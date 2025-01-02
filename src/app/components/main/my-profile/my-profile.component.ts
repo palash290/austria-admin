@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
@@ -40,11 +40,11 @@ export class MyProfileComponent {
   }
 
   loadUserProfile() {
-    this.service.getApi('sub-admin/profile').subscribe({
+    this.service.getApi('profile').subscribe({
       next: (resp) => {
-        this.userEmail = resp.profile.email;
-        this.name = resp.profile.name;
-        this.phone = resp.profile.contact_no;
+        this.userEmail = resp.data.email;
+        this.name = resp.data.name;
+        this.phone = resp.data.mobile_number;
 
         this.profileForm.patchValue({
           name: this.name,
@@ -71,9 +71,9 @@ export class MyProfileComponent {
       const formURlData = new URLSearchParams();
       formURlData.set('name', this.profileForm.value.name);
       formURlData.set('email', this.userEmail);
-      formURlData.set('contact_no', this.profileForm.value.phone);
+      formURlData.set('mobile_number', this.profileForm.value.phone);
      
-      this.service.postAPI('sub-admin/update-profile', formURlData.toString()).subscribe({
+      this.service.postAPI('profile-update', formURlData.toString()).subscribe({
         next: (resp) => {
           if (resp.success === true) {
             this.toastr.success(resp.message);

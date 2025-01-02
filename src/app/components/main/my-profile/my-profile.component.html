@@ -1,4 +1,5 @@
 <div class="ct_right_dash_content">
+    <!-- <app-header /> -->
     <div class="d-flex align-items-center justify-content-between">
         <h4 class="mb-0 ct_fs_22">My Profile</h4>
     </div>
@@ -11,7 +12,7 @@
                     <div class="form-group mb-4">
                         <label for="" class="mb-2">Full Name</label>
                         <input type="email" class="form-control ct_input" formControlName="name"
-                            placeholder="Enter full name" value="Alex meian" maxlength="10">
+                            placeholder="Enter full name" value="Alex meian" maxlength="30">
                         <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
                             class="err_msg">
                             <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
@@ -21,9 +22,9 @@
                     <div class="form-group mb-4">
                         <label for="" class="mb-2">Contact No</label>
                         <input type="number" class="form-control ct_input" formControlName="phone"
-                            placeholder="Enter Contact No" maxlength="13">
+                            placeholder="Enter Contact No">
                         <!-- <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"
-                            class="error-message">
+                            class="err_msg">
                             <div *ngIf="profileForm.controls['phone'].errors?.['required']">Please enter
                                 your contact number.</div>
                         </div> -->
@@ -38,9 +39,9 @@
                     <div class="form-group mb-4">
                         <label for="" class="mb-2">Email</label>
                         <input type="email" class="form-control ct_input" formControlName="email"
-                            placeholder="Enter your email" value="alexmeian@gmail.com">
+                            placeholder="Enter your email">
                     </div>
-                    <a (click)="onSubmit()" class="ct_green_btn mt-5 px-5 mx-auto d-flex"
+                    <a (click)="onSubmit()" class="ct_blue_btn mt-5 px-5 mx-auto d-flex"
                         style="width: fit-content; cursor: pointer;">Edit Profile</a>
                 </form>
             </div>
