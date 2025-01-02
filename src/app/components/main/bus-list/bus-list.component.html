@@ -1,0 +1,348 @@
+<div class="ct_right_dash_content">
+    <app-header />
+    <div class="ct_middle_content">
+
+        <div class="ct_bus_grey_table">
+            <div class="d-flex justify-content-between gap-3">
+                <h4 class="ct_fs_20 ct_fw_600 mb-0 ct_px_20 ct_pb_20">Bus Management</h4>
+                <button class="ct_blue_btn mb-2" data-bs-toggle="modal" data-bs-target="#ct_add_modal">Add Bus</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <!-- <th>
+                                <label class="cl-checkbox">
+                                    <input type="checkbox">
+                                    <span></span>
+                                </label>
+                            </th> -->
+                            <th>S No.</th>
+                            <th>Bus Number </th>
+                            <th>Name/Type</th>
+                            <th>Capacity</th>
+                            <!-- <th>Route Assigned</th>
+                            <th>Driver</th> -->
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data; let i = index">
+                            <!-- <td>
+                                <label class="cl-checkbox">
+                                    <input type="checkbox">
+                                    <span></span>
+                                </label>
+                            </td> -->
+                            <td>{{i+1}}</td>
+                            <td>{{item.bus_number}}</td>
+                            <td>{{item.bus_name}}</td>
+                            <td>{{item.total_seats}}</td>
+                            <!-- <td>{{item.route.start_location}} -- {{item.route.end_location}}</td>
+                            <td>{{item.driver.driver_name}}</td> -->
+                            <td>
+                                <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto" style="width: 120px;">
+                                    <option [value]="true" [selected]="item.is_active">Active</option>
+                                    <option [value]="false" [selected]="!item.is_active">Deactive</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="ct_actions_btn">
+                                    <button class="ct_action_btn" data-bs-toggle="modal" data-bs-target="#ct_edit_modal"
+                                        (click)="patchUpdate(item)">
+                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
+                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+
+                                    </button>
+                                    <button class="ct_action_btn" data-bs-toggle="modal"
+                                        data-bs-target="#ct_delete_modal">
+                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" (click)="patchUpdate(item)">
+                                            <path
+                                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- All Modal Section S -->
+
+<!-- Add Modal S -->
+<div class="modal fade " id="ct_add_modal" tabindex="-1" aria-labelledby="ct_edit_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 text-center">Add Bus</h4>
+                    <form [formGroup]="form" class="pt-2">
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Name</label>
+                            <input type="text" placeholder="Enter Bus Name" formControlName="busName"
+                                class="form-control ct_input ct_fs_18">
+
+                            <p *ngIf="form.get('busName')?.touched && form.get('busName')?.errors" class="err_msg">
+                                {{ getErrorMessage('busName') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Number</label>
+                            <input type="text" placeholder="Enter Bus Number" formControlName="number"
+                                class="form-control ct_input ct_fs_18">
+
+                            <p *ngIf="form.get('number')?.touched && form.get('number')?.errors" class="err_msg">
+                                {{ getErrorMessage('number') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Seats</label>
+                            <input type="text" placeholder="Enter Total Seats" formControlName="totalSeats"
+                                class="form-control ct_input ct_fs_18" maxlength="2">
+
+                            <p *ngIf="form.get('totalSeats')?.touched && form.get('totalSeats')?.errors"
+                                class="err_msg">
+                                {{ getErrorMessage('totalSeats') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Registration Number</label>
+                            <input type="text" placeholder="Enter Registration Number" formControlName="regNum"
+                                class="form-control ct_input ct_fs_18">
+                            <p *ngIf="form.get('regNum')?.touched && form.get('regNum')?.errors" class="err_msg">
+                                {{ getErrorMessage('regNum') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+                        </div>
+                        <!-- <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Route</label>
+                            <div class="ct_grid_3">
+                                <div>
+                                    <select class="form-control ct_input ct_fs_18">
+                                        <option value="">Kyiv</option>
+                                        <option value="">Kyiv</option>
+                                        <option value="">Kyiv</option>
+                                        <option value="">Kyiv</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p class="mb-0 ct_fs_18 ct_fw_600 text-center">To</p>
+                                </div>
+                                <div>
+                                    <select class="form-control ct_input ct_fs_18">
+                                        <option value="">Zhytomir</option>
+                                        <option value="">Zhytomir</option>
+                                        <option value="">Zhytomir</option>
+                                        <option value="">Zhytomir</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Date & Time</label>
+                            <input type="time" class="form-control ct_input ct_fs_18">
+                        </div> -->
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center" (click)="addBus()">
+                <button type="button" class="ct_blue_btn py-3">Add Bus</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal
+                    data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Modal E -->
+
+
+<!-- Edit Modal S -->
+<div class="modal fade " id="ct_edit_modal" tabindex="-1" aria-labelledby="ct_edit_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 text-center">Edit Bus</h4>
+                    <form [formGroup]="editForm" class="pt-2">
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Name</label>
+                            <input type="text" placeholder="Enter Bus Name" formControlName="busName"
+                                class="form-control ct_input ct_fs_18">
+
+                            <p *ngIf="editForm.get('busName')?.touched && editForm.get('busName')?.errors"
+                                class="err_msg">
+                                {{ getEditErrorMessage('busName') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Number</label>
+                            <input type="text" placeholder="Enter Bus Number" formControlName="number"
+                                class="form-control ct_input ct_fs_18">
+
+                            <p *ngIf="editForm.get('number')?.touched && editForm.get('number')?.errors"
+                                class="err_msg">
+                                {{ getEditErrorMessage('number') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Seats</label>
+                            <input type="text" placeholder="Enter Total Seats" formControlName="totalSeats"
+                                class="form-control ct_input ct_fs_18">
+
+                            <p *ngIf="editForm.get('totalSeats')?.touched && editForm.get('totalSeats')?.errors"
+                                class="err_msg">
+                                {{ getEditErrorMessage('totalSeats') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Registration Number</label>
+                            <input type="text" placeholder="Enter Registration Number" formControlName="regNum"
+                                class="form-control ct_input ct_fs_18">
+
+                            <p *ngIf="editForm.get('regNum')?.touched && editForm.get('regNum')?.errors"
+                                class="err_msg">
+                                {{ getEditErrorMessage('regNum') }}
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button (click)="editBus()" type="button" class="ct_blue_btn py-3">Save Changes</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal1
+                    data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal E -->
+
+<!-- delete Modal S -->
+<div class="modal fade " id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_delete_modal_cnt">
+                    <div class="text-center mb-4 ct_delete_icon">
+                        <svg width="40" height="40" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Confirm Delete</h4>
+                    <p class="mb-0 text-center ct_fs_18"> Are you sure? you want to delete it.</p>
+
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
+
+                <button (click)="deleteMember()" type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal2
+                    data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete Modal E -->
+
+<!-- All Modal Section E -->

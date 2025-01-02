@@ -1,0 +1,49 @@
+<div class="ct_right_dash_content">
+    <div class="d-flex align-items-center justify-content-between">
+        <h4 class="mb-0 ct_fs_22">My Profile</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="ct_white_bg_1 py-5">
+                <h4 class="ct_fs_24 mb-4 ct_fw_600"> Profile Detail</h4>
+                <form [formGroup]="profileForm">
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-2">Full Name</label>
+                        <input type="email" class="form-control ct_input" formControlName="name"
+                            placeholder="Enter full name" value="Alex meian" maxlength="10">
+                        <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
+                            class="err_msg">
+                            <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
+                                your full name.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-2">Contact No</label>
+                        <input type="number" class="form-control ct_input" formControlName="phone"
+                            placeholder="Enter Contact No" maxlength="13">
+                        <!-- <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"
+                            class="error-message">
+                            <div *ngIf="profileForm.controls['phone'].errors?.['required']">Please enter
+                                your contact number.</div>
+                        </div> -->
+                        <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"
+                            class="err_msg">
+                            <div *ngIf="profileForm.controls['phone'].errors?.['required']">Contact
+                                number is required.</div>
+                            <div *ngIf="profileForm.controls['phone'].errors?.['pattern']">Contact number must be
+                                between 8 and 15 digits.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-2">Email</label>
+                        <input type="email" class="form-control ct_input" formControlName="email"
+                            placeholder="Enter your email" value="alexmeian@gmail.com">
+                    </div>
+                    <a (click)="onSubmit()" class="ct_green_btn mt-5 px-5 mx-auto d-flex"
+                        style="width: fit-content; cursor: pointer;">Edit Profile</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

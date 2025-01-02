@@ -1,0 +1,164 @@
+<section class="ct_login_main_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 ct_box_shadow_white">
+                            <div class="ct_login_form">
+                                <h4 class="ct_fs_26 ct_fw_600 ct_mb_50">Log in to your personal
+                                    account</h4>
+                                <form [formGroup]="loginForm">
+                                    <div class="form-group mb-4">
+                                        <input type="email" placeholder="Email address" formControlName="email"
+                                            class="form-control ct_input_48 ct_input_grey_bg">
+                                        <p *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors"
+                                            class="err_msg">
+                                            {{ getErrorMessage('email') }}
+                                            <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                                    fill="#F80000" />
+                                            </svg>
+                                        </p>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="position-relative">
+                                            <!-- <input type="password" placeholder="Password"
+                                                class="form-control ct_input_48 ct_input_grey_bg">
+                                            <i class="fa-regular fa-eye ct_show_eye"></i> -->
+
+                                            <input type="{{ isPasswordVisible ? 'text' : 'password' }}"
+                                                placeholder="Password" formControlName="password"
+                                                class="form-control ct_input_48 ct_input_grey_bg">
+                                            <!-- <i class="fa-regular fa-eye ct_show_eye" style="cursor: pointer;"></i> -->
+                                            <i class="fa-regular ct_show_eye" style="cursor: pointer;"
+                                                [ngClass]="isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'"
+                                                (click)="togglePasswordVisibility()"></i>
+
+                                            <p *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors"
+                                                class="err_msg">
+                                                {{ getErrorMessage('password') }}
+                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                                        fill="#F80000" />
+                                                </svg>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="javascript:void(0)" class="ct_forgot_link" data-bs-toggle="modal"
+                                            data-bs-target="#forgot_password_modal">Forgot password ?</a>
+                                    </div>
+                                    <!-- <div class="ct_decoration_line">
+                                        <p class="mb-0 ct_grey_text ct_fw_500">Or</p>
+                                    </div> -->
+
+                                    <!-- <div class="mt-4">
+                                        <a href="#"
+                                            class="ct_outline_btn ct_google_login_btn justify-content-center text-center"><img
+                                                src=" assets/img/google_icon.png" alt="" class="me-2">Continue with
+                                            Google</a>
+                                    </div> -->
+
+                                    <div class="mt-5 mb-3" (click)="loginAndFetchData()">
+                                        <button class="ct_blue_btn w-100">Login</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6  ct_right_login_bg">
+                            <div class="d-grid h-100 mb-4 mb-md-0">
+                                <h2 class="ct_fs_26 ct_fw_700 mb-0 text-white">Possibilities of a personal account
+                                </h2>
+                                <div class="ct_login_list mt-auto">
+                                    <ul>
+                                        <li><i class="fa-solid fa-check"></i>Buy a reserved ticket</li>
+                                        <li><i class="fa-solid fa-check"></i>View bus information</li>
+                                        <li><i class="fa-solid fa-check"></i>Return tickets</li>
+                                        <li><i class="fa-solid fa-check"></i>Leave a review about the trip</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<div *ngIf="loading">
+    <app-loader />
+</div>
+
+<!-- All Modal S -->
+
+
+<!-- forgot_password_modal Modal S -->
+<div class="modal fade  " id="forgot_password_modal" tabindex="-1" aria-labelledby="forgot_password_modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header p-0 border-0">
+                <button type="button" class="btn-close ct_close_btn" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 border-0">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <div class="ct_login_form">
+                                <h4 class="ct_fs_26 ct_fw_600 ">Forgot Password</h4>
+                                <p class="ct_mb_50">Forgot your password? No worries! Enter your email, and we’ll
+                                    send you a reset link.</p>
+                                <form action="">
+                                    <div class="form-group mb-4">
+                                        <input type="email" placeholder="Email address"
+                                            class="form-control ct_input_48 ct_input_grey_bg">
+                                    </div>
+
+                                    <div class="mt-5 mb-3">
+                                        <button class="ct_blue_btn w-100">Register</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6  ct_right_login_bg">
+                            <div class="d-grid h-100 mb-4 mb-md-0">
+                                <h2 class="ct_fs_26 ct_fw_700 mb-0 text-white">Possibilities of a personal account
+                                </h2>
+                                <div class="ct_login_list mt-auto">
+                                    <ul>
+                                        <li><i class="fa-solid fa-check"></i>Buy a reserved ticket</li>
+                                        <li><i class="fa-solid fa-check"></i>View bus information</li>
+                                        <li><i class="fa-solid fa-check"></i>Return tickets</li>
+                                        <li><i class="fa-solid fa-check"></i>Leave a review about the trip</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Signup Modal E -->
+<!-- All Modal E -->
