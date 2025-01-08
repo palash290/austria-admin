@@ -21,6 +21,8 @@ export const routes: Routes = [
             { path: 'my-profile', loadComponent: () => import('./components/main/my-profile/my-profile.component').then(m => m.MyProfileComponent) },
             { path: 'change-password', loadComponent: () => import('./components/main/change-password/change-password.component').then(m => m.ChangePasswordComponent) },
             { path: 'all-users', loadComponent: () => import('./components/main/all-users/all-users.component').then(m => m.AllUsersComponent) },
+            { path: 'routes-management', loadComponent: () => import('./components/main/routes-management/routes-management.component').then(m => m.RoutesManagementComponent) },
+            { path: 'bus-schedule', loadComponent: () => import('./components/main/bus-schedule/bus-schedule.component').then(m => m.BusScheduleComponent) },
             // { path: 'product_details', loadComponent: () => import('./components/product-details/product-details.component').then(m => m.ProductDetailsComponent) },
             // { path: 'buyerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/buyer-shipment-status/buyer-shipment-status.component').then(m => m.BuyerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
