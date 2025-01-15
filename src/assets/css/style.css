@@ -27,9 +27,14 @@ a:hover {
   --green: #249b95;
   --dark_blue: #10408e;
 }
-
+.ct_green_solid_text {
+  color: #16a34a;
+}
 .ct_text_black {
   color: #212121;
+}
+.ct_text_red {
+  color: var(--red);
 }
 .ct_text_clr_757575 {
   color: #757575;
@@ -71,10 +76,10 @@ a:hover {
   font-weight: 300;
 }
 .ct_fw_400 {
-  font-weight: 400;
+  font-weight: 400 !important;
 }
 .ct_fw_500 {
-  font-weight: 500;
+  font-weight: 500 !important;
 }
 .ct_fw_600 {
   font-weight: 600;
@@ -205,7 +210,7 @@ a:hover {
   text-indent: 30px;
 }
 .ct_input {
-  height: 60px;
+  height: 50px;
   outline: none;
 }
 
@@ -244,7 +249,7 @@ a:hover {
   background-color: var(--blue);
   outline: none;
   padding: 8px 26px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid var(--blue);
   transition: 0.4s ease all;
   position: relative;
@@ -302,7 +307,7 @@ a:hover {
   width: 100%;
 }
 .ct_blue_btn:hover {
-  color: #000;
+  color: #fff !important;
 }
 .ct_flex_1 {
   flex: 1;
@@ -505,4 +510,15 @@ section.ct_login_main_bg {
 .ct_box_shadow_white {
   background-color: #fff;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
+}
+
+.ct_multiselect_height
+  ~ span.select2.select2-container
+  span.selection
+  span.select2-selection.select2-selection--multiple {
+  padding-block: 12px;
+}
+.select2-container--bootstrap-5.select2-container--focus .select2-selection,
+.select2-container--bootstrap-5.select2-container--open .select2-selection {
+  box-shadow: unset;
 }

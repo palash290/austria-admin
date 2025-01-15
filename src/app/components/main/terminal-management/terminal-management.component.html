@@ -1,53 +1,3 @@
-<!-- <div class="ct_right_dash_content">
-    <app-header />
-    <div class="ct_middle_content">
-
-        <div class="ct_bus_grey_table">
-            <div class="d-flex justify-content-between gap-3">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0 ct_px_20 ct_pb_20">All Users</h4>
-       
-            </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                     
-                            <th>S No.</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Created At</th>
-                        
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of data; let i = index">
-                        
-                            <td>{{i+1}}</td>
-                            <td>
-                                <a style="cursor: pointer;">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="position-relative" data-bs-toggle="modal" data-bs-target="#img">
-                                          
-                                        </div>
-                                        <p class="mb-0 ct_fs_16 ct_green_text">{{item.first_name}} {{item.last_name}}</p>
-                                    </div>
-                                </a>
-                            </td>
-                            <td>{{item.email}}</td>
-                            <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
-                     
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-        </div>
-
-    </div>
-</div> -->
-
 <div class="ct_right_dash_content">
     <div class="ct_dash_header">
         <div class="d-flex align-items-center gap-3">
@@ -58,29 +8,18 @@
         </div>
         <div class="ct_profile_drop">
             <app-header />
-
         </div>
     </div>
     <div class="ct_middle_content">
 
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Users Management</h4>
-                <div class="ct_grid_2 gap-2">
-                    <!-- <button
-                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
-                        data-bs-toggle="modal" data-bs-target="#ct_add_booking">
-                        +
-                        Add Booking</button> -->
-
-                    <!-- <select class="form-control ct_by_date_select">
-                        <option value="">By Date</option>
-                        <option value="">12 Jun</option>
-                        <option value="">13 Jun</option>
-                        <option value="">14 Jun</option>
-
-                    </select> -->
-                </div>
+                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Terminal Management</h4>
+                <button
+                    class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
+                    data-bs-toggle="modal" data-bs-target="#ct_add_route">
+                    +
+                    Add Terminal</button>
 
             </div>
             <div class="table-responsive">
@@ -88,27 +27,24 @@
                     <thead>
                         <tr>
                             <th>S No.</th>
-                            <th>User Name</th>
-                            <th>Email</th>
-                            <th>Create At</th>
-                            <!-- <th>Total Bookings</th> -->
-                            <th>Actions</th>
+                            <th>Terminal Name</th>
+                            <th>Country</th>
+                            <th>City</th>
+                            <!-- <th>Actions</th> -->
                         </tr>
                     </thead>
                     <tbody>
 
-                        <tr *ngFor="let item of data; let i = index">
+                        <tr *ngFor="let item of allTerminals; let i = index">
                             <td>{{i+1}}</td>
-                            <td>
-                                {{item.first_name}} {{item.last_name}}
-                            </td>
-                            <td>{{item.email}}</td>
-                            <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
+                            <th>{{item.terminal_name}}</th>
+                            <td>{{item.city.country_name}}</td>
+                            <td>{{item.city.city_name}}</td>
 
-                            <td>
+                            <!-- <td>
                                 <div class="ct_actions_btn">
-                                    <button class="ct_action_btn" data-bs-toggle="modal"
-                                        data-bs-target="#ct_edit_user_management">
+                                    <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
+                                        data-bs-target="#ct_edit_driver">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -116,8 +52,9 @@
                                                 stroke="black" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round" />
                                         </svg>
+
                                     </button>
-                                    <button class="ct_action_btn" data-bs-toggle="modal"
+                                    <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
                                         data-bs-target="#ct_delete_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +65,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>
@@ -138,64 +75,68 @@
 </div>
 
 
-<!-- Edit Modal S -->
-<div class="modal fade modal-lg" id="ct_edit_user_management" tabindex="-1"
-    aria-labelledby="ct_edit_user_managementLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+
+
+
+<!-- Add Modal S -->
+<div class="modal fade" id="ct_add_route" tabindex="-1" aria-labelledby="ct_add_routeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content pb-4">
             <!-- <div class="modal-header border-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> -->
             <div class="modal-body border-0 pt-5">
                 <div class="ct_edit_modal_cnt">
-                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Edit User Management</h4>
+                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add Route</h4>
                     <form action="" class="pt-2">
 
                         <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">User Name<span
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Drop-off Point<span
                                     class="ct_text_red">*</span></label>
                             <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter driver name">
+
+                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
+                                    [(ngModel)]="selectedCityId" (change)="onAustriaCityChange($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let lan of allRoutes" [value]="lan.city_id">
+                                        {{ lan.city_name }}
+                                    </option>
+                                </select>
+
                                 <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-user"></i>
+                                    <i class="fa-solid fa-location-dot"></i>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Email Id<span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter driver id">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-id-card"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Contact Number <span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter contact number">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total booking made <span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="number" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter licence number">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-id-badge"></i>
-                                </div>
+
                             </div>
                         </div>
 
+                        <div class="form-group mb-4 position-relative">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Terminal Name<span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18"
+                                placeholder="Enter total running hours" [(ngModel)]="terminalName"
+                                [ngModelOptions]="{standalone: true}" (keyup)="searchTerminal()">
+
+                            @if(isSearchActiveFrom){
+                            <div class="ct_suggstion_search">
+                                <ul>
+                                    @if(allTerminalsList?.length > 0){
+                                    @for (item of allTerminalsList; track $index) {
+                                    <div (click)="searchByFromCity(item)" style="cursor: pointer;">
+                                        <h6 class="mb-0 ct_fw_600">{{item.description}}</h6>
+                                        <!-- <p class=" mb-3 ct_fs_14">{{item.country_name}} </p> -->
+                                    </div>
+
+                                    }
+                                    } @else {
+                                    <li> <img src="assets/img/Search_icon.svg" alt="">Not found
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+                            }
+
+                        </div>
 
                     </form>
 
@@ -204,17 +145,48 @@
             <div class="modal-footer border-0 justify-content-end">
                 <button type="button" class="ct_blue_btn ct_outline_btn_blue ct_fw_400"
                     data-bs-dismiss="modal">Cancel</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal
+                    data-bs-dismiss="modal">Close</button>
+                <button (click)="addTerminal()" type="button" class="ct_blue_btn py-2 ct_fw_400">Add Terminal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add Modal  E -->
 
-                <button type="button" class="ct_blue_btn py-2 ct_fw_400">Update</button>
+
+
+<!-- Edit Modal S -->
+<div class="modal fade " id="ct_edit_modal" tabindex="-1" aria-labelledby="ct_edit_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 text-center">Edit Bus</h4>
+                    <form action="" class="pt-2">
+                      
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button  type="button" class="ct_blue_btn py-3">Save Changes</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal1
+                    data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 <!-- Edit Modal E -->
 
+
+
 <!-- delete Modal S -->
-<div class="modal fade modal-lg" id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content pb-4">
             <div class="modal-header border-0">
@@ -237,13 +209,11 @@
             </div>
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
-
-                <button type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
+                <button (click)="deleteTerminal()" type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal21
+                    data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 <!-- delete Modal E -->
-
-
-<!-- All Modal Section E -->

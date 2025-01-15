@@ -41,9 +41,9 @@ export class BusListComponent {
   initUpdateForm() {
     this.editForm = new FormGroup({
       busName: new FormControl(this.updateDet?.bus_name, Validators.required),
-      number: new FormControl(this.updateDet?.bus_number, Validators.required),
-      totalSeats: new FormControl(this.updateDet?.total_seats, Validators.required),
-      regNum: new FormControl({ value: this.updateDet?.registration_number, disabled: true }, Validators.required)
+      number: new FormControl(this.updateDet?.bus_number_plate, Validators.required),
+      totalSeats: new FormControl(this.updateDet?.number_of_seats, Validators.required),
+      regNum: new FormControl({ value: this.updateDet?.bus_registration_number, disabled: true }, Validators.required)
     })
   }
 
@@ -75,9 +75,9 @@ export class BusListComponent {
       this.btnLoader = true;
       const formURlData = new URLSearchParams();
       formURlData.set('bus_name', this.form.value.busName);
-      formURlData.set('bus_number', this.form.value.number);
-      formURlData.set('total_seats', this.form.value.totalSeats);
-      formURlData.set('registration_number', this.form.value.regNum);
+      formURlData.set('bus_number_plate', this.form.value.number);
+      formURlData.set('number_of_seats', this.form.value.totalSeats);
+      formURlData.set('bus_registration_number', this.form.value.regNum);
 
       this.service.postAPI('create-bus', formURlData.toString()).subscribe({
         next: (resp) => {

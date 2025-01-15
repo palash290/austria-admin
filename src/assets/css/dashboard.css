@@ -12,6 +12,9 @@
   max-width: 320px;
   width: 100%;
 }
+p {
+  word-break: break-word;
+}
 .ct_dash_logo {
   text-align: center;
 }
@@ -22,6 +25,7 @@
 }
 .ct_dash_nav {
   margin-top: 40px;
+  margin-bottom: 60px;
 }
 .ct_dash_nav li {
   transition: 0.4s ease all;
@@ -57,6 +61,7 @@
 .ct_dash_nav li:hover a svg path,
 .ct_dash_nav li.active a svg path {
   stroke: #fff;
+  fill: #fff;
 }
 
 .ct_user_img img {
@@ -76,6 +81,8 @@
   width: calc(100% - 320px);
   margin-left: 320px;
   padding: 50px 30px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
 .ct_dash_header {
@@ -96,9 +103,8 @@
 }
 
 .ct_user_dropdown_icon ~ ul.dropdown-menu.show {
-  background-color: #fff;
   border: 0px;
-  background-color: #f5f5f5;
+  background-color: #fff;
   max-width: 250px;
   width: 250px;
   padding: 0px;
@@ -117,9 +123,9 @@
 }
 
 .ct_card_icon {
-  width: 58px;
-  height: 58px;
-  border-radius: 8px;
+  width: 66px;
+  height: 66px;
+  border-radius: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,14 +136,34 @@
   padding: 21px 20px;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 58px auto;
+  grid-template-columns: 66px auto auto;
   gap: 15px;
   height: 100%;
   align-items: center;
 }
+.ct_white_bg_card {
+  background-color: #fff;
+  box-shadow: 0px 4.25px 4.25px 0px #00000003;
+  border: 1.06px solid #edeeef;
+  padding: 21px 20px;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 66px auto auto;
+  gap: 15px;
+  height: 100%;
+  align-items: center;
+}
+.ct_small_graph_img img {
+  width: 75px;
+  height: 62px;
+  object-fit: contain;
+}
+.ct_small_graph_img {
+  text-align: end;
+}
 .ct_grid_2 {
   display: grid;
-  grid-template-columns: auto 358px;
+  grid-template-columns: auto auto;
   gap: 15px;
 }
 
@@ -145,6 +171,7 @@
   padding: 20px 0px 0px;
   border: 1px solid #dcdddf;
   border-radius: 15px;
+  background-color: #fff;
 }
 .ct_px_20 {
   padding-inline: 20px;
@@ -418,4 +445,143 @@
   grid-template-columns: auto auto auto;
   align-items: center;
   gap: 10px;
+}
+
+.ct_outline_btn_blue {
+  background-color: transparent !important;
+  color: #000 !important;
+  border-color: var(--blue);
+}
+.ct_outline_btn_blue:before {
+  background-color: var(--blue) !important;
+}
+.ct_outline_btn_blue:hover {
+  color: #fff;
+}
+
+.ct_border_btm1 {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ct_input_left_icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+.ct_text_indent_30 {
+  text-indent: 30px;
+}
+.ct_by_date_select,
+.ct_by_date_select:focus {
+  background-color: #43abff;
+  color: #fff;
+  border-color: #43abff;
+}
+
+.ct_modal_height_500 {
+  height: auto;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.ct_custom_scroll_bar::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+.ct_custom_scroll_bar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.ct_custom_scroll_bar::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.ct_custom_scroll_bar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.ct_grid_3_route {
+  display: grid;
+  grid-template-columns: 48% 48% auto;
+  align-items: center;
+  gap: 5px;
+}
+.ct_edit_img {
+  position: relative;
+  text-align: center;
+  width: 168px;
+  height: 168px;
+  margin-inline: auto;
+}
+.ct_edit_img img {
+  width: 168px;
+  height: 168px;
+  border-radius: 100px;
+  object-fit: cover;
+}
+
+.ct_edit_img_icon_bg {
+  width: 30px;
+  height: 30px;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  position: absolute;
+  bottom: 8px;
+  right: 20px;
+}
+
+.ct_white_table {
+  border-width: 0px;
+  height: 100%;
+}
+.ct_white_table thead tr th {
+  background-color: transparent;
+
+  font-size: 16px;
+}
+.ct_white_table tbody tr td {
+  border-radius: 0px !important;
+  font-size: 16px;
+}
+
+.ct_today_overview_grey {
+  padding: 52px 15px;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  text-align: center;
+}
+.ct_p_40 {
+  padding: 40px;
+}
+.ct_pb_40 {
+  padding-bottom: 40px;
+}
+
+.ct_sidebar_bottom_card {
+  background-color: #dfe8f8;
+  padding: 0px 29px 42px;
+  text-align: center;
+  border-radius: 20px;
+}
+.ct_sidebar_bottom_card img {
+  width: 100%;
+  max-width: 200px;
+  position: relative;
+  margin-top: -50px;
+}
+.ct_black_btn {
+  background-color: #000;
+  border-color: #000;
+}
+.ct_black_btn:hover {
+  border-color: #000;
 }

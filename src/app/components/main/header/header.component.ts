@@ -14,9 +14,27 @@ import { CommonModule } from '@angular/common';
 export class HeaderComponent {
 
   @ViewChild('closeModal') closeModal!: ElementRef;
+  name: any;
   
   constructor(private apiService: SharedService) { }
 
+  ngOnInit() {
+    this.apiService.refreshSidebar$.subscribe(() => {
+      this.loadUserProfile();
+    });
+    this.loadUserProfile();
+  }
+
+  loadUserProfile() {
+    this.apiService.getApi('profile').subscribe({
+      next: (resp) => {
+        this.name = resp.data.name;
+      },
+      error: (error) => {
+        console.log(error.message);
+      }
+    });
+  }
 
   logout(): void {
     this.apiService.logout(); // Clear the token (e.g., from localStorage or API)

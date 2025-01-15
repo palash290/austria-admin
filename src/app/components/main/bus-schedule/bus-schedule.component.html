@@ -1,4 +1,4 @@
-<div class="ct_right_dash_content">
+<!-- <div class="ct_right_dash_content">
     <app-header />
     <div class="ct_middle_content">
 
@@ -13,36 +13,20 @@
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <!-- <th>
-                                <label class="cl-checkbox">
-                                    <input type="checkbox">
-                                    <span></span>
-                                </label>
-                            </th> -->
                             <th>S No.</th>
                             <th>Bus Number </th>
                             <th>Name/Type</th>
                             <th>Capacity</th>
-                            <!-- <th>Route Assigned</th>
-                            <th>Driver</th> -->
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of data; let i = index">
-                            <!-- <td>
-                                <label class="cl-checkbox">
-                                    <input type="checkbox">
-                                    <span></span>
-                                </label>
-                            </td> -->
                             <td>{{i+1}}</td>
                             <td>{{item.bus_number}}</td>
                             <td>{{item.bus_name}}</td>
                             <td>{{item.total_seats}}</td>
-                            <!-- <td>{{item.route.start_location}} -- {{item.route.end_location}}</td>
-                            <td>{{item.driver.driver_name}}</td> -->
                             <td>
                                 <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto" style="width: 120px;">
                                     <option [value]="true" [selected]="item.is_active">Active</option>
@@ -85,4 +69,436 @@
         </div>
 
     </div>
+</div> -->
+
+<div class="ct_right_dash_content">
+    <div class="ct_dash_header">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ct_toggle_bar">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <!-- <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Welcome Back, John!</h4> -->
+        </div>
+        <div class="ct_profile_drop">
+            <app-header />
+
+        </div>
+    </div>
+    <div class="ct_middle_content">
+
+        <div class="ct_bus_grey_table">
+            <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Bus Schedule Management</h4>
+                <div class="ct_grid_2 gap-2">
+                    <button
+                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
+                        data-bs-toggle="modal" data-bs-target="#ct_add_newschedule">
+                        +
+                        Add New Schedule</button>
+
+                    <!-- <select class="form-control ct_by_date_select">
+                        <option value="">By Date</option>
+                        <option value="">12 Jun</option>
+                        <option value="">13 Jun</option>
+                        <option value="">14 Jun</option>
+
+                    </select> -->
+                </div>
+
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <!-- <th>Bus No.</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Departure</th>
+                            <th>Arrival</th>
+                            <th>Driver</th>
+                            <th>Actions</th> -->
+
+                            <th>S No.</th>
+                            <th>Bus Number </th>
+                            <th>Name/Type</th>
+                            <th>Capacity</th>
+                            <!-- <th>Status</th> -->
+                            <!-- <th>Actions</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let item of data; let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{item.bus.bus_number_plate}}</td>
+                            <td>{{item.bus.bus_name}}</td>
+                            <td>{{item.bus.number_of_seats}}</td>
+                            <!-- <td>
+                                <div class="ct_actions_btn">
+                                    <button class="ct_action_btn" data-bs-toggle="modal"
+                                        data-bs-target="#ct_edit_new_schedule">
+                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
+                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+
+                                    </button>
+                                    <button class="ct_action_btn" data-bs-toggle="modal"
+                                        data-bs-target="#ct_delete_modal">
+                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- add Modal S -->
+<div class="modal fade" id="ct_add_newschedule" tabindex="-1" aria-labelledby="ct_add_newscheduleLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+        <div class="modal-content pb-4">
+            <!-- <div class="modal-header border-0">
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div> -->
+            <div class="modal-body border-0 pt-5">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add New Schedule</h4>
+                    <form action="" class="pt-2 ct_modal_height_500 ct_custom_scroll_bar ">
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus No. <span
+                                    class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+
+                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
+                                    [(ngModel)]="selectedBusId" (change)="onBusChange($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let lan of allBuses" [value]="lan.bus_id">
+                                        {{ lan.bus_number_plate }}
+                                    </option>
+                                </select>
+
+                                <div class="ct_input_left_icon">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Assign Driver* <span
+                                    class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+
+                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
+                                    [(ngModel)]="selectedDriverId" (change)="onDriverChange($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let lan of allDrivers" [value]="lan.driver_id">
+                                        {{ lan.driver_name }}
+                                    </option>
+                                </select>
+
+                                <div class="ct_input_left_icon">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">From (Route)<span
+                                    class="ct_text_red">*</span></label>
+                            <select class="form-control ct_input ct_fs_18">
+                                <option value="">Select starting location</option>
+                                <option value="">Central Station</option>
+                                <option value="">Central Station</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">To (Route)<span
+                                    class="ct_text_red">*</span></label>
+                            <select class="form-control ct_input ct_fs_18">
+                                <option value="">Select ending location</option>
+                                <option value="">Berlin</option>
+                                <option value="">Berlin</option>
+                            </select>
+                        </div> -->
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Departure Time <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="time" class="form-control ct_input ct_fs_18" [(ngModel)]="departure_time"
+                                [ngModelOptions]="{standalone: true}">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Running Hours <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="total_running_hours"
+                                [ngModelOptions]="{standalone: true}">
+                        </div>
+
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Pickup Terminal* <span
+                                    class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+
+                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
+                                    [(ngModel)]="selectedPickupTerminalId" (change)="onPickupTerminalChange($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let lan of pickupTerminals" [value]="lan.terminal_id">
+                                        {{ lan.terminal_name }}
+                                    </option>
+                                </select>
+
+                                <div class="ct_input_left_icon">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Dropoff Terminal* <span
+                                    class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+
+                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
+                                    [(ngModel)]="selectedDropTerminalId" (change)="onDropTerminalChange($event)"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let lan of dropoffTerminals" [value]="lan.terminal_id">
+                                        {{ lan.terminal_name }}
+                                    </option>
+                                </select>
+
+                                <div class="ct_input_left_icon">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                        <!-- Radio Buttons: Daily and Custom -->
+                        <div class="form-group mb-4">
+                            <label class="ct_fs_18 ct_fw_500 mb-2">Recurrence Pattern <span
+                                    class="ct_text_red">*</span></label>
+                            <div class="d-flex align-items-center">
+                                <div class="form-check me-3">
+                                    <input type="radio" id="daily" name="recurrencePattern" value="Daily"
+                                        [(ngModel)]="selectedRecurrence" [ngModelOptions]="{ standalone: true }"
+                                        class="form-check-input" />
+                                    <label for="daily" class="form-check-label ct_fs_18">Daily</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" id="custom" name="recurrencePattern" value="Custom"
+                                        [(ngModel)]="selectedRecurrence" [ngModelOptions]="{ standalone: true }"
+                                        class="form-check-input" />
+                                    <label for="custom" class="form-check-label ct_fs_18">Custom</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div *ngIf="selectedRecurrence == 'Custom'" class="custom-dropdown">
+                            <!-- Selected values -->
+                            <div class="dropdown-header" (click)="toggleDropdown()">
+                                {{ getSelectedOptions() || 'Select options' }}
+                                <i class="arrow" [class.open]="dropdownOpen"></i>
+                            </div>
+
+                            <!-- Dropdown options -->
+                            <div class="dropdown-options" *ngIf="dropdownOpen">
+                                <div class="dropdown-item" *ngFor="let option of weekDays">
+                                    <label>
+                                        <input type="checkbox" [value]="option" [(ngModel)]="selectedOptions[option]"
+                                            [ngModelOptions]="{standalone: true}" />
+                                        {{ option }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" value="Adult">
+
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="adultPrice"
+                                [ngModelOptions]="{standalone: true}">
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" value="Child">
+
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="childPrice"
+                                [ngModelOptions]="{standalone: true}">
+
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" value="Extra">
+
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="extraPrice"
+                                [ngModelOptions]="{standalone: true}">
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-end">
+                <button type="button" class="ct_blue_btn ct_outline_btn_blue ct_fw_400"
+                    data-bs-dismiss="modal">Cancel</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal
+                    data-bs-dismiss="modal">Close</button>
+                <button (click)="addTerminal()" type="button" class="ct_blue_btn py-2 ct_fw_400">Save Schedule</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- add Modal E -->
+
+<!-- Edit Modal S -->
+<div class="modal fade" id="ct_edit_new_schedule" tabindex="-1" aria-labelledby="ct_edit_new_scheduleLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+        <div class="modal-content pb-4">
+            <!-- <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+            <div class="modal-body border-0 pt-5">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add New Schedule</h4>
+                    <form action="" class="pt-2 ct_modal_height_500 ct_custom_scroll_bar ">
+
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus No. <span
+                                    class="ct_text_red">*</span></label>
+                            <select class="form-control ct_input ct_fs_18">
+                                <option value="">Select Bus</option>
+                                <option value="">Charted Bus</option>
+                                <option value="">Charted Bus</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">From (Route)<span
+                                    class="ct_text_red">*</span></label>
+                            <select class="form-control ct_input ct_fs_18">
+                                <option value="">Select starting location</option>
+                                <option value="">Central Station</option>
+                                <option value="">Central Station</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">To (Route)<span
+                                    class="ct_text_red">*</span></label>
+                            <select class="form-control ct_input ct_fs_18">
+                                <option value="">Select ending location</option>
+                                <option value="">Berlin</option>
+                                <option value="">Berlin</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Departure Time <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="time" class="form-control ct_input ct_fs_18">
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Arrival Time <span
+                                    class="ct_text_red">*</span></label>
+                            <input type="time" class="form-control ct_input ct_fs_18">
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Assign Driver<span
+                                    class="ct_text_red">*</span></label>
+                            <select class="form-control ct_input ct_fs_18">
+                                <option value="">Select Driver</option>
+                                <option value="">john Doe</option>
+                                <option value="">Alen</option>
+                            </select>
+                        </div>
+
+
+
+
+
+
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-end">
+                <button type="button" class="ct_blue_btn ct_outline_btn_blue ct_fw_400"
+                    data-bs-dismiss="modal">Cancel</button>
+
+                <button type="button" class="ct_blue_btn py-2 ct_fw_400">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal E -->
+
+<!-- delete Modal S -->
+<div class="modal fade" id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_delete_modal_cnt">
+                    <div class="text-center mb-4 ct_delete_icon">
+                        <svg width="40" height="40" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Confirm Delete</h4>
+                    <p class="mb-0 text-center ct_fs_18"> Are you sure? you want to delete it.</p>
+
+
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
+
+                <button type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete Modal E -->

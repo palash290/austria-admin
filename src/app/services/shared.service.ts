@@ -2,35 +2,35 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  
-  baseUrl = 'http://192.168.29.44:4200/admin/';
 
-  constructor (private http: HttpClient, private route: Router) {}
+  baseUrl = 'http://192.168.29.44:42000/admin/';
 
-  setToken (token: string) {
+  constructor(private http: HttpClient, private route: Router) { }
+
+  setToken(token: string) {
     localStorage.setItem('austriaAdminToken', token)
   }
 
-  getToken () {
+  getToken() {
     return localStorage.getItem('austriaAdminToken')
   }
 
-  isLogedIn () {
+  isLogedIn() {
     return this.getToken() !== null
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem('austriaAdminToken');
     this.route.navigateByUrl('');
   }
 
-  loginUser (params: any): Observable<any> {
+  loginUser(params: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded'
     })
@@ -72,6 +72,13 @@ export class SharedService {
     });
     return this.http.delete(this.baseUrl + url, { headers: headers })
   };
-  
+
+  private refreshSidebarSource = new BehaviorSubject<void | null>(null);
+  refreshSidebar$ = this.refreshSidebarSource.asObservable();
+
+  triggerRefresh() {
+    this.refreshSidebarSource.next(null);
+  }
+
 
 }

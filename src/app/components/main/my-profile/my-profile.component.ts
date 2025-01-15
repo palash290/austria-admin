@@ -34,8 +34,8 @@ export class MyProfileComponent {
   initForm() {
     this.profileForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      phone: new FormControl('',  [Validators.required, Validators.pattern(this.pattern1)]),
-      email: new FormControl({value: this.userEmail, disabled: true}),
+      phone: new FormControl('', [Validators.required, Validators.pattern(this.pattern1)]),
+      email: new FormControl({ value: this.userEmail, disabled: true }),
     });
   }
 
@@ -65,20 +65,20 @@ export class MyProfileComponent {
     //   return;
     // }
     this.profileForm.markAllAsTouched();
-    
+
     if (this.profileForm.valid) {
       this.loading = true;
       const formURlData = new URLSearchParams();
       formURlData.set('name', this.profileForm.value.name);
       formURlData.set('email', this.userEmail);
       formURlData.set('mobile_number', this.profileForm.value.phone);
-     
+
       this.service.postAPI('profile-update', formURlData.toString()).subscribe({
         next: (resp) => {
           if (resp.success === true) {
             this.toastr.success(resp.message);
             this.loading = false;
-            //this.service.triggerRefresh();
+            this.service.triggerRefresh();
           } else {
             this.toastr.warning(resp.message);
             this.loading = false;
