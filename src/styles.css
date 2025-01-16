@@ -6,3 +6,10 @@
     flex-direction: row-reverse;
     color: red;
 }
+
+.pagination-section {
+    padding: 1rem;
+    border-top: 1px solid #dcdcdc;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}

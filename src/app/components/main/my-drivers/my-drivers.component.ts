@@ -3,18 +3,24 @@ import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
 
 @Component({
   selector: 'app-my-drivers',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './my-drivers.component.html',
   styleUrl: './my-drivers.component.css'
 })
 export class MyDriversComponent {
 
+  totalPagesArray: number[] = [];
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 1;
+  pageSizeOptions = [5, 10, 25, 50];
+  searchQuery: any = '';
   data: any;
   form!: FormGroup;
   editForm!: FormGroup;
@@ -89,9 +95,10 @@ export class MyDriversComponent {
 
 
   getDrivers() {
-    this.service.getApi('get-all-drivers').subscribe({
+    this.service.getApi(`get-all-drivers-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
       next: resp => {
-        this.data = resp.data;
+        this.data = resp.data.drivers;
+        this.totalPages = resp.data.pagination?.totalPages
       },
       error: error => {
         console.log(error.message);
@@ -220,6 +227,7 @@ export class MyDriversComponent {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
           this.getDrivers();
+          this.toastr.success(resp.message)
           this.btnDelLoader = false;
         } else {
           this.btnDelLoader = false;
@@ -240,6 +248,17 @@ export class MyDriversComponent {
     return this.errorMessageService.getErrorMessage(control)
   }
 
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.getDrivers();
+  }
+
+  changePageSize(newPageSize: number) {
+    this.pageSize = newPageSize;
+    this.currentPage = 1;
+    this.getDrivers();
+  }
 
 }
 // "driver_id": 1,

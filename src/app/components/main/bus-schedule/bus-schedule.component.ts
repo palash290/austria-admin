@@ -269,5 +269,8 @@ export class BusScheduleComponent {
     });
   }
 
-
+  isFieldTouched: { [key: string]: boolean } = {};
+  onBlur(field: string): void {
+    this.isFieldTouched[field] = true;
+  }
 }

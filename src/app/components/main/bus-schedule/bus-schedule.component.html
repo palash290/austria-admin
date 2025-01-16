@@ -122,6 +122,13 @@
                             <th>Bus Number </th>
                             <th>Name/Type</th>
                             <th>Capacity</th>
+                            <!-- <th>Direction</th>
+                            <th>From</th>
+                            <th>To</th> -->
+                            <th>Departure</th>
+                            <th>Arrival</th>
+                            <th>Duration</th>
+                            <th>Driver</th>
                             <!-- <th>Status</th> -->
                             <!-- <th>Actions</th> -->
                         </tr>
@@ -133,6 +140,13 @@
                             <td>{{item.bus.bus_number_plate}}</td>
                             <td>{{item.bus.bus_name}}</td>
                             <td>{{item.bus.number_of_seats}}</td>
+                            <!-- <td>{{item.route.route_direction}}</td>
+                            <td>{{item.route.pickup_point.city_name}}</td>
+                            <td>{{item.route.dropoff_point.city_name}}</td> -->
+                            <td>{{item.departure_time}}</td>
+                            <td>{{item.arrival_time}}</td>
+                            <td>{{item.duration_time}}</td>
+                            <td>{{item.driver.driver_name}}</td>
                             <!-- <td>
                                 <div class="ct_actions_btn">
                                     <button class="ct_action_btn" data-bs-toggle="modal"
@@ -243,14 +257,32 @@
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Departure Time <span
                                     class="ct_text_red">*</span></label>
                             <input type="time" class="form-control ct_input ct_fs_18" [(ngModel)]="departure_time"
-                                [ngModelOptions]="{standalone: true}">
+                                [ngModelOptions]="{standalone: true}" (blur)="onBlur('departure_time')">
+                            <p *ngIf="!departure_time && isFieldTouched['departure_time']" class="err_msg">
+                                This field cannot be empty
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
                         </div>
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Running Hours <span
                                     class="ct_text_red">*</span></label>
                             <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="total_running_hours"
-                                [ngModelOptions]="{standalone: true}">
+                                [ngModelOptions]="{standalone: true}" (blur)="onBlur('total_running_hours')">
+                            <p *ngIf="!total_running_hours && isFieldTouched['total_running_hours']" class="err_msg">
+                                This field cannot be empty
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
                         </div>
 
 
@@ -318,9 +350,10 @@
                         </div>
 
 
-                        <div *ngIf="selectedRecurrence == 'Custom'" class="custom-dropdown">
+                        <div *ngIf="selectedRecurrence == 'Custom'" class="custom-dropdown mb-4">
                             <!-- Selected values -->
-                            <div class="dropdown-header" (click)="toggleDropdown()">
+                            <div class="form-control ct_input ct_fs_18 d-flex justify-content-between align-items-center"
+                                (click)="toggleDropdown()">
                                 {{ getSelectedOptions() || 'Select options' }}
                                 <i class="arrow" [class.open]="dropdownOpen"></i>
                             </div>
@@ -337,39 +370,64 @@
                             </div>
                         </div>
 
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-4 position-relative">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category <span
                                     class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" value="Adult">
+                            <input type="text" class="form-control ct_input ct_fs_18" value="Adult" readonly>
 
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="adultPrice"
-                                [ngModelOptions]="{standalone: true}">
+                            <div class="absolute">
+                                <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
+                                        class="ct_text_red">*</span></label>
+                                <input type="text" placeholder="Enter Price Here" class="form-control ct_input ct_fs_18"
+                                    [(ngModel)]="adultPrice" [ngModelOptions]="{standalone: true}"
+                                    (blur)="onBlur('adultPrice')">
+                                <p *ngIf="!adultPrice && isFieldTouched['adultPrice']" class="err_msg">
+                                    This field cannot be empty
+                                    <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                            fill="#F80000" />
+                                    </svg>
+                                </p>
+                            </div>
 
                         </div>
 
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" value="Child">
-
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="childPrice"
-                                [ngModelOptions]="{standalone: true}">
-
+                        <div class="form-group mb-4 position-relative">
+                            <input type="text" class="form-control ct_input ct_fs_18" value="Child" readonly>
+                            <div class="absolute">
+                                <input type="text" placeholder="Enter Price Here" class="form-control ct_input ct_fs_18"
+                                    [(ngModel)]="childPrice" [ngModelOptions]="{standalone: true}"
+                                    (blur)="onBlur('childPrice')">
+                                <p *ngIf="!childPrice && isFieldTouched['childPrice']" class="err_msg">
+                                    This field cannot be empty
+                                    <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                            fill="#F80000" />
+                                    </svg>
+                                </p>
+                            </div>
                         </div>
 
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" value="Extra">
-
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Price <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="extraPrice"
-                                [ngModelOptions]="{standalone: true}">
+                        <div class="form-group mb-4 position-relative">
+                            <input type="text" class="form-control ct_input ct_fs_18" value="Extra" readonly>
+                            <div class="absolute">
+                                <input type="text" placeholder="Enter Price Here" class="form-control ct_input ct_fs_18"
+                                    [(ngModel)]="extraPrice" [ngModelOptions]="{standalone: true}"
+                                    (blur)="onBlur('extraPrice')">
+                                <p *ngIf="!extraPrice && isFieldTouched['extraPrice']" class="err_msg">
+                                    This field cannot be empty
+                                    <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                            fill="#F80000" />
+                                    </svg>
+                                </p>
+                            </div>
                         </div>
 
 

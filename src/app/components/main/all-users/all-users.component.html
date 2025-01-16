@@ -66,21 +66,25 @@
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
                 <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Users Management</h4>
-                <div class="ct_grid_2 gap-2">
-                    <!-- <button
+                <!-- <div class="d-flex gap-3 align-items-center  justify-content-between"> -->
+                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    (ngModelChange)="getUsers()">
+                <!-- </div> -->
+                <!-- <div class="ct_grid_2 gap-2"> -->
+                <!-- <button
                         class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
                         data-bs-toggle="modal" data-bs-target="#ct_add_booking">
                         +
                         Add Booking</button> -->
 
-                    <!-- <select class="form-control ct_by_date_select">
+                <!-- <select class="form-control ct_by_date_select">
                         <option value="">By Date</option>
                         <option value="">12 Jun</option>
                         <option value="">13 Jun</option>
                         <option value="">14 Jun</option>
 
                     </select> -->
-                </div>
+                <!-- </div> -->
 
             </div>
             <div class="table-responsive">
@@ -132,6 +136,32 @@
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="data?.length == 0 || !data" class="text-center">
+                    <p class="ct_fs_15 mt-3">No items found</p>
+                </div>
+            </div>
+            <!-- Pagination Controls -->
+            <div class="d-flex justify-content-between align-items-center pagination-section w-100">
+                <div class="d-flex gap-2 align-items-center">
+                    <label for="pageSize">Items per page: </label>
+                    <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
+                        (change)="changePageSize(pageSize)">
+                        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Table pagination">
+                    <ul class="pagination">
+                        <li class="page-item" [class.disabled]="currentPage === 1">
+                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === totalPages">
+                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

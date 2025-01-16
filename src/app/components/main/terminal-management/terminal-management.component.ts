@@ -14,6 +14,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class TerminalManagementComponent {
 
+  totalPagesArray: number[] = [];
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 1;
+  pageSizeOptions = [5, 10, 25, 50];
+  searchQuery: any = '';
   allTerminals: any;
   allRoutes: any;
   terminalName: any;
@@ -26,9 +32,10 @@ export class TerminalManagementComponent {
   }
 
   getAllTerminals() {
-    this.service.getApi('get-all-city-terminal').subscribe({
+    this.service.getApi(`get-all-city-terminal?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
       next: resp => {
-        this.allTerminals = resp.data;
+        this.allTerminals = resp.data.terminals;
+        this.totalPages = resp.data.pagination?.totalPages
       },
       error: error => {
         console.log(error.message);
@@ -156,6 +163,7 @@ export class TerminalManagementComponent {
       next: (resp) => {
         if (resp.success) {
           this.closeModal21.nativeElement.click();
+          this.toastr.success(resp.message)
           this.getAllTerminals();
           //this.btnDelLoader = false;
         } else {
@@ -167,7 +175,21 @@ export class TerminalManagementComponent {
     });
   }
 
+  isTouched: boolean = false;
+  onBlur() {
+    this.isTouched = true;
+  }
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.getAllTerminals();
+  }
 
+  changePageSize(newPageSize: number) {
+    this.pageSize = newPageSize;
+    this.currentPage = 1;
+    this.getAllTerminals();
+  }
 }
 // "data": [
 //         {

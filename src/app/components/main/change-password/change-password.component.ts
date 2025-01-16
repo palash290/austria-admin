@@ -29,12 +29,8 @@ export class ChangePasswordComponent {
       current_password: new FormControl('', Validators.required),
       new_password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirm_password: new FormControl('', Validators.required),
-    });
+    }, { validators: passwordMatchValidator() });
 
-    this.form.get('admin/confirm_password')?.setValidators([
-      Validators.required,
-      this.passwordMatchValidator()
-    ]);
   }
 
   submitForm() {
@@ -53,10 +49,10 @@ export class ChangePasswordComponent {
       this.loading = true;
       const formURlData = new URLSearchParams();
       //console.log()
-      formURlData.set('current_password', this.form.value.current_password);
-      formURlData.set('new_password', this.form.value.new_password);
-      formURlData.set('confirm_password', this.form.value.confirm_password);
-      this.service.postAPI('sub-admin/change-password', formURlData).subscribe({
+      formURlData.set('currentPassword', this.form.value.current_password);
+      // formURlData.set('new_password', this.form.value.new_password);
+      formURlData.set('newPassword', this.form.value.confirm_password);
+      this.service.postAPI('change-password', formURlData).subscribe({
         next: (resp) => {
           if (resp.status == 200) {
             this.toastr.success(resp.message);
@@ -71,25 +67,11 @@ export class ChangePasswordComponent {
         },
         error: (error) => {
           this.loading = false;
-          this.toastr.warning('Old password is incorrect.');
+          this.toastr.warning('Current password is incorrect.');
           console.error('Login error:', error.message);
         }
       });
     }
-  }
-
-  passwordMatchValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const password = this.form.get('new_password')?.value;
-      const confirmPassword = control.value;
-      if (password !== confirmPassword) {
-        this.passwordMismatch = true;
-        return { passwordMismatch: true };
-      } else {
-        this.passwordMismatch = false;
-        return null;
-      }
-    };
   }
 
   isPasswordVisible1: boolean = false;
@@ -110,4 +92,17 @@ export class ChangePasswordComponent {
     this.isPasswordVisible3 = !this.isPasswordVisible3;
   }
 
+}
+
+export function passwordMatchValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    const password = control.get('new_password');
+    const confirmPassword = control.get('confirm_password');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password.value !== confirmPassword.value ? { 'passwordMismatch': true } : null;
+  };
 }

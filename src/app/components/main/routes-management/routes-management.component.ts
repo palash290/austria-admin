@@ -15,7 +15,12 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './routes-management.component.css'
 })
 export class RoutesManagementComponent {
-
+  totalPagesArray: number[] = [];
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 1;
+  pageSizeOptions = [5, 10, 25, 50];
+  searchQuery: any = '';
   data: any;
   form!: FormGroup;
   selectedOption: string = '1';
@@ -99,9 +104,10 @@ export class RoutesManagementComponent {
   }
 
   getRoutes() {
-    this.service.getApi('get-all-routes').subscribe({
+    this.service.getApi(`get-all-routes-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}&filter=${this.searchQuery}`).subscribe({
       next: resp => {
-        this.data = resp.data;
+        this.data = resp.data.routes;
+        this.totalPages = resp.data.pagination?.totalPages
       },
       error: error => {
         console.log(error.message);
@@ -150,6 +156,9 @@ export class RoutesManagementComponent {
       this.service.postAPI('create-route', formURlData.toString()).subscribe(response => {
         if (response.success) {
           this.letLongUkrane = response.data;
+          this.closeModal.nativeElement.click();
+          this.toastr.success(response.message);
+          this.getRoutes();
         }
       });
     } else {
@@ -187,15 +196,45 @@ export class RoutesManagementComponent {
   updatePrice: any;
 
   patchUpdate(details: any) {
-    //debugger
     this.updateDet = details;
     this.updatePrice = details.fixed_price;
     this.updateId = details.route_id;
   }
 
-  goToSchedule(route_id: any, pickupId: any, dropoffId: any){
+  @ViewChild('closeModal21') closeModal21!: ElementRef;
+  deleteRoute() {
+    const formURlData = new URLSearchParams();
+    formURlData.set('route_id', this.updateId);
+    //this.btnDelLoader = true;
+    this.service.postAPI(`delete-route`, formURlData.toString()).subscribe({
+      next: (resp) => {
+        if (resp.success) {
+          this.closeModal21.nativeElement.click();
+          this.toastr.success(resp.message)
+          this.getRoutes();
+          //this.btnDelLoader = false;
+        } else {
+          //this.btnDelLoader = false;
+          this.toastr.warning('Something went wrong!');
+          this.getRoutes();
+        }
+      },
+    });
+  }
+
+  goToSchedule(route_id: any, pickupId: any, dropoffId: any) {
     this.router.navigateByUrl(`/home/bus-schedule/${route_id}/${pickupId}/${dropoffId}`)
   }
 
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.getRoutes();
+  }
 
+  changePageSize(newPageSize: number) {
+    this.pageSize = newPageSize;
+    this.currentPage = 1;
+    this.getRoutes();
+  }
 }

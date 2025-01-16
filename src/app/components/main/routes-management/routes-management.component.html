@@ -83,23 +83,33 @@
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
                 <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Route Management</h4>
-                <button
-                    class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
-                    data-bs-toggle="modal" data-bs-target="#ct_add_route">
-                    +
-                    Add Route</button>
+                <div class="d-flex gap-3 align-items-center  justify-content-between">
+                    <select class="form-control w-auto" [(ngModel)]="searchQuery" name="route"
+                        (ngModelChange)="getRoutes()">
+                        <option value="" disabled selected>-- Select --</option>
+                        <option value="Austria To Ukraine">Austria To Ukraine</option>
+                        <option value="Ukraine To Austria">Ukraine To Austria</option>
+                    </select>
+                    <!-- <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                        (ngModelChange)="getRoutes()"> -->
+                    <button
+                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
+                        data-bs-toggle="modal" data-bs-target="#ct_add_route">
+                        +
+                        Add Route</button>
 
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>
                         <tr>
                             <th>S No.</th>
-                            <th>Route Way</th>
-                            <th>Start Point</th>
-                            <th>End Point</th>
+                            <th>Route Direction</th>
+                            <th>From</th>
+                            <th>To</th>
                             <th>Distance (km)</th>
-                            <th>Status</th>
+                            <!-- <th>Status</th> -->
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -112,8 +122,8 @@
                             <td>{{item.dropoff_point.city_name}}</td>
                             <td>{{item.distance_km}}</td>
                             <!-- <td>€ {{item.fixed_price}}</td> -->
-                            <td><span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
-                                    style="background-color: #E2EDE5;color: #28A745;">Active</span></td>
+                            <!-- <td><span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
+                                    style="background-color: #E2EDE5;color: #28A745;">Active</span></td> -->
 
                             <td>
                                 <div class="ct_actions_btn">
@@ -128,12 +138,12 @@
                                         </svg>
                                     </button> -->
 
-                                    <button class="ct_action_btn" data-bs-toggle="modal"
-                                        data-bs-target="#ct_edit_route" (click)="goToSchedule(item.route_id, item.pickup_point.city_id, item.dropoff_point.city_id)">
+                                    <button class="ct_action_btn" data-bs-toggle="modal" data-bs-target="#ct_edit_route"
+                                        (click)="goToSchedule(item.route_id, item.pickup_point.city_id, item.dropoff_point.city_id)">
                                         <i class="fa-regular fa-eye ct_hide_pass_wye"></i>
                                     </button>
 
-                                    <!-- <button class="ct_action_btn" data-bs-toggle="modal"
+                                    <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
                                         data-bs-target="#ct_delete_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -142,12 +152,38 @@
                                                 stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round" />
                                         </svg>
-                                    </button> -->
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="data?.length == 0 || !data" class="text-center">
+                    <p class="ct_fs_15 mt-3">No items found</p>
+                </div>
+            </div>
+            <!-- Pagination Controls -->
+            <div class="d-flex justify-content-between align-items-center pagination-section w-100">
+                <div class="d-flex gap-2 align-items-center">
+                    <label for="pageSize">Items per page: </label>
+                    <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
+                        (change)="changePageSize(pageSize)">
+                        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Table pagination">
+                    <ul class="pagination">
+                        <li class="page-item" [class.disabled]="currentPage === 1">
+                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === totalPages">
+                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
@@ -262,8 +298,8 @@
                                     class="ct_text_red">*</span></label>
                             <select class="form-control ct_input ct_fs_18" [(ngModel)]="selectedOption" name="route"
                                 [ngModelOptions]="{standalone: true}">
-                                <option value="1">Austria To Ukrane</option>
-                                <option value="2">Ukrane To Austria</option>
+                                <option value="1">Austria To Ukraine</option>
+                                <option value="2">Ukraine To Austria</option>
                             </select>
                         </div>
 
@@ -458,7 +494,7 @@
 
 <!-- delete Modal S -->
 <div class="modal fade " id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content pb-4">
             <div class="modal-header border-0">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -481,8 +517,8 @@
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
 
-                <button type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
-                <button hidden type="button" class="btn btn-secondary" #closeModal2
+                <button type="button" class="ct_blue_btn py-3 px-5" (click)="deleteRoute()">Confirm</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal21
                     data-bs-dismiss="modal">Close</button>
             </div>
         </div>

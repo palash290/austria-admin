@@ -3,18 +3,24 @@ import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
 
 @Component({
   selector: 'app-bus-list',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './bus-list.component.html',
   styleUrl: './bus-list.component.css'
 })
 export class BusListComponent {
 
+  totalPagesArray: number[] = [];
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalPages: number = 1;
+  pageSizeOptions = [5, 10, 25, 50];
+  searchQuery: any = '';
   data: any;
   form!: FormGroup;
   editForm!: FormGroup;
@@ -48,9 +54,10 @@ export class BusListComponent {
   }
 
   getBuses() {
-    this.service.getApi('get-all-buses').subscribe({
+    this.service.getApi(`get-all-buses-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
       next: resp => {
-        this.data = resp.data;
+        this.data = resp.data.buses;
+        this.totalPages = resp.data.pagination?.totalPages
       },
       error: error => {
         console.log(error.message);
@@ -174,6 +181,7 @@ export class BusListComponent {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
           this.getBuses();
+          this.toastr.success(resp.message)
           this.btnDelLoader = false;
         } else {
           this.btnDelLoader = false;
@@ -195,5 +203,16 @@ export class BusListComponent {
     return this.errorMessageService.getErrorMessage(control)
   }
 
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.getBuses();
+  }
+
+  changePageSize(newPageSize: number) {
+    this.pageSize = newPageSize;
+    this.currentPage = 1;
+    this.getBuses();
+  }
 
 }

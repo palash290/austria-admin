@@ -54,3 +54,15 @@
 .dropdown-item input {
   margin-right: 10px;
 }
+
+.absolute {
+  position: absolute;
+  top: 0;
+  left: 20%;
+  width: 80%;
+}
+
+.absolute .ct_input {
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
