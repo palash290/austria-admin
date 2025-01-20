@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class SharedService {
 
-  baseUrl = 'http://192.168.29.44:4200/admin/';
+  baseUrl = 'http://192.168.29.44:42000/admin/';
 
   constructor(private http: HttpClient, private route: Router) { }
 
@@ -52,6 +52,15 @@ export class SharedService {
     const authToken = localStorage.getItem('austriaAdminToken')
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${authToken}`
+    })
+    return this.http.post(this.baseUrl + url, data, { headers: headers })
+  }
+
+  postData(url: any, data: any): Observable<any> {
+    const authToken = localStorage.getItem('austriaAdminToken')
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${authToken}`
     })
     return this.http.post(this.baseUrl + url, data, { headers: headers })

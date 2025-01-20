@@ -1,0 +1,30 @@
+.Replid {
+      color: green;
+      background: rgba(0, 128, 0, 0.307);
+      padding: 5px 10px;
+      border-radius: 10px;
+}
+
+.Pending {
+      color: #bfac01;
+      background: rgba(255, 230, 6, 0.626);
+      padding: 5px 10px;
+      border-radius: 10px;
+}
+
+.message {
+      padding: 15px;
+      background: azure;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 500;
+}
+
+.reply {
+      padding: 15px;
+      background: aliceblue;
+      border-radius: 10px;
+      margin-top: 1rem;
+      font-size: 16px;
+      font-weight: 500;
+}

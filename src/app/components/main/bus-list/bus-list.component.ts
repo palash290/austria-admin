@@ -214,5 +214,4 @@ export class BusListComponent {
     this.currentPage = 1;
     this.getBuses();
   }
-
 }
