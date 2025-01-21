@@ -52,7 +52,7 @@
                               <tbody>
 
                                     <tr *ngFor="let item of data; let i = index">
-                                          <td>{{i+1}}</td>
+                                          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                                           <td>
                                                 {{item.route.pickup_point.city_name}}
                                           </td>
@@ -162,7 +162,7 @@
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <input type="date" class="form-control ct_input ct_fs_18"
-                                                      formControlName="from_date">
+                                                      formControlName="from_date" [min]="minDate">
                                           </div>
                                           <p *ngIf="Form.get('from_date')?.touched && Form.get('from_date')?.errors"
                                                 class="err_msg">
@@ -179,7 +179,7 @@
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <input type="date" class="form-control ct_input ct_fs_18"
-                                                      formControlName="to_date">
+                                                      formControlName="to_date" [min]="minDate">
                                           </div>
                                           <p *ngIf="Form.get('to_date')?.touched && Form.get('to_date')?.errors"
                                                 class="err_msg">
@@ -260,7 +260,7 @@
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <input type="date" class="form-control ct_input ct_fs_18"
-                                                      formControlName="from_date">
+                                                      formControlName="from_date" [min]="minDate">
                                           </div>
                                           <p *ngIf="Form.get('from_date')?.touched && Form.get('from_date')?.errors"
                                                 class="err_msg">
@@ -277,7 +277,7 @@
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <input type="date" class="form-control ct_input ct_fs_18"
-                                                      formControlName="to_date">
+                                                      formControlName="to_date" [min]="minDate">
                                           </div>
                                           <p *ngIf="Form.get('to_date')?.touched && Form.get('to_date')?.errors"
                                                 class="err_msg">
@@ -355,3 +355,7 @@
 
 
 <!-- All Modal Section E -->
+
+<div *ngIf="loading">
+      <app-loader />
+  </div>

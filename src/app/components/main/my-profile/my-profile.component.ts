@@ -5,11 +5,12 @@ import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, LoaderComponent],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
@@ -64,6 +65,14 @@ export class MyProfileComponent {
     //   this.toastr.warning('Please check all the fields!');
     //   return;
     // }
+
+    const name = this.profileForm.value.name?.trim();
+    const phone = this.profileForm.value.phone?.trim();
+
+    if (!name || phone) {
+      return;
+    }
+
     this.profileForm.markAllAsTouched();
 
     if (this.profileForm.valid) {
@@ -95,5 +104,6 @@ export class MyProfileComponent {
       this.toastr.warning('Please check all the fields!');
     }
   }
+
 
 }

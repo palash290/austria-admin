@@ -66,7 +66,7 @@
                     <tbody>
 
                         <tr *ngFor="let item of data; let i = index">
-                            <td>{{i+1}}</td>
+                            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                             <td>{{item.bus.bus_number_plate}}</td>
                             <td>{{item.bus.bus_name}}</td>
                             <td>{{item.bus.number_of_seats}}</td>

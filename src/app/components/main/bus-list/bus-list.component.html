@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of data; let i = index">
-                            <td>{{i+1}}</td>
+                            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                             <td>{{item.bus_name}}</td>
                             <td>{{item.bus_number_plate}}</td>
                             <td>{{item.bus_type}}</td>
@@ -60,7 +60,7 @@
 
                             <td>
                                 <div class="ct_actions_btn">
-                                    <!-- <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
+                                    <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
                                         data-bs-target="#ct_edit_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,7 @@
                                                 stroke="black" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round" />
                                         </svg>
-                                    </button> -->
+                                    </button>
                                     <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
                                         data-bs-target="#ct_delete_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
@@ -156,7 +156,7 @@
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Number</label>
                             <input type="text" placeholder="Enter Bus Number" formControlName="number"
-                                class="form-control ct_input ct_fs_18">
+                                class="form-control ct_input ct_fs_18" maxlength="15">
 
                             <p *ngIf="form.get('number')?.touched && form.get('number')?.errors" class="err_msg">
                                 {{ getErrorMessage('number') }}
@@ -172,8 +172,8 @@
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Seats</label>
-                            <input type="text" placeholder="Enter Total Seats" formControlName="totalSeats"
-                                class="form-control ct_input ct_fs_18" maxlength="2">
+                            <input type="number" placeholder="Enter Total Seats" formControlName="totalSeats"
+                                class="form-control ct_input ct_fs_18" (input)="validateMaxLength($event, 2)">
 
                             <p *ngIf="form.get('totalSeats')?.touched && form.get('totalSeats')?.errors"
                                 class="err_msg">
@@ -191,7 +191,7 @@
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Registration Number</label>
                             <input type="text" placeholder="Enter Registration Number" formControlName="regNum"
-                                class="form-control ct_input ct_fs_18">
+                                class="form-control ct_input ct_fs_18" maxlength="20">
                             <p *ngIf="form.get('regNum')?.touched && form.get('regNum')?.errors" class="err_msg">
                                 {{ getErrorMessage('regNum') }}
                                 <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
@@ -279,7 +279,7 @@
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Number</label>
                             <input type="text" placeholder="Enter Bus Number" formControlName="number"
-                                class="form-control ct_input ct_fs_18">
+                                class="form-control ct_input ct_fs_18" maxlength="15">
 
                             <p *ngIf="editForm.get('number')?.touched && editForm.get('number')?.errors"
                                 class="err_msg">
@@ -297,7 +297,7 @@
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Seats</label>
                             <input type="text" placeholder="Enter Total Seats" formControlName="totalSeats"
-                                class="form-control ct_input ct_fs_18">
+                                class="form-control ct_input ct_fs_18" (input)="validateMaxLength($event, 2)">
 
                             <p *ngIf="editForm.get('totalSeats')?.touched && editForm.get('totalSeats')?.errors"
                                 class="err_msg">
@@ -379,3 +379,7 @@
 <!-- delete Modal E -->
 
 <!-- All Modal Section E -->
+
+<div *ngIf="loading">
+    <app-loader />
+</div>

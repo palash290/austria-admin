@@ -94,7 +94,7 @@
                                           <th>S No.</th>
                                           <th>User Name</th>
                                           <th>Email</th>
-                                          <th>Message</th>
+                                          <!-- <th>Message</th> -->
                                           <th>Status</th>
                                           <th>Create At</th>
                                           <th>Actions</th>
@@ -103,14 +103,14 @@
                               <tbody>
 
                                     <tr *ngFor="let item of data; let i = index">
-                                          <td>{{i+1}}</td>
+                                          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                                           <td>
                                                 {{item.name}}
                                           </td>
                                           <td>{{item.email}}</td>
-                                          <td>{{item.query}}</td>
-                                          <td><span
-                                                      [ngClass]="item.is_response ? 'Replid' : 'Pending'">{{item.is_response ? 'Replid' : 'Pending'}}</span>
+                                          <!-- <td>{{item.query}}</td> -->
+                                          <td><span [ngClass]="item.is_response ? 'Replid' : 'Pending'">{{item.is_response
+                                                      ? 'Replid' : 'Pending'}}</span>
                                           </td>
                                           <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
 
@@ -329,3 +329,7 @@
 
 
 <!-- All Modal Section E -->
+
+<div *ngIf="loading">
+      <app-loader />
+</div>

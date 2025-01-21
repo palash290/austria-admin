@@ -6,11 +6,12 @@ import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { ActivatedRoute } from '@angular/router';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-bus-schedule',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './bus-schedule.component.html',
   styleUrl: './bus-schedule.component.css'
 })
@@ -26,6 +27,7 @@ export class BusScheduleComponent {
   selectedRecurrence: any = 'Daily';
   weekDays: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   selectedDays: string[] = [];
+  loading: boolean = false;
 
   dropdownOpen: boolean = false;
   selectedOptions: { [key: string]: boolean } = {};
@@ -57,7 +59,21 @@ export class BusScheduleComponent {
     this.getDrivers();
     this.getPickupTerminalsByCity();
     this.getDropoffTerminalsByCity();
+    this.fetchCategories();
   }
+
+  categories: { ticket_type: string, price?: string }[] = [];
+
+  fetchCategories() {
+    this.service.getApi('get-all-ticket-type')
+      .subscribe(response => {
+        this.categories = response.data.map((category: any) => ({
+          ...category,
+          price: '' // Initialize with an empty string
+        }));
+      });
+  }
+
 
   getBuseSchedule() {
     const formURlData = new URLSearchParams();
@@ -170,14 +186,25 @@ export class BusScheduleComponent {
 
   // Method to format data into the desired array
   getPricesData(): any[] {
-    return [
-      { category: 'Adult', price: this.adultPrice },
-      { category: 'Child', price: this.childPrice },
-      { category: 'Extra', price: this.extraPrice }
-    ];
+    // return [
+    //   { category: 'Adult', price: this.adultPrice },
+    //   { category: 'Child', price: this.childPrice },
+    //   { category: 'Extra', price: this.extraPrice }
+    // ];
+
+    return this.categories.map(category => ({
+      category: category.ticket_type,
+      price: category.price || null
+    }));
   }
 
   addTerminal() {
+    // const busName = this.total_running_hours?.trim();
+
+    // if (!busName) {
+    //   return;
+    // }
+    this.loading = true;
     const formattedData = JSON.stringify(this.getPricesData());
     const formURlData = new URLSearchParams();
     formURlData.set('bus_id', this.selectedBusId);
@@ -185,17 +212,24 @@ export class BusScheduleComponent {
     formURlData.set('driver_id', this.selectedDriverId);
     formURlData.set('departure_time', this.departure_time);
     formURlData.set('total_running_hours', this.total_running_hours);
-    formURlData.set('pickup_terminal_id', this.selectedPickupTerminalId);
-    formURlData.set('dropoff_terminal_id', this.selectedDropTerminalId);
+    formURlData.set('recurrence_pattern', this.selectedRecurrence);
 
     const selected: any = Object.keys(this.selectedOptions).filter(
       (key) => this.selectedOptions[key]
     );
-    console.log('Selected options:', selected);
 
+    if (this.selectedRecurrence == 'Custom') {
+      if (selected?.length > 0) {
+        formURlData.set('days_of_week', selected);
+      } else {
+        this.toastr.error('Please select days of week for custom recurrence');
+        return
+      }
+    } else {
+      const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      formURlData.set('days_of_week', allDays.join(','));
+    }
 
-    formURlData.set('recurrence_pattern', this.selectedRecurrence);
-    formURlData.set('days_of_week', selected);
     formURlData.set('base_pricing', formattedData);
 
     this.service.postAPI('create-busschedule', formURlData.toString()).subscribe({
@@ -205,11 +239,21 @@ export class BusScheduleComponent {
           this.closeModal.nativeElement.click();
           this.toastr.success(response.message);
           this.getBuseSchedule();
+          this.selectedOptions = {};
+          this.selectedRecurrence = 'Daily';
+          this.total_running_hours = '';
+          this.departure_time = '';
+          this.adultPrice = '';
+          this.childPrice = '';
+          this.extraPrice = '';
+          this.loading = false;
         } else {
           this.toastr.warning(response.message);
+          this.loading = false;
         }
       },
       error: (error) => {
+        this.loading = false;
         if (error.error.message) {
           this.toastr.error(error.error.message);
         } else {
@@ -218,6 +262,15 @@ export class BusScheduleComponent {
       }
     });
   }
+
+  validateMaxLength(event: Event, length: number): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > length) {
+      input.value = input.value.slice(0, length); // Trim value to the first 3 characters
+      //this.total_running_hours = input.value; // Update the model value
+    }
+  }
+
 
   pickupTerminals: any;
 
@@ -229,7 +282,7 @@ export class BusScheduleComponent {
       next: (response) => {
         if (response.success) {
           this.pickupTerminals = response.data;
-          this.selectedPickupTerminalId = this.pickupTerminals[0].terminal_id;
+          //this.selectedPickupTerminalId = this.pickupTerminals[0].terminal_id;
         } else {
           this.toastr.warning(response.message);
         }
@@ -254,7 +307,7 @@ export class BusScheduleComponent {
       next: (response) => {
         if (response.success) {
           this.dropoffTerminals = response.data;
-          this.selectedDropTerminalId = this.dropoffTerminals[0].terminal_id;
+          //this.selectedDropTerminalId = this.dropoffTerminals[0].terminal_id;
         } else {
           this.toastr.warning(response.message);
         }
@@ -273,4 +326,6 @@ export class BusScheduleComponent {
   onBlur(field: string): void {
     this.isFieldTouched[field] = true;
   }
+
+
 }

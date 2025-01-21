@@ -5,11 +5,12 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-my-drivers',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './my-drivers.component.html',
   styleUrl: './my-drivers.component.css'
 })
@@ -27,6 +28,7 @@ export class MyDriversComponent {
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
   pattern1 = "^[0-9_-]{8,15}";
+  loading: boolean = false;
 
   constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
 
@@ -110,17 +112,18 @@ export class MyDriversComponent {
 
   addDriver() {
     this.form.markAllAsTouched();
-    // const busName = this.form.value.busName?.trim();
-    // const number = this.form.value.number?.trim();
-    // const totalSeats = this.form.value.totalSeats?.trim();
-    // const regNum = this.form.value.regNum?.trim();
+    const busName = this.form.value.driver_name?.trim();
+    const number = this.form.value.license_number?.trim();
+    const totalSeats = this.form.value.contact_number?.trim();
+    //const regNum = this.form.value.regNum?.trim();
 
-    // if (!busName || !number || !totalSeats || !regNum) {
-    //   return;
-    // }
+    if (!busName || !number || !totalSeats) {
+      return;
+    }
 
     if (this.form.valid) {
       this.btnLoader = true;
+      this.loading = true;
       const formURlData = new FormData();
       formURlData.set('driver_name', this.form.value.driver_name);
       formURlData.set('driver_license_number', this.form.value.license_number);
@@ -134,17 +137,20 @@ export class MyDriversComponent {
           if (resp.success == true) {
             this.toastr.success(resp.message);
             this.btnLoader = false;
+            this.loading = false;
             this.closeModal.nativeElement.click();
             this.getDrivers();
             this.form.reset();
           } else {
             this.toastr.warning(resp.message);
             this.btnLoader = false;
+            this.loading = false;
             this.getDrivers();
           }
         },
         error: (error) => {
           this.btnLoader = false;
+          this.loading = false;
           if (error.error.message) {
             this.toastr.error(error.error.message);
           } else {
@@ -171,38 +177,42 @@ export class MyDriversComponent {
   editBus() {
     this.editForm.markAllAsTouched();
 
-    const busName = this.editForm.value.busName?.trim();
-    const number = this.editForm.value.number?.trim();
-    //const totalSeats = this.editForm.value.totalSeats?.trim();
+    const busName = this.editForm.value.driver_name?.trim();
+    const number = this.editForm.value.license_number?.trim();
+    const totalSeats = this.editForm.value.contact_number?.trim();
     //const regNum = this.editForm.value.regNum?.trim();
 
-    if (!busName || !number) {
+    if (!busName || !number || !totalSeats) {
       return;
     }
 
     if (this.editForm.valid) {
       this.btnEditLoader = true;
+      this.loading = true;
       const formURlData = new URLSearchParams();
-      formURlData.set('bus_name', this.editForm.value.busName);
-      formURlData.set('bus_number', this.editForm.value.number);
-      formURlData.set('total_seats', this.editForm.value.totalSeats);
-      formURlData.set('bus_id', this.updateId);
+      formURlData.set('driver_name', this.editForm.value.driver_name);
+      formURlData.set('driver_license_number', this.editForm.value.license_number);
+      formURlData.set('driver_contact_number', this.editForm.value.contact_number);
+      formURlData.set('driver_id', this.updateId);
 
-      this.service.postAPI('update-bus', formURlData.toString()).subscribe({
+      this.service.postAPI('update-driver', formURlData.toString()).subscribe({
         next: (resp) => {
           if (resp.success == true) {
             this.toastr.success(resp.message);
             this.btnEditLoader = false;
+            this.loading = false;
             this.closeModal1.nativeElement.click();
             this.getDrivers();
           } else {
             this.toastr.warning(resp.message);
             this.btnEditLoader = false;
+            this.loading = false;
             this.getDrivers();
           }
         },
         error: (error) => {
           this.btnEditLoader = false;
+          this.loading = false;
           if (error.error.message) {
             this.toastr.error(error.error.message);
           } else {

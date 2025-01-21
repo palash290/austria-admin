@@ -6,11 +6,12 @@ import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { Router, RouterLink } from '@angular/router';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-routes-management',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, RouterLink, LoaderComponent],
   templateUrl: './routes-management.component.html',
   styleUrl: './routes-management.component.css'
 })
@@ -31,6 +32,7 @@ export class RoutesManagementComponent {
   ukraneCity: any;
   selectedUkraneCityId: any;
   selectedUkraneCityName: any;
+  loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
 
@@ -145,6 +147,7 @@ export class RoutesManagementComponent {
 
   addRoute() {
     if (this.selectedOption == '1') {
+      this.loading = true;
       const formURlData = new URLSearchParams();
       formURlData.set('route_direction', `Austria to Ukraine`);
       formURlData.set('pickup_point', this.selectedAustriaCityId);
@@ -159,9 +162,11 @@ export class RoutesManagementComponent {
           this.closeModal.nativeElement.click();
           this.toastr.success(response.message);
           this.getRoutes();
+          this.loading = false;
         }
       });
     } else {
+      this.loading = true;
       const formURlData = new URLSearchParams();
       formURlData.set('route_direction', `Ukraine to Austria`);
       formURlData.set('pickup_point', this.selectedUkraneCityId);
@@ -176,11 +181,14 @@ export class RoutesManagementComponent {
             this.closeModal.nativeElement.click();
             this.toastr.success(response.message);
             this.getRoutes();
+            this.loading = false;
           } else {
             this.toastr.warning(response.message);
+            this.loading = false;
           }
         },
         error: (error) => {
+          this.loading = false;
           if (error.error.message) {
             this.toastr.error(error.error.message);
           } else {
@@ -202,6 +210,7 @@ export class RoutesManagementComponent {
   }
 
   @ViewChild('closeModal21') closeModal21!: ElementRef;
+
   deleteRoute() {
     const formURlData = new URLSearchParams();
     formURlData.set('route_id', this.updateId);
@@ -237,4 +246,6 @@ export class RoutesManagementComponent {
     this.currentPage = 1;
     this.getRoutes();
   }
+
+
 }

@@ -217,28 +217,37 @@
 
                 <div class="ct_bus_grey_table  ct_p_40 mt-4 border-0">
                     <div class="ct_pb_20  d-flex align-items-center gap-2 justify-content-between">
-                        <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Active Trips</h4>
+                        <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Active Users</h4>
                     </div>
                     <div class="table-responsive">
                         <table class="table mb-0">
                             <thead>
                                 <tr>
-
-                                    <th>Bus Name</th>
-                                    <th>Bus Number </th>
-                                    <th>Type</th>
-                                    <th>Capacity</th>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Create At</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of buses; let i = index">
-                                    <td>{{item.bus_name}}</td>
-                                    <td>{{item.bus_number_plate}}</td>
-                                    <td>{{item.bus_type}}</td>
-                                    <td>{{item.number_of_seats}}</td>
+                                    <td>
+                                        @if(item.guest_user){
+                                        Guest User
+                                        } @else {
+                                        {{item.first_name}} {{item.last_name}}
+                                        }
+
+                                    </td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.mobile_number ? item.mobile_number : '-'}}</td>
+                                    <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
                                 </tr>
                             </tbody>
                         </table>
+                        <div *ngIf="buses?.length == 0 || !buses" class="text-center">
+                            <p class="ct_fs_15 mt-3">No items found</p>
+                        </div>
                     </div>
                 </div>
             </div>

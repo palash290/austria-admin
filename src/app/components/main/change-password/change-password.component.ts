@@ -4,11 +4,12 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validator
 import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../../../services/shared.service';
 import { HeaderComponent } from '../header/header.component';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, LoaderComponent],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
 })

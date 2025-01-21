@@ -32,9 +32,9 @@ export class DashboardComponent {
         this.busCount = resp.data.busCount;
         this.driverCount = resp.data.driverCount;
         this.routeCount = resp.data.routeCount;
-        if (resp.success && resp.data.busscheduleResult) {
+        if (resp.success && resp.data.userList) {
           // Extract all buses from the bus schedule result
-          this.buses = resp.data.busscheduleResult.map((schedule: any) => schedule.bus);
+          this.buses = resp.data.userList
           console.log('Buses:', this.buses);
         } else {
           console.log('No bus data available');
@@ -45,5 +45,6 @@ export class DashboardComponent {
       }
     });
   }
+
 
 }

@@ -5,11 +5,12 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-out-of-service',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './out-of-service.component.html',
   styleUrl: './out-of-service.component.css'
 })
@@ -22,7 +23,8 @@ export class OutOfServiceComponent {
   searchQuery: any = '';
   data: any;
   routes: any;
-  Form!: FormGroup
+  Form!: FormGroup;
+  loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal2') closeModal2!: ElementRef;
   @ViewChild('closeModal3') closeModal3!: ElementRef;
@@ -35,7 +37,8 @@ export class OutOfServiceComponent {
 
   ngOnInit() {
     this.getRoutes();
-    this.getAllRoutes()
+    this.getAllRoutes();
+    this.dateValidation();
   }
 
   inItForm() {
@@ -83,18 +86,29 @@ export class OutOfServiceComponent {
   }
 
   submit() {
+    const closure_reason = this.Form.value.closure_reason?.trim();
+
+    if (!closure_reason) {
+      return;
+    }
+
     if (this.Form.invalid) {
       return
     }
+    this.loading = true;
     this.service.postData(`create-closure`, this.Form.value).subscribe({
       next: resp => {
         if (resp.success) {
-          this.toastr.success(resp.message)
-          this.getRoutes()
-          this.closeModal.nativeElement.click()
+          this.toastr.success(resp.message);
+          this.getRoutes();
+          this.closeModal.nativeElement.click();
+          this.loading = false;
+        } else {
+          this.loading = false;
         }
       },
       error: error => {
+        this.loading = false;
         console.log(error.message);
       }
     });
@@ -137,18 +151,29 @@ export class OutOfServiceComponent {
     if (this.Form.invalid) {
       return
     }
+
+    const closure_reason = this.Form.value.closure_reason?.trim();
+
+    if (!closure_reason) {
+      return;
+    }
+    this.loading = true;
     let formData = { ...this.Form.value, closure_id: this.updateId };
 
     this.service.postData(`update-closure`, formData).subscribe({
       next: resp => {
         if (resp.success) {
-          this.toastr.success(resp.message)
-          this.getRoutes()
-          this.closeModal3.nativeElement.click()
-          this.Form.reset()
+          this.toastr.success(resp.message);
+          this.getRoutes();
+          this.closeModal3.nativeElement.click();
+          this.Form.reset();
+          this.loading = false;
+        } else {
+          this.loading = false;
         }
       },
       error: error => {
+        this.loading = false;
         console.log(error.message);
       }
     });
@@ -158,4 +183,15 @@ export class OutOfServiceComponent {
     let control: any = this.Form.get(controlName);
     return this.errorMessageService.getErrorMessage(control)
   }
+
+  minDate: any;
+  dateValidation() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Ensure two-digit month
+    const day = today.getDate().toString().padStart(2, '0'); // Ensure two-digit day
+    this.minDate = `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+  }
+
+
 }

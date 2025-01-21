@@ -5,11 +5,12 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-contact-us',
   standalone: true,
-  imports: [HeaderComponent, FormsModule, CommonModule],
+  imports: [HeaderComponent, FormsModule, CommonModule, LoaderComponent],
   templateUrl: './contact-us.component.html',
   styleUrl: './contact-us.component.css'
 })
@@ -23,6 +24,7 @@ export class ContactUsComponent {
   data: any;
   currentMsg: any;
   replyMsg: string = '';
+  loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
 
   constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
@@ -64,7 +66,13 @@ export class ContactUsComponent {
   }
 
   send() {
-    let formData = new URLSearchParams()
+    const replyMsg = this.replyMsg?.trim();
+
+    if (!replyMsg) {
+      return;
+    }
+    this.loading = true;
+    let formData = new URLSearchParams();
 
     formData.set('contact_id', this.currentMsg.contact_id)
     formData.set('email', this.currentMsg.email)
@@ -78,12 +86,15 @@ export class ContactUsComponent {
           this.closeModal.nativeElement.click();
           this.toastr.success(response.message);
           this.getContacts();
-          this.replyMsg = ''
+          this.replyMsg = '';
+          this.loading = false;
         } else {
+          this.loading = false;
           this.toastr.warning(response.message);
         }
       },
       error: (error) => {
+        this.loading = false;
         if (error.error.message) {
           this.toastr.error(error.error.message);
         } else {
@@ -92,4 +103,6 @@ export class ContactUsComponent {
       }
     });
   }
+
+  
 }

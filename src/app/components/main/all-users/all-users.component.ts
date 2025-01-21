@@ -52,4 +52,6 @@ export class AllUsersComponent {
     this.currentPage = 1;
     this.getUsers();
   }
+
+  
 }

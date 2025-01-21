@@ -113,15 +113,13 @@
                             <a (click)="onSubmit()" class="ct_blue_btn mt-5 px-5 mx-auto d-flex"
                                 style="width: fit-content; cursor: pointer;">Edit Profile</a>
                         </form>
-
                     </div>
-
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
+</div>
+
+<div *ngIf="loading">
+    <app-loader />
 </div>

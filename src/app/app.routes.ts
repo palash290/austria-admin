@@ -28,6 +28,8 @@ export const routes: Routes = [
             { path: 'terminal-management', loadComponent: () => import('./components/main/terminal-management/terminal-management.component').then(m => m.TerminalManagementComponent) },
             { path: 'contact-us', loadComponent: () => import('./components/main/contact-us/contact-us.component').then(m => m.ContactUsComponent) },
             { path: 'out-of-service', loadComponent: () => import('./components/main/out-of-service/out-of-service.component').then(m => m.OutOfServiceComponent) },
+            { path: 'category-management', loadComponent: () => import('./components/main/category-management/category-management.component').then(m => m.CategoryManagementComponent) },
+            //category-management
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'user-profile/:id', loadComponent: () => import('./components/user/user-profile/user-profile.component').then(m => m.UserProfileComponent) },
             // { path: 'terms', loadComponent: () => import('./components/help/terms-conditions/terms-conditions.component').then(m => m.TermsConditionsComponent) },

@@ -5,11 +5,12 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-bus-list',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './bus-list.component.html',
   styleUrl: './bus-list.component.css'
 })
@@ -24,6 +25,7 @@ export class BusListComponent {
   data: any;
   form!: FormGroup;
   editForm!: FormGroup;
+  loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
 
@@ -71,14 +73,15 @@ export class BusListComponent {
     this.form.markAllAsTouched();
     const busName = this.form.value.busName?.trim();
     const number = this.form.value.number?.trim();
-    const totalSeats = this.form.value.totalSeats?.trim();
+    //const totalSeats = this.form.value.totalSeats?.trim();
     const regNum = this.form.value.regNum?.trim();
 
-    if (!busName || !number || !totalSeats || !regNum) {
+    if (!busName || !number || !regNum) {
       return;
     }
 
     if (this.form.valid) {
+      this.loading = true;
       this.btnLoader = true;
       const formURlData = new URLSearchParams();
       formURlData.set('bus_name', this.form.value.busName);
@@ -91,17 +94,20 @@ export class BusListComponent {
           if (resp.success == true) {
             this.toastr.success(resp.message);
             this.btnLoader = false;
+            this.loading = false;
             this.closeModal.nativeElement.click();
             this.getBuses();
             this.form.reset();
           } else {
             this.toastr.warning(resp.message);
             this.btnLoader = false;
+            this.loading = false;
             this.getBuses();
           }
         },
         error: (error) => {
           this.btnLoader = false;
+          this.loading = false;
           if (error.error.message) {
             this.toastr.error(error.error.message);
           } else {
@@ -137,10 +143,12 @@ export class BusListComponent {
 
     if (this.editForm.valid) {
       this.btnEditLoader = true;
+      this.loading = true;
       const formURlData = new URLSearchParams();
       formURlData.set('bus_name', this.editForm.value.busName);
-      formURlData.set('bus_number', this.editForm.value.number);
-      formURlData.set('total_seats', this.editForm.value.totalSeats);
+      formURlData.set('bus_number_plate', this.editForm.value.number);
+      formURlData.set('number_of_seats', this.editForm.value.totalSeats);
+      formURlData.set('bus_registration_number',  this.updateDet?.bus_registration_number);
       formURlData.set('bus_id', this.updateId);
 
       this.service.postAPI('update-bus', formURlData.toString()).subscribe({
@@ -148,16 +156,19 @@ export class BusListComponent {
           if (resp.success == true) {
             this.toastr.success(resp.message);
             this.btnEditLoader = false;
+            this.loading = false;
             this.closeModal1.nativeElement.click();
             this.getBuses();
           } else {
             this.toastr.warning(resp.message);
             this.btnEditLoader = false;
+            this.loading = false;
             this.getBuses();
           }
         },
         error: (error) => {
           this.btnEditLoader = false;
+          this.loading = false;
           if (error.error.message) {
             this.toastr.error(error.error.message);
           } else {
@@ -214,4 +225,14 @@ export class BusListComponent {
     this.currentPage = 1;
     this.getBuses();
   }
+
+  validateMaxLength(event: Event, length: number): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > length) {
+      input.value = input.value.slice(0, length); // Trim value to the first 3 characters
+      //this.total_running_hours = input.value; // Update the model value
+    }
+  }
+
+  
 }

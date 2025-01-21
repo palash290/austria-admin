@@ -303,11 +303,14 @@ a:hover {
   transition: 0.4s ease all;
   z-index: -1;
 }
+/* .ct_outline_btn_blue:hover{
+  color: #fff;
+} */
 .ct_blue_btn:hover:before {
   width: 100%;
 }
 .ct_blue_btn:hover {
-  color: #fff !important;
+  color: #000 !important;
 }
 .ct_flex_1 {
   flex: 1;
