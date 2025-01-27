@@ -29,6 +29,7 @@ export const routes: Routes = [
             { path: 'contact-us', loadComponent: () => import('./components/main/contact-us/contact-us.component').then(m => m.ContactUsComponent) },
             { path: 'out-of-service', loadComponent: () => import('./components/main/out-of-service/out-of-service.component').then(m => m.OutOfServiceComponent) },
             { path: 'category-management', loadComponent: () => import('./components/main/category-management/category-management.component').then(m => m.CategoryManagementComponent) },
+            { path: 'new-route', loadComponent: () => import('./components/main/routes-management/new-route/new-route.component').then(m => m.NewRouteComponent) },
             //category-management
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'user-profile/:id', loadComponent: () => import('./components/user/user-profile/user-profile.component').then(m => m.UserProfileComponent) },

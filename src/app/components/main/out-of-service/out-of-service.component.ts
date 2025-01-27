@@ -4,7 +4,7 @@ import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
@@ -24,6 +24,7 @@ export class OutOfServiceComponent {
   data: any;
   routes: any;
   Form!: FormGroup;
+  editForm!: FormGroup;
   loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal2') closeModal2!: ElementRef;
@@ -32,7 +33,8 @@ export class OutOfServiceComponent {
   updateId: any;
 
   constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) {
-    this.inItForm()
+    this.inItForm();
+    this.inItEditForm();
   }
 
   ngOnInit() {
@@ -44,8 +46,17 @@ export class OutOfServiceComponent {
   inItForm() {
     this.Form = new FormGroup({
       route: new FormControl('', Validators.required),
-      from_date: new FormControl('', Validators.required),
-      to_date: new FormControl('', Validators.required),
+      from_date: new FormControl('', [Validators.required, this.minDateValidator.bind(this)]),
+      to_date: new FormControl({ value: '', disabled: true }, [Validators.required, this.dateGreaterOrEqualValidator('from_date')]),
+      closure_reason: new FormControl('', Validators.required),
+    })
+  }
+
+  inItEditForm() {
+    this.editForm = new FormGroup({
+      route: new FormControl('', Validators.required),
+      from_date: new FormControl('', [Validators.required, this.minDateValidator.bind(this)]),
+      to_date: new FormControl('', [Validators.required, this.dateGreaterOrEqualValidator('from_date')]),
       closure_reason: new FormControl('', Validators.required),
     })
   }
@@ -85,7 +96,20 @@ export class OutOfServiceComponent {
     this.getRoutes();
   }
 
+  onFromDateKeyup(): void {
+    console.log('from_date value:', this.Form.get('from_date')?.value); // Log from_date value
+    console.log('from_date touched:', this.Form.get('from_date')?.touched); // Log touch state
+    if (this.Form.get('from_date')?.value) {
+      this.Form.get('to_date')?.enable(); // Enable the to_date field when from_date has a value
+      console.log('to_date enabled:', this.Form.get('to_date')?.enabled); // Check if to_date is enabled
+    } else {
+      this.Form.get('to_date')?.disable(); // Disable the to_date field if from_date is empty
+      console.log('to_date disabled:', this.Form.get('to_date')?.disabled); // Check if to_date is disabled
+    }
+  }
+
   submit() {
+    this.Form.markAllAsTouched();
     const closure_reason = this.Form.value.closure_reason?.trim();
 
     if (!closure_reason) {
@@ -139,12 +163,13 @@ export class OutOfServiceComponent {
 
   patchData(item: any) {
     this.updateId = item.closure_id
-    this.Form.patchValue({
+    this.editForm.patchValue({
       route: item.route.route_id,
       from_date: item.from_date,
       to_date: item.to_date,
       closure_reason: item.closure_reason
-    })
+    });
+    //this.inItEditForm();
   }
 
   update() {
@@ -185,6 +210,7 @@ export class OutOfServiceComponent {
   }
 
   minDate: any;
+
   dateValidation() {
     const today = new Date();
     const year = today.getFullYear();
@@ -192,6 +218,48 @@ export class OutOfServiceComponent {
     const day = today.getDate().toString().padStart(2, '0'); // Ensure two-digit day
     this.minDate = `${year}-${month}-${day}`; // Format as YYYY-MM-DD
   }
+
+  minDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (control.value) {
+      const inputDate = new Date(control.value);
+      const today = new Date(this.minDate);
+
+      if (inputDate < today) {
+        return { minDate: true }; // Error key if date is invalid
+      }
+    }
+    return null; // Valid date
+  }
+
+  dateGreaterOrEqualValidator(fromControlName: string) {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      const fromDateValue = this.Form?.get(fromControlName)?.value;
+      const toDateValue = control.value;
+
+      if (fromDateValue && toDateValue) {
+        const fromDate = new Date(fromDateValue);
+        const toDate = new Date(toDateValue);
+
+        if (toDate < fromDate) {
+          return { dateGreaterOrEqual: true }; // Error key if the to_date is less than from_date
+        }
+      }
+      return null; // Valid date
+    };
+  }
+
+  viewDetails: any;
+
+  viewMessage(item: any) {
+    this.viewDetails = item;
+    console.log(this.viewDetails);
+    
+  }
+
+  // hasError(controlName: string, errorName: string): boolean {
+  //   const control = this.Form.get(controlName);
+  //   return control?.hasError(errorName) && control.touched;
+  // }
 
 
 }

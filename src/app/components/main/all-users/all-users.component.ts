@@ -21,6 +21,7 @@ export class AllUsersComponent {
   totalPages: number = 1;
   pageSizeOptions = [5, 10, 25, 50];
   searchQuery: any = '';
+  filterQuery: any = '';
   data: any;
 
   constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
@@ -30,7 +31,7 @@ export class AllUsersComponent {
   }
 
   getUsers() {
-    this.service.getApi(`user-list?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
+    this.service.getApi(`user-list?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}&filter=${this.filterQuery}`).subscribe({
       next: resp => {
         this.data = resp.data.users;
         this.totalPages = resp.data.pagination?.totalPages

@@ -8,7 +8,6 @@
             </div>
             <div class="ct_profile_drop">
                   <app-header />
-
             </div>
       </div>
       <div class="ct_middle_content">
@@ -44,7 +43,7 @@
                                           <th>To</th>
                                           <th>From Date</th>
                                           <th>To Date</th>
-                                          <th>Reson</th>
+                                          <!-- <th>Reson</th> -->
                                           <!-- <th>Total Bookings</th> -->
                                           <th>Actions</th>
                                     </tr>
@@ -61,7 +60,7 @@
                                           </td>
                                           <td>{{item.from_date | date}}</td>
                                           <td>{{item.to_date | date}}</td>
-                                          <td>{{item.closure_reason}}</td>
+                                          <!-- <td>{{item.closure_reason}}</td> -->
 
                                           <td>
                                                 <div class="ct_actions_btn">
@@ -76,6 +75,12 @@
                                                                         stroke-linejoin="round" />
                                                             </svg>
                                                       </button>
+
+                                                      <button class="ct_action_btn" data-bs-toggle="modal"
+                                                            data-bs-target="#view_model" (click)="viewMessage(item)">
+                                                            <i class="fa-regular fa-eye ct_hide_pass_wye"></i>
+                                                      </button>
+
                                                       <button (click)="DeletePopUp(item.closure_id)"
                                                             class="ct_action_btn" data-bs-toggle="modal"
                                                             data-bs-target="#ct_delete_modal">
@@ -150,11 +155,7 @@
                                           <p *ngIf="Form.get('route')?.touched && Form.get('route')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('route') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
+
                                           </p>
                                     </div>
                                     <div class="form-group mb-4">
@@ -162,17 +163,23 @@
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <input type="date" class="form-control ct_input ct_fs_18"
-                                                      formControlName="from_date" [min]="minDate">
+                                                      formControlName="from_date" [min]="minDate"
+                                                      (change)="onFromDateKeyup()">
                                           </div>
-                                          <p *ngIf="Form.get('from_date')?.touched && Form.get('from_date')?.errors"
+                                          <!-- <p *ngIf="Form.get('from_date')?.touched && Form.get('from_date')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('from_date') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
-                                          </p>
+
+                                          </p> -->
+                                          <div *ngIf="Form.controls['from_date'].invalid && Form.controls['from_date'].touched"
+                                                class="err_msg">
+                                                <div *ngIf="Form.controls['from_date'].errors?.['required']">
+                                                      This field is required.
+                                                </div>
+                                                <div *ngIf="Form.controls['from_date'].errors?.['minDate']">
+                                                      Date cannot be earlier than today.
+                                                </div>
+                                          </div>
                                     </div>
                                     <div class="form-group mb-4">
                                           <label for="" class="ct_fs_18 ct_fw_500 mb-2">To<span
@@ -181,18 +188,27 @@
                                                 <input type="date" class="form-control ct_input ct_fs_18"
                                                       formControlName="to_date" [min]="minDate">
                                           </div>
-                                          <p *ngIf="Form.get('to_date')?.touched && Form.get('to_date')?.errors"
+                                          <!-- <p *ngIf="Form.get('to_date')?.touched && Form.get('to_date')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('to_date') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
-                                          </p>
+
+                                          </p> -->
+
+                                          <div *ngIf="Form.controls['to_date'].invalid && Form.controls['to_date'].touched"
+                                                class="err_msg">
+                                                <div *ngIf="Form.controls['to_date'].errors?.['required']">
+                                                      This field is required.
+                                                </div>
+                                                <div *ngIf="Form.controls['to_date'].errors?.['minDate']">
+                                                      Date cannot be earlier than today.
+                                                </div>
+                                                <div *ngIf="Form.controls['to_date'].errors?.['dateGreaterOrEqual']">
+                                                      Date must be equal to or greater than From date.
+                                                </div>
+                                          </div>
                                     </div>
                                     <div class="form-group mb-4">
-                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reson<span
+                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reason<span
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <textarea type="text" class="form-control ct_fs_18"
@@ -202,11 +218,7 @@
                                           <p *ngIf="Form.get('closure_reason')?.touched && Form.get('closure_reason')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('closure_reason') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
+
                                           </p>
                                     </div>
                               </form>
@@ -221,6 +233,7 @@
       </div>
 </div>
 <!-- Add Modal E -->
+
 <!-- Edit Modal S -->
 <div class="modal fade" id="ct_edit_user_management" tabindex="-1" aria-labelledby="ct_edit_user_managementLabel"
       aria-hidden="true">
@@ -232,7 +245,7 @@
                   <div class="modal-body border-0 pt-5">
                         <div class="ct_edit_modal_cnt">
                               <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Update Out Of Service</h4>
-                              <form [formGroup]="Form" class="pt-2">
+                              <form [formGroup]="editForm" class="pt-2">
                                     <div class="form-group mb-4">
                                           <label for="" class="ct_fs_18 ct_fw_500 mb-2">Route<span
                                                       class="ct_text_red">*</span></label>
@@ -245,14 +258,10 @@
                                                       </option>
                                                 </select>
                                           </div>
-                                          <p *ngIf="Form.get('route')?.touched && Form.get('route')?.errors"
+                                          <p *ngIf="editForm.get('route')?.touched && editForm.get('route')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('route') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
+
                                           </p>
                                     </div>
                                     <div class="form-group mb-4">
@@ -262,14 +271,10 @@
                                                 <input type="date" class="form-control ct_input ct_fs_18"
                                                       formControlName="from_date" [min]="minDate">
                                           </div>
-                                          <p *ngIf="Form.get('from_date')?.touched && Form.get('from_date')?.errors"
+                                          <p *ngIf="editForm.get('from_date')?.touched && editForm.get('from_date')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('from_date') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
+
                                           </p>
                                     </div>
                                     <div class="form-group mb-4">
@@ -279,32 +284,24 @@
                                                 <input type="date" class="form-control ct_input ct_fs_18"
                                                       formControlName="to_date" [min]="minDate">
                                           </div>
-                                          <p *ngIf="Form.get('to_date')?.touched && Form.get('to_date')?.errors"
+                                          <p *ngIf="editForm.get('to_date')?.touched && editForm.get('to_date')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('to_date') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
+
                                           </p>
                                     </div>
                                     <div class="form-group mb-4">
-                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reson<span
+                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reason<span
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <textarea type="text" class="form-control ct_fs_18"
                                                       formControlName="closure_reason" placeholder="Type Here...."
                                                       rows="5"></textarea>
                                           </div>
-                                          <p *ngIf="Form.get('closure_reason')?.touched && Form.get('closure_reason')?.errors"
+                                          <p *ngIf="editForm.get('closure_reason')?.touched && editForm.get('closure_reason')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('closure_reason') }}
-                                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                                      xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                                            fill="#F80000" />
-                                                </svg>
+
                                           </p>
                                     </div>
                               </form>
@@ -354,8 +351,67 @@
 <!-- delete Modal E -->
 
 
+<div class="modal fade" id="view_model" tabindex="-1" aria-labelledby="view_modelLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content pb-4">
+                  <!-- <div class="modal-header border-0">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div> -->
+                  <div class="modal-body border-0 pt-5">
+                        <div class="ct_edit_modal_cnt">
+                              <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">View Details</h4>
+                              <form class="pt-2">
+                                    <div class="form-group mb-4">
+                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">Route<span
+                                                      class="ct_text_red">*</span></label>
+                                          <div class="position-relative">
+                                                <input type="text" class="form-control ct_input ct_fs_18" disabled
+                                                      [value]="'' + viewDetails?.route.pickup_point.city_name + ' - ' + viewDetails?.route.dropoff_point.city_name">
+                                          </div>
+
+                                    </div>
+                                    <div class="form-group mb-4">
+                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">From<span
+                                                      class="ct_text_red">*</span></label>
+                                          <div class="position-relative">
+                                                <input type="date" class="form-control ct_input ct_fs_18"
+                                                      [value]="viewDetails?.from_date" disabled>
+                                          </div>
+
+                                    </div>
+                                    <div class="form-group mb-4">
+                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">To<span
+                                                      class="ct_text_red">*</span></label>
+                                          <div class="position-relative">
+                                                <input type="date" class="form-control ct_input ct_fs_18"
+                                                      [value]="viewDetails?.to_date" disabled>
+                                          </div>
+
+                                    </div>
+                                    <div class="form-group mb-4">
+                                          <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reason<span
+                                                      class="ct_text_red">*</span></label>
+                                          <div class="position-relative">
+                                                <textarea type="text" class="form-control ct_fs_18" disabled
+                                                      [value]="viewDetails?.closure_reason" placeholder="Type Here...."
+                                                      rows="5"></textarea>
+                                          </div>
+
+                                    </div>
+                              </form>
+                        </div>
+                  </div>
+                  <div class="modal-footer border-0 justify-content-end">
+
+                        <button type="button" class="ct_blue_btn py-2 ct_fw_400" data-bs-dismiss="modal">Close</button>
+                  </div>
+            </div>
+      </div>
+</div>
+
+
 <!-- All Modal Section E -->
 
 <div *ngIf="loading">
       <app-loader />
-  </div>
+</div>

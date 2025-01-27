@@ -1,10 +1,9 @@
-<div class="ct_right_dash_content">
+<!-- <div class="ct_right_dash_content">
     <div class="ct_dash_header">
         <div class="d-flex align-items-center gap-3">
             <div class="ct_toggle_bar">
                 <i class="fa-solid fa-bars"></i>
             </div>
-            <!-- <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Welcome Back, John!</h4> -->
         </div>
         <div class="ct_profile_drop">
             <app-header />
@@ -14,7 +13,7 @@
 
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Category Management</h4>
+                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4>
                 <div class="d-flex gap-3 align-items-center  justify-content-between">
                     <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                         (ngModelChange)="getBuses()">
@@ -31,8 +30,7 @@
                     <thead>
                         <tr>
                             <th>S No.</th>
-                            <th>Category Name</th>
-                            <!-- <th>Status</th> -->
+                            <th>Passenger Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -42,16 +40,7 @@
                             <td>{{item.ticket_type}}</td>
                             <td>
                                 <div class="ct_actions_btn">
-                                    <!-- <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
-                                        data-bs-target="#ct_edit_modal">
-                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
-                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </button> -->
+                                 
                                     <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
                                         data-bs-target="#ct_delete_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
@@ -71,7 +60,7 @@
                     <p class="ct_fs_15 mt-3">No items found</p>
                 </div>
             </div>
-            <!-- Pagination Controls -->
+           
             <div class="d-flex justify-content-between align-items-center pagination-section">
                 <div class="d-flex gap-2 align-items-center">
                     <label for="pageSize">Items per page: </label>
@@ -82,7 +71,6 @@
                     </select>
                 </div>
 
-                <!-- Pagination -->
                 <nav aria-label="Table pagination">
                     <ul class="pagination">
                         <li class="page-item" [class.disabled]="currentPage === 1">
@@ -96,7 +84,125 @@
             </div>
         </div>
     </div>
+</div> -->
+
+
+<div class="ct_right_dash_content">
+    <div class="ct_dash_header">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ct_toggle_bar">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+        <div class="ct_profile_drop">
+            <app-header />
+        </div>
+    </div>
+    <div class="ct_middle_content">
+
+        <div class="ct_bus_grey_table">
+            <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4>
+                <div class="d-flex gap-3 align-items-center  justify-content-between">
+                    <!-- <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                        (ngModelChange)="getType()"> -->
+                    <button
+                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
+                        data-bs-toggle="modal" data-bs-target="#ct_add_bus">
+                        +
+                        Add Passenger Type</button>
+                </div>
+
+            </div>
+            <div class="table-responsive">
+                <!-- <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Routes</th>
+                            <th *ngFor="let header of data">
+                                {{ header.ticket_type }}
+                                <button class="ct_action_btn" data-bs-toggle="modal"
+                                    (click)="patchUpdate(header.ticket_type_id)" data-bs-target="#ct_delete_modal">
+                                    <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                            stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of allRoutes; let i = index">
+                            <td>{{item.pickup_point.city_name}} - {{item.dropoff_point.city_name}}</td>
+                            <td><input type="text" placeholder="Type Input" *ngFor="let header of data"></td>
+                        </tr>
+                    </tbody>
+                </table> -->
+
+                <table class="table mb-0">
+                    <thead>
+                        <!-- <tr>
+                            <th>Routes</th>
+                            <th *ngFor="let ticketType of ticketTypes">{{ ticketType }}</th>
+                        </tr> -->
+                        <tr>
+                            <th>Routes</th>
+                            <th *ngFor="let ticketType of ticketTypes">
+                                <span *ngIf="ticketType === 'Baseprice'">{{ ticketType }}</span>
+                                <span *ngIf="ticketType !== 'Baseprice'">
+                                    {{ ticketType }}
+                                    <!-- <button
+                                  class="btn btn-sm btn-danger ms-2"
+                                  (click)="deleteTicketType(ticketType)"
+                                >
+                                  Delete
+                                </button> -->
+                                    <button class="ct_action_btn" data-bs-toggle="modal"
+                                        (click)="patchUpdate(ticketType)" data-bs-target="#ct_delete_modal">
+                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let route of allRoutes">
+                            <!-- Route Information -->
+                            <td>{{ route.pickup_point.city_name }} - {{ route.dropoff_point.city_name }}</td>
+
+                            <!-- Dynamic Ticket Types -->
+                            <td *ngFor="let ticketType of ticketTypes">
+                                <input type="number" [placeholder]="ticketType + ' Price'"
+                                    [(ngModel)]="route.ticket_type[0][ticketType]"
+                                    [ngClass]="{ 'border-danger': route.ticket_type[0][ticketType] < 0 }"
+                                    (ngModelChange)="updateTicketPrice(route, ticketType, $event)" [min]="0" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- <div class="mt-3">
+                    <button class="btn btn-primary" (click)="updateAllTicketPrices()">Update All</button>
+                </div> -->
+
+                <!-- <div *ngIf="data1?.length == 0 || !data1" class="text-center">
+                    <p class="ct_fs_15 mt-3">No items found</p>
+                </div> -->
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 
 
@@ -111,11 +217,11 @@
             </div>
             <div class="modal-body border-0 pt-0">
                 <div class="ct_edit_modal_cnt">
-                    <h4 class="ct_fs_24 ct_fw_600 text-center">Add Category</h4>
+                    <h4 class="ct_fs_24 ct_fw_600 text-center">Add Passenger Type</h4>
                     <form [formGroup]="form" class="pt-2">
                         <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Category Name</label>
-                            <input type="text" placeholder="Enter Category Name" formControlName="busName"
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Passenger Type</label>
+                            <input type="text" placeholder="Enter Passenger Type" formControlName="busName"
                                 class="form-control ct_input ct_fs_18">
 
                             <p *ngIf="form.get('busName')?.touched && form.get('busName')?.errors" class="err_msg">
@@ -127,16 +233,12 @@
                                         fill="#F80000" />
                                 </svg>
                             </p>
-
                         </div>
-
-
                     </form>
-
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_blue_btn py-3" (click)="addBus()">Add Category</button>
+                <button type="button" class="ct_blue_btn py-3" (click)="addType()">Add Category</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal
                     data-bs-dismiss="modal">Close</button>
             </div>
@@ -173,7 +275,7 @@
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
 
-                <button (click)="deleteMember()" type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
+                <button (click)="deleteTicketType()" type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal2
                     data-bs-dismiss="modal">Close</button>
             </div>

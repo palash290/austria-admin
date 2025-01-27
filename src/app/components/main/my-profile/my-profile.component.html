@@ -82,18 +82,18 @@
 
                         <form [formGroup]="profileForm">
                             <div class="form-group mb-4">
-                                <label for="" class="mb-2">Full Name</label>
+                                <label for="" class="mb-2">Name</label>
                                 <input type="email" class="form-control ct_input ct_fs_18" formControlName="name"
-                                    placeholder="Enter full name" value="Alex meian" maxlength="30">
+                                    placeholder="Enter name" value="Alex meian" maxlength="30">
                                 <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
                                     class="err_msg">
                                     <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
-                                        your full name.</div>
+                                        your name.</div>
                                 </div>
                             </div>
                             <div class="form-group mb-4">
                                 <label for="" class="mb-2">Contact No</label>
-                                <input type="number" class="form-control ct_input ct_fs_18" formControlName="phone"
+                                <input type="text" class="form-control ct_input ct_fs_18" formControlName="phone"
                                     placeholder="Enter Contact No">
 
                                 <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"

@@ -95,7 +95,7 @@ export class BusScheduleComponent {
     this.service.getApi('get-all-buses').subscribe({
       next: resp => {
         this.allBuses = resp.data;
-        this.selectedBusId = this.allBuses[0].bus_id;
+        //this.selectedBusId = this.allBuses[0].bus_id;
       },
       error: error => {
         console.log(error.message);
@@ -107,7 +107,7 @@ export class BusScheduleComponent {
     this.service.getApi('get-all-drivers').subscribe({
       next: resp => {
         this.allDrivers = resp.data;
-        this.selectedDriverId = this.allDrivers[0].driver_id;
+        //this.selectedDriverId = this.allDrivers[0].driver_id;
       },
       error: error => {
         console.log(error.message);
@@ -183,6 +183,7 @@ export class BusScheduleComponent {
   @ViewChild('closeModal') closeModal!: ElementRef;
   departure_time: any;
   total_running_hours: any;
+  base_price: any;
 
   // Method to format data into the desired array
   getPricesData(): any[] {
@@ -199,13 +200,21 @@ export class BusScheduleComponent {
   }
 
   addTerminal() {
-    // const busName = this.total_running_hours?.trim();
-
-    // if (!busName) {
-    //   return;
-    // }
+    // debugger
     this.loading = true;
-    const formattedData = JSON.stringify(this.getPricesData());
+    if (
+      !this.selectedBusId || 
+      !this.routeId || 
+      !this.selectedDriverId || 
+      !this.departure_time || 
+      !this.total_running_hours 
+      //!this.base_price
+    ) {
+      this.toastr.warning('Please fill in all the required fields.');
+      this.loading = false;
+      return;
+    }
+    //const formattedData = JSON.stringify(this.getPricesData());
     const formURlData = new URLSearchParams();
     formURlData.set('bus_id', this.selectedBusId);
     formURlData.set('route_id', this.routeId);
@@ -222,7 +231,8 @@ export class BusScheduleComponent {
       if (selected?.length > 0) {
         formURlData.set('days_of_week', selected);
       } else {
-        this.toastr.error('Please select days of week for custom recurrence');
+        this.toastr.warning('Please select days of week for custom recurrence');
+        this.loading = false;
         return
       }
     } else {
@@ -230,12 +240,12 @@ export class BusScheduleComponent {
       formURlData.set('days_of_week', allDays.join(','));
     }
 
-    formURlData.set('base_pricing', formattedData);
+    // formURlData.set('base_pricing', formattedData);
+    //formURlData.set('base_pricing', this.base_price);
 
     this.service.postAPI('create-busschedule', formURlData.toString()).subscribe({
       next: (response) => {
         if (response.success) {
-          //this.letLongUkrane = response.data;
           this.closeModal.nativeElement.click();
           this.toastr.success(response.message);
           this.getBuseSchedule();
@@ -247,6 +257,7 @@ export class BusScheduleComponent {
           this.childPrice = '';
           this.extraPrice = '';
           this.loading = false;
+          this.resetPrices();
         } else {
           this.toastr.warning(response.message);
           this.loading = false;
@@ -263,11 +274,33 @@ export class BusScheduleComponent {
     });
   }
 
+  // Method to reset the prices for all categories
+  resetPrices() {
+    this.categories.forEach(category => {
+      category.price = ''; // Reset the price to an empty string
+    });
+  }
+
+  // validateMaxLength(event: Event, length: number): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.value.length > length) {
+  //     input.value = input.value.slice(0, length); // Trim value to the first 3 characters
+  //     //this.total_running_hours = input.value; // Update the model value
+  //   }
+  // }
+
   validateMaxLength(event: Event, length: number): void {
     const input = event.target as HTMLInputElement;
+
+    // Prevent negative numbers
+    if (input.value.startsWith('-')) {
+      input.value = input.value.slice(1); // Remove the negative sign
+      //this.toastr.warning('Negative values are not allowed!', 'Invalid Input');
+    }
+
+    // Enforce maximum length
     if (input.value.length > length) {
-      input.value = input.value.slice(0, length); // Trim value to the first 3 characters
-      //this.total_running_hours = input.value; // Update the model value
+      input.value = input.value.slice(0, length); // Limit to the specified length
     }
   }
 

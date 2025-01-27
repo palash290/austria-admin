@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
+declare var google: any;
 
 @Component({
   selector: 'app-routes-management',
@@ -36,13 +37,152 @@ export class RoutesManagementComponent {
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
 
+  stopName: any;
+  terminalName: any;
+  allRoutes: any;
+
+  lines:any
+
+
+
   constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService, private router: Router) { }
 
   ngOnInit() {
     this.getRoutes();
-    this.getAustriaCityName();
-    this.getUkraneCityName();
+    // this.getAustriaCityName();
+    // this.getUkraneCityName();
+    this.getAllCity();
+
   }
+
+  getAllCity() {
+    this.service.getApi('get-all-city').subscribe({
+      next: resp => {
+        this.allRoutes = resp.data;
+        this.initMap();
+      },
+      error: error => {
+        console.log(error.message);
+      }
+    });
+  }
+
+  initMap(): void {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB0V1g5YyGB_NE1Lw1QitZZGECA5-1Xnng`;
+    script.onload = () => this.createMap();
+    document.body.appendChild(script);
+  }
+
+
+  createMap(): void {
+    // Default center if no tasks
+    const mapOptions = {
+      zoom: 9,
+      center: { lat: 25.304867300025933, lng: 78.56014738728993 }
+    };
+
+    const map = new google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
+    const bounds = new google.maps.LatLngBounds();
+
+
+    // Loop through the cities in this.allRoutes and add markers
+    this.allRoutes.forEach((city: any) => {
+      if (city.latitude && city.longitude) {
+        const marker = new google.maps.Marker({
+          position: { lat: parseFloat(city.latitude), lng: parseFloat(city.longitude) },
+          map: map,
+          title: city.city_name || 'City Location'
+        });
+
+        // Extend bounds to include this marker's position
+        bounds.extend(new google.maps.LatLng(parseFloat(city.latitude), parseFloat(city.longitude)));
+      }
+    });
+
+    // Fit the map bounds to include all markers
+    map.fitBounds(bounds);
+  }
+
+
+  isSearchActiveFrom = false;
+  allTerminalsList: any;
+
+  searchTerminal() {
+    if (this.terminalName == '') {
+      this.isSearchActiveFrom = false;
+      return
+    }
+
+    this.isSearchActiveFrom = true;
+
+    const formData = new URLSearchParams();
+    formData.append('location', this.terminalName);
+
+    this.service
+      .postAPI('get-location', formData.toString())
+      .subscribe((res: any) => {
+        if (res.success == true) {
+          this.allTerminalsList = res.data;
+        }
+      });
+  };
+
+  searchByFromCity(item: any, selectedName?: any) {
+    this.terminalName = selectedName ? selectedName : item.description;
+    this.isSearchActiveFrom = false;
+    this.getLetLongUkrane();
+  };
+
+
+  isTouched: boolean = false;
+
+  onBlur() {
+    this.isTouched = true;
+  }
+
+
+  addTerminal() {
+    const formURlData = new URLSearchParams();
+    formURlData.set('city_name', this.stopName);
+    formURlData.set('city_address', this.terminalName);
+    this.service.postAPI('create-city', formURlData.toString()).subscribe({
+      next: (response) => {
+        if (response.success) {
+          //this.letLongUkrane = response.data;
+          this.closeModal.nativeElement.click();
+          this.toastr.success(response.message);
+          //this.getAllTerminals();
+          this.getAllCity()
+        } else {
+          this.toastr.warning(response.message);
+        }
+      },
+      error: (error) => {
+        if (error.error.message) {
+          this.toastr.error(error.error.message);
+        } else {
+          this.toastr.error('Something went wrong!');
+        }
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   getAustriaCityName() {
 
@@ -106,9 +246,9 @@ export class RoutesManagementComponent {
   }
 
   getRoutes() {
-    this.service.getApi(`get-all-routes-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}&filter=${this.searchQuery}`).subscribe({
+    this.service.getApi(`get-all-routes`).subscribe({
       next: resp => {
-        this.data = resp.data.routes;
+        this.lines = resp.data;
         this.totalPages = resp.data.pagination?.totalPages
       },
       error: error => {
@@ -146,6 +286,7 @@ export class RoutesManagementComponent {
   }
 
   addRoute() {
+    debugger
     if (this.selectedOption == '1') {
       this.loading = true;
       const formURlData = new URLSearchParams();
@@ -156,13 +297,26 @@ export class RoutesManagementComponent {
       //formURlData.set('start_location_lat_long', `${this.letLongAustria.lat}, ${this.letLongAustria.lng}`);
       //formURlData.set('end_location_lat_long', `${this.letLongUkrane.lat}, ${this.letLongUkrane.lng}`);
 
-      this.service.postAPI('create-route', formURlData.toString()).subscribe(response => {
-        if (response.success) {
-          this.letLongUkrane = response.data;
-          this.closeModal.nativeElement.click();
-          this.toastr.success(response.message);
-          this.getRoutes();
+      this.service.postAPI('create-route', formURlData.toString()).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.letLongUkrane = response.data;
+            this.closeModal.nativeElement.click();
+            this.toastr.success(response.message);
+            this.getRoutes();
+            this.loading = false;
+          } else {
+            this.toastr.warning(response.message);
+            this.loading = false;
+          }
+        },
+        error: (error) => {
           this.loading = false;
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
         }
       });
     } else {

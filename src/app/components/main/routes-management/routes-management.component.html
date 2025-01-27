@@ -1,124 +1,127 @@
 <div class="ct_right_dash_content">
-    <div class="ct_dash_header">
-        <div class="d-flex align-items-center gap-3">
-            <div class="ct_toggle_bar">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-            <!-- <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Welcome Back, John!</h4> -->
+    <div class="container">
+        <div class="header">
+            <h1>Stops and Lines</h1>
+            <p>Manage all stops and lines that your company operates.</p>
+            <p class="breadcrumb">Home / Bus Schedule / Stops and Lines</p>
         </div>
-        <div class="ct_profile_drop">
-            <app-header />
-        </div>
-    </div>
-    <div class="ct_middle_content">
 
-        <div class="ct_bus_grey_table">
-            <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Route Management</h4>
-                <div class="d-flex gap-3 align-items-center  justify-content-between">
-                    <select class="form-control w-auto" [(ngModel)]="searchQuery" name="route"
-                        (ngModelChange)="getRoutes()">
-                        <option value="" disabled selected>-- Select --</option>
-                        <option value="Austria To Ukraine">Austria To Ukraine</option>
-                        <option value="Ukraine To Austria">Ukraine To Austria</option>
-                    </select>
-                    <!-- <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
-                        (ngModelChange)="getRoutes()"> -->
-                    <button
-                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
-                        data-bs-toggle="modal" data-bs-target="#ct_add_route">
-                        +
-                        Add Route</button>
-
+        <div class="content row">
+            <!-- Lines Section -->
+            <div class="col-md-6 lines-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Lines</h3>
+                    <button class="btn btn-primary" routerLink="/home/new-route">+ Add New
+                        Line</button>
                 </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>S No.</th>
-                            <th>Route Direction</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Distance (km)</th>
-                            <!-- <th>Status</th> -->
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <p>View and manage lines. Click on a line to view and edit details, manage departure times.</p>
 
-                        <tr *ngFor="let item of data; let i = index">
-                            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                            <td>{{item.route_direction}}</td>
-                            <td>{{item.pickup_point.city_name}}</td>
-                            <td>{{item.dropoff_point.city_name}}</td>
-                            <td>{{item.distance_km}}</td>
-                            <!-- <td>€ {{item.fixed_price}}</td> -->
-                            <!-- <td><span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
-                                    style="background-color: #E2EDE5;color: #28A745;">Active</span></td> -->
-
-                            <td>
-                                <div class="ct_actions_btn">
-                                    <!-- <button class="ct_action_btn" data-bs-toggle="modal"
-                                        data-bs-target="#ct_edit_route">
-                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
-                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
+                <div class="accordion" id="linesAccordion">
+                    <div class="accordion-item" *ngFor="let line of lines">
+                        <h2 class="accordion-header" id="heading{{ line.route_id }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                [attr.data-bs-target]="'#collapse' + line.route_id" aria-expanded="false"
+                                [attr.aria-controls]="'collapse' + line.route_id">
+                                {{ line.route_direction }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ line.route_id }}" class="accordion-collapse collapse"
+                            [attr.aria-labelledby]="'heading'+ line.route_id " data-bs-parent="#linesAccordion">
+                            <div class="accordion-body">
+                                <!-- Content inside the collapse -->
+                                <div>
+                                    <p *ngFor="let stop of line.route_stops.slice(0,1)"
+                                        class="d-flex align-items-center gap-1 m-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            viewBox="0 0 24 24">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="m14.829 11.948l1.414-1.414L12 6.29l-4.243 4.243l1.415 1.414L11 10.12v7.537h2V10.12z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M19.778 4.222c-4.296-4.296-11.26-4.296-15.556 0s-4.296 11.26 0 15.556s11.26 4.296 15.556 0s4.296-11.26 0-15.556m-1.414 1.414A9 9 0 1 0 5.636 18.364A9 9 0 0 0 18.364 5.636"
+                                                    clip-rule="evenodd" />
+                                            </g>
                                         </svg>
-                                    </button> -->
-
-                                    <button class="ct_action_btn" data-bs-toggle="modal" data-bs-target="#ct_edit_route"
-                                        (click)="goToSchedule(item.route_id, item.pickup_point.city_id, item.dropoff_point.city_id)">
-                                        <i class="fa-regular fa-eye ct_hide_pass_wye"></i>
-                                    </button>
-
-                                    <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
-                                        data-bs-target="#ct_delete_modal">
-                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
-                                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
+                                        <strong>From:</strong>{{
+                                        stop.stop_city.city_name }}
+                                    </p>
+                                    <ul class="p-0 m-2">
+                                        <li *ngFor="let stop of line.route_stops.slice(1, line.route_stops?.length-1)"
+                                            class="d-flex align-items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M19 9A7 7 0 1 0 5 9c0 1.387.409 2.677 1.105 3.765h-.008L12 22l5.903-9.235h-.007A6.97 6.97 0 0 0 19 9m-7 3a3 3 0 1 1 0-6a3 3 0 0 1 0 6" />
+                                            </svg> {{ stop.stop_city.city_name }}
+                                        </li>
+                                    </ul>
+                                    <p *ngFor="let stop of line.route_stops.slice(line.route_stops?.length-1, line.route_stops?.length)"
+                                        class="d-flex align-items-center gap-1 m-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            viewBox="0 0 24 24">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="m14.829 12.026l1.414 1.414L12 17.683L7.757 13.44l1.415-1.414L11 13.854V6.317h2v7.537z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M19.778 19.778c-4.296 4.296-11.26 4.296-15.556 0s-4.296-11.26 0-15.556s11.26-4.296 15.556 0s4.296 11.26 0 15.556m-1.414-1.414A9 9 0 1 1 5.636 5.636a9 9 0 0 1 12.728 12.728"
+                                                    clip-rule="evenodd" />
+                                            </g>
                                         </svg>
-                                    </button>
+                                        <strong>To:</strong> {{ stop.stop_city.city_name }}
+                                    </p>
+                                    <p><strong>Departure time:</strong> {{ line.route_stops[0]?.departure_time }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button routerLink="/home/new-route" [queryParams]="{'route_id':line.route_id}"
+                                            class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto p-2">Edit
+                                            Line</button>
+                                        <div class="dropdown d-inline">
+                                            <button
+                                                class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto d-flex align-items-center gap-1 p-2"
+                                                type="button" id="actionMenu" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z" />
+                                                </svg>
+                                                Action
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill="currentColor" d="m12 16l-6-6h12z" />
+                                                </svg>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="actionMenu">
+                                                <li style="cursor: pointer;"><a class="dropdown-item" >Delete Line</a></li>
+                                                <!-- <li><a class="dropdown-item" href="#">Option 2</a></li> -->
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div *ngIf="data?.length == 0 || !data" class="text-center">
-                    <p class="ct_fs_15 mt-3">No items found</p>
-                </div>
-            </div>
-            <!-- Pagination Controls -->
-            <div class="d-flex justify-content-between align-items-center pagination-section w-100">
-                <div class="d-flex gap-2 align-items-center">
-                    <label for="pageSize">Items per page: </label>
-                    <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
-                        (change)="changePageSize(pageSize)">
-                        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
-                        </option>
-                    </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Pagination -->
-                <nav aria-label="Table pagination">
-                    <ul class="pagination">
-                        <li class="page-item" [class.disabled]="currentPage === 1">
-                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-                        </li>
-                        <li class="page-item" [class.disabled]="currentPage === totalPages">
-                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+            </div>
+
+
+            <!-- Bus Stops Section -->
+            <div class="col-md-6 bus-stops-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Bus stops</h3>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ct_add_route">+ Add Bus
+                        Stop</button>
+                </div>
+                <p>Manage all bus stops that your lines go to. Click on a pin on the map to edit or delete an existing
+                    stop.</p>
+
+                <div class="image-container">
+                    <div id="map" style="width: 100%; height: 400px;"></div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 
 
@@ -137,104 +140,56 @@
                 <div class="ct_edit_modal_cnt">
                     <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add Route</h4>
                     <form action="" class="pt-2">
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Route Direction <span
-                                    class="ct_text_red">*</span></label>
-                            <select class="form-control ct_input ct_fs_18" [(ngModel)]="selectedOption" name="route"
-                                [ngModelOptions]="{standalone: true}">
-                                <option value="1">Austria To Ukraine</option>
-                                <option value="2">Ukraine To Austria</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Pick-up Point <span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                @if(selectedOption == '1'){
-                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    [(ngModel)]="selectedAustriaCityId" (change)="onAustriaCityChange($event)"
-                                    [ngModelOptions]="{standalone: true}">
-                                    <option *ngFor="let lan of austriaCity" [value]="lan.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-                                } @else {
-                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    [(ngModel)]="selectedUkraneCityId" (change)="onUkraneCityChange($event)"
-                                    [ngModelOptions]="{standalone: true}">
-                                    <option *ngFor="let lan of ukraneCity" [value]="lan.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-                                }
-
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Stops Enroute* <span
-                                    class="ct_text_red">*</span></label>
-                            <div class="ct_grid_3_route">
-                                <div class="form-group">
-                                    <input type="text" class="form-control ct_input ct_fs_18"
-                                        placeholder="Enter stop name">
-                                </div>
-                                <div class="form-group">
-                                    <input type="time" class="form-control ct_input ct_fs_18">
-                                </div>
-                                <div class="ct_route_delete_icon">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </div>
-                            </div>
-                            <div class="ct_add_route_btn mt-3">
-                                <a href="javascript:void(0)" class="ct_fw_600 ct_fs_18 text-dark">Add Route</a>
-
-                            </div>
-                        </div> -->
-
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Drop-off Point<span
                                     class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <!-- <select class="form-control ct_input ct_fs_18 ct_text_indent_30">
-                                    <option value="North-South">Enter starting location</option>
-                                    <option value="North-South">Airport mall</option>
-                                </select> -->
-                                @if(selectedOption == '1'){
-                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    [(ngModel)]="selectedUkraneCityId" (change)="onUkraneCityChange($event)"
-                                    [ngModelOptions]="{standalone: true}">
-                                    <option *ngFor="let lan of ukraneCity" [value]="lan.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-                                } @else {
-                                <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    [(ngModel)]="selectedAustriaCityId" (change)="onAustriaCityChange($event)"
-                                    [ngModelOptions]="{standalone: true}">
-                                    <option *ngFor="let lan of austriaCity" [value]="lan.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-                                }
+                            <div class="form-group position-relative">
 
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                </div>
+                                <input type="text" class="form-control ct_input ct_fs_18"
+                                    placeholder="Enter contact number" [(ngModel)]="stopName"
+                                    [ngModelOptions]="{standalone: true}">
 
                             </div>
                         </div>
-                        <!-- <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total Running Hours<span
+
+                        <div class="form-group mb-4 position-relative">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Terminal Name<span
                                     class="ct_text_red">*</span></label>
-                            <input type="number" class="form-control ct_input ct_fs_18"
-                                placeholder="Enter total running hours">
-                        </div> -->
+                            <input type="text" class="form-control ct_input ct_fs_18" placeholder="Enter Terminal Name"
+                                [(ngModel)]="terminalName" [ngModelOptions]="{standalone: true}"
+                                (keyup)="searchTerminal()" (blur)="onBlur()">
+
+                            <p *ngIf="!terminalName && isTouched" class="err_msg">
+                                This field cannot be empty
+                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
+                                        fill="#F80000" />
+                                </svg>
+                            </p>
+
+                            @if(isSearchActiveFrom){
+                            <div class="ct_suggstion_search">
+                                <ul>
+                                    @if(allTerminalsList?.length > 0){
+                                    @for (item of allTerminalsList; track $index) {
+                                    <div (click)="searchByFromCity(item)" style="cursor: pointer;">
+                                        <h6 class="mb-1 mt-1 ct_fw_600">{{item.description}}</h6>
+                                        <!-- <p class=" mb-3 ct_fs_14">{{item.country_name}} </p> -->
+                                    </div>
+                                    }
+                                    } @else {
+                                    <li> <img src="assets/img/Search_icon.svg" alt="">Not found
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+                            }
+
+                        </div>
+
                     </form>
 
                 </div>
@@ -244,131 +199,12 @@
                     data-bs-dismiss="modal">Cancel</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal
                     data-bs-dismiss="modal">Close</button>
-                <button (click)="addRoute()" type="button" class="ct_blue_btn py-2 ct_fw_400">Add Route</button>
+                <button type="button" (click)="addTerminal()" class="ct_blue_btn py-2 ct_fw_400">Add Terminal</button>
             </div>
         </div>
     </div>
 </div>
 <!-- Add Modal  E -->
-
-
-
-<!-- Edit Modal S -->
-<div class="modal fade " id="ct_edit_modal" tabindex="-1" aria-labelledby="ct_edit_modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content pb-4">
-            <div class="modal-header border-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body border-0 pt-0">
-                <div class="ct_edit_modal_cnt">
-                    <h4 class="ct_fs_24 ct_fw_600 text-center">Edit Route</h4>
-                    <form class="pt-2">
-
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Select Path</label>
-
-                            <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto w-100"
-                                [value]="updateDet?.route_direction" disabled>
-                                <option value="Austria to Ukraine">Austria To Ukrane</option>
-                                <option value="Ukraine to Austria">Ukrane To Austria</option>
-                            </select>
-                        </div>
-
-                        <div *ngIf="updateDet?.route_direction == 'Austria to Ukraine'" class="form-group mb-4">
-                            <div class="d-flex justify-content-between mt-3 gap-3">
-                                <label for="" class="ct_fs_18 ct_fw_500 mb-2">Austria</label>
-                                <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto w-50" disabled
-                                    [value]="updateDet?.pickup_point.city_id">
-                                    <option *ngFor="let lan of austriaCity" [value]="lan.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-
-                                <label for="" class="ct_fs_18 ct_fw_500 mb-2">Ukrane</label>
-                                <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto w-50" disabled
-                                    [value]="updateDet?.dropoff_point.city_id">
-                                    <option *ngFor="let lan of ukraneCity" [value]="lan.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div *ngIf="updateDet?.route_direction == 'Ukraine to Austria'" class="form-group mb-4">
-                            <div class="d-flex justify-content-between mt-3 gap-3">
-                                <label for="" class="ct_fs_18 ct_fw_500 mb-2">Ukrane</label>
-                                <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto w-50" disabled>
-                                    <option *ngFor="let lan of ukraneCity" [value]="updateDet?.pickup_point.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-
-                                <label for="" class="ct_fs_18 ct_fw_500 mb-2">Austria</label>
-                                <select class="ct_input form-control ct_fs_18 ct_fw_500 h-auto w-50" disabled>
-                                    <option *ngFor="let lan of austriaCity" [value]="updateDet?.dropoff_point.city_id">
-                                        {{ lan.city_name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Select Path</label>
-                            <input type="number" placeholder="Enter Price" [(ngModel)]="updatePrice"
-                                class="form-control ct_input ct_fs_18" [ngModelOptions]="{standalone: true}">
-                        </div>
-
-                    </form>
-
-                </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_blue_btn py-3">Save Changes</button>
-                <button hidden type="button" class="btn btn-secondary" #closeModal1
-                    data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Edit Modal E -->
-
-
-
-
-<!-- delete Modal S -->
-<div class="modal fade " id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content pb-4">
-            <div class="modal-header border-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body border-0 pt-0">
-                <div class="ct_delete_modal_cnt">
-                    <div class="text-center mb-4 ct_delete_icon">
-                        <svg width="40" height="40" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
-                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Confirm Delete</h4>
-                    <p class="mb-0 text-center ct_fs_18"> Are you sure? you want to delete it.</p>
-
-
-                </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
-
-                <button type="button" class="ct_blue_btn py-3 px-5" (click)="deleteRoute()">Confirm</button>
-                <button hidden type="button" class="btn btn-secondary" #closeModal21
-                    data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- delete Modal E -->
 
 <!-- All Modal Section E -->
 

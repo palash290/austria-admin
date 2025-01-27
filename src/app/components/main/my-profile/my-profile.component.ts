@@ -67,9 +67,9 @@ export class MyProfileComponent {
     // }
 
     const name = this.profileForm.value.name?.trim();
-    const phone = this.profileForm.value.phone?.trim();
+    //const phone = this.profileForm.value.phone?.trim();
 
-    if (!name || phone) {
+    if (!name) {
       return;
     }
 

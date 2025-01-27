@@ -78,6 +78,7 @@ export class ContactUsComponent {
     formData.set('email', this.currentMsg.email)
     formData.set('query', this.currentMsg.query)
     formData.set('response', this.replyMsg)
+    formData.set('name', this.currentMsg.name)
 
     this.service.postAPI('customer-query-responded', formData.toString()).subscribe({
       next: (response) => {

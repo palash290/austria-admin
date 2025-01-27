@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
     color: red;
 }
 
@@ -13,3 +13,4 @@
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
+

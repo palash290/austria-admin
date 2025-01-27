@@ -1,0 +1,108 @@
+<div class="ct_right_dash_content">
+    <div class="update-line-container">
+        <h2>Update Line</h2>
+        <p class="breadcrumb">Home > Bus Schedule > Stops & Lines > Update Line</p>
+
+        <div class="alert">
+            ⚠️ There are bookings for this route, and changes are not possible.
+        </div>
+
+        <form>
+            <div class="d-flex justify-content-between gap-3">
+
+                <!-- Details Section -->
+                <div class="details-section w-50">
+                    <h3>Details</h3>
+                    <!-- <label class="switch">
+                        <input type="checkbox" [(ngModel)]="status" [ngModelOptions]="{standalone: true}" />
+                        <span class="slider"></span>
+                    </label> -->
+                    <span class="status-label">{{ status ? 'ACTIVE' : 'INACTIVE' }}</span>
+
+                    <div class="mt-3">
+                        <label for="title">Title</label>
+                        <input id="title" type="text" class="form-control ct_input ct_fs_18 " [(ngModel)]="title"
+                            [ngModelOptions]="{standalone: true}" />
+                    </div>
+                    <div class="mt-3">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="5" [(ngModel)]="description"
+                            [ngModelOptions]="{standalone: true}" class="form-control ct_fs_18 "></textarea>
+                    </div>
+                </div>
+
+                <div class="bus-stops-section w-50">
+                    <h3>Bus Stops</h3>
+                    <div *ngFor="let stop of busStops; let i = index" class="form-group mb-4 position-relative">
+                        <label for="location-{{ i }}">Location {{ i + 1 }}:</label>
+                        <select id="location-{{ i }}" [(ngModel)]="stop.city_id" [ngModelOptions]="{standalone: true}"
+                            class="location-select form-control ct_input ps-4 width_60">
+                            <!-- <option value="select" disabled selected>-- Choose --</option> -->
+                            <option *ngFor="let location of allCities">
+                                {{ location.city_name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="stop.isNew" class="action-buttons">
+                            <!-- Action Buttons -->
+                            <button type="button" class="btn-delete" (click)="deleteBusStop(i)"
+                                aria-label="Delete Stop">
+                                🗑️
+                            </button>
+                            <button type="button" class="btn-reorder" (click)="reorderBusStop(i, i - 1)"
+                                [disabled]="i === 0" aria-label="Move Up">
+                                ⬆️
+                            </button>
+                            <button type="button" class="btn-reorder" (click)="reorderBusStop(i, i + 1)"
+                                [disabled]="i === busStops.length - 1" aria-label="Move Down">
+                                ⬇️
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add Bus Stop Button -->
+                    <button type="button" (click)="addBusStop()" class="btn-add">
+                        + Add Bus Stop
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Departure Times Section -->
+        <div class="departure-times-section mt-5 w-50">
+            <h3>Departure Times</h3>
+            <!-- <div>
+                            <label>Departure times</label>
+                            <input type="time" [(ngModel)]="newDepartureTime" [ngModelOptions]="{standalone: true}" />
+                            <button type="button" (click)="addDepartureTime()">+ Add New</button>
+                        </div> -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Departure times</th>
+                        <th>Availability</th>
+                        <th>Weekdays</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let time of departureTimes">
+                        <td>{{ time }}</td>
+                        <td>Non-stop</td>
+                        <td>All</td>
+                        <td>
+                            <button (click)="editTime(time)">✏️</button>
+                            <button (click)="deleteTime(time)">🗑️</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions mt-3">
+            <button (click)="saveBusStops()" type="submit">Save</button>
+            <button type="button" (click)="cancel()">Cancel</button>
+        </div>
+
+    </div>
+</div>

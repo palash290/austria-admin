@@ -3,7 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { LoaderComponent } from '../loader/loader.component';
 
@@ -41,7 +41,11 @@ export class BusListComponent {
     this.form = new FormGroup({
       busName: new FormControl('', Validators.required),
       number: new FormControl('', Validators.required),
-      totalSeats: new FormControl('', Validators.required),
+      totalSeats: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^(0|[1-9]\d*)?$/), // Ensures only digits are allowed
+        this.numberRangeValidator(1, 99) // Ensures the number is between 1 and 100
+      ]),
       regNum: new FormControl('', Validators.required)
     })
   }
@@ -50,9 +54,28 @@ export class BusListComponent {
     this.editForm = new FormGroup({
       busName: new FormControl(this.updateDet?.bus_name, Validators.required),
       number: new FormControl(this.updateDet?.bus_number_plate, Validators.required),
-      totalSeats: new FormControl(this.updateDet?.number_of_seats, Validators.required),
+      totalSeats: new FormControl(this.updateDet?.number_of_seats, [
+        Validators.required,
+        Validators.pattern(/^(0|[1-9]\d*)?$/), // Ensures only digits are allowed
+        this.numberRangeValidator(1, 99) // Ensures the number is between 1 and 100
+      ]),
       regNum: new FormControl({ value: this.updateDet?.bus_registration_number, disabled: true }, Validators.required)
     })
+  }
+
+  numberRangeValidator(min: number, max: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+        // If the value is not a valid decimal number, do not perform the range check
+        return null;
+      }
+      const numberValue = parseFloat(value); // Convert the string to a number
+      if (numberValue < min || numberValue > max) {
+        return { 'numberRange': { value: control.value } };
+      }
+      return null;
+    };
   }
 
   getBuses() {
