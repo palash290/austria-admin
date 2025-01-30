@@ -1,11 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-contact-us',
@@ -27,7 +27,7 @@ export class ContactUsComponent {
   loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
 
-  constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
 
   ngOnInit() {
     this.getContacts();

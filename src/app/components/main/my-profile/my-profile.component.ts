@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-my-profile',
@@ -25,7 +25,7 @@ export class MyProfileComponent {
 
   pattern1 = "^[0-9_-]{8,15}";
 
-  constructor(private route: Router, private service: SharedService, private toastr: ToastrService) { }
+  constructor(private route: Router, private service: SharedService, private toastr: NzMessageService) { }
 
   ngOnInit() {
     this.initForm();

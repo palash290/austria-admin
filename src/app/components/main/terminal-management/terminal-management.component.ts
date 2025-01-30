@@ -2,8 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-terminal-management',
@@ -24,7 +24,7 @@ export class TerminalManagementComponent {
   allRoutes: any;
   terminalName: any;
 
-  constructor(private service: SharedService, private toastr: ToastrService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService) { }
 
   ngOnInit() {
     this.getAllTerminals();

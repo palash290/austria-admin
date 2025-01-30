@@ -1,11 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-out-of-service',
@@ -32,7 +32,7 @@ export class OutOfServiceComponent {
   deleteId: any;
   updateId: any;
 
-  constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) {
+  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) {
     this.inItForm();
     this.inItEditForm();
   }

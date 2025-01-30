@@ -106,6 +106,7 @@
                 <div class="d-flex gap-3 align-items-center  justify-content-between">
                     <select class="form-control w-auto" (change)="onBusChange($event)">
                         <option value="" disabled selected>-- Select --</option>
+                        <!-- <option value="1">All</option> -->
                         <option *ngFor="let lan of stopNames" [value]="lan.startPointCityId">{{lan.start_city_name}}
                         </option>
                     </select>

@@ -3,8 +3,8 @@ import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
-import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../../../services/shared.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-all-users',
@@ -24,7 +24,7 @@ export class AllUsersComponent {
   filterQuery: any = '';
   data: any;
 
-  constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
 
   ngOnInit() {
     this.getUsers();

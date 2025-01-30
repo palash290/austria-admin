@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../../../services/shared.service';
 import { HeaderComponent } from '../header/header.component';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-change-password',
@@ -19,7 +19,7 @@ export class ChangePasswordComponent {
   passwordMismatch = false;
   loading: boolean = false;
 
-  constructor(private service: SharedService, private toastr: ToastrService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService) { }
 
   ngOnInit() {
     this.initForm()

@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../../../services/shared.service';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { HeaderComponent } from '../header/header.component';

@@ -3,7 +3,6 @@ import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';

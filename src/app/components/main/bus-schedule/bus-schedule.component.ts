@@ -3,11 +3,11 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { CategoryManagementComponent } from '../category-management/category-management.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-bus-schedule',
@@ -29,7 +29,7 @@ export class BusScheduleComponent {
   allDrivers: any;
 
 
-  constructor(private service: SharedService, private toastr: ToastrService, private activRout: ActivatedRoute, private fb: FormBuilder, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private activRout: ActivatedRoute, private fb: FormBuilder, private errorMessageService: ErrorMessageService) { }
 
   ngOnInit() {
     this.activRout.queryParams.subscribe({

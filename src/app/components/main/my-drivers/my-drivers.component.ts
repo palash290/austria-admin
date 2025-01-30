@@ -1,11 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-my-drivers',
@@ -30,7 +30,7 @@ export class MyDriversComponent {
   pattern1 = "^[0-9_-]{8,15}";
   loading: boolean = false;
 
-  constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
 
   ngOnInit() {
     this.getDrivers();

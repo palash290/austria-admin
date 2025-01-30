@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../services/shared.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { LoaderComponent } from '../../main/loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,7 @@ export class LoginComponent {
   loginForm!: FormGroup;
   loading: boolean = false;
 
-  constructor(private route: Router, private apiService: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
+  constructor(private route: Router, private apiService: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
 
   ngOnInit(): void {
     this.initForm();
