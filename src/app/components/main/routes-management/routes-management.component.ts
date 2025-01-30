@@ -222,6 +222,7 @@ export class RoutesManagementComponent {
   }
 
 
+
   deleteCity(cityName: string): void {
     console.log("Delete clicked for:", cityName);
     //alert(`Deleting ${cityName}`);

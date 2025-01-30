@@ -14,3 +14,18 @@
     border-top-right-radius: 15px;
 }
 
+/* styles.css or styles.scss */
+.info-window-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .info-window-btn:hover {
+    background-color: #0056b3;
+  }
+  
