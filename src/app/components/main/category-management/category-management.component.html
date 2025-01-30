@@ -87,8 +87,8 @@
 </div> -->
 
 
-<div class="ct_right_dash_content">
-    <div class="ct_dash_header">
+<div class="">
+    <!-- <div class="ct_dash_header">
         <div class="d-flex align-items-center gap-3">
             <div class="ct_toggle_bar">
                 <i class="fa-solid fa-bars"></i>
@@ -97,12 +97,19 @@
         <div class="ct_profile_drop">
             <app-header />
         </div>
-    </div>
+    </div> -->
     <div class="ct_middle_content">
 
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4>
+                <!-- <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4> -->
+                <div class="d-flex gap-3 align-items-center  justify-content-between">
+                    <select class="form-control w-auto" (change)="onBusChange($event)">
+                        <option value="" disabled selected>-- Select --</option>
+                        <option *ngFor="let lan of stopNames" [value]="lan.startPointCityId">{{lan.start_city_name}}
+                        </option>
+                    </select>
+                </div>
                 <div class="d-flex gap-3 align-items-center  justify-content-between">
                     <!-- <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                         (ngModelChange)="getType()"> -->
@@ -150,18 +157,18 @@
                         </tr> -->
                         <tr>
                             <th>Routes</th>
+                            <th>Status</th>
                             <th *ngFor="let ticketType of ticketTypes">
-                                <span *ngIf="ticketType === 'Baseprice'">{{ ticketType }}</span>
-                                <span *ngIf="ticketType !== 'Baseprice'">
-                                    {{ ticketType }}
+                                <span *ngIf="ticketType.COLUMN_NAME == 'Baseprice'">{{ ticketType.COLUMN_NAME }}</span>
+                                <span *ngIf="ticketType.COLUMN_NAME !== 'Baseprice'">
+                                    {{ ticketType.COLUMN_NAME }}
                                     <!-- <button
                                   class="btn btn-sm btn-danger ms-2"
-                                  (click)="deleteTicketType(ticketType)"
-                                >
+                                  (click)="deleteTicketType(ticketType)">
                                   Delete
                                 </button> -->
                                     <button class="ct_action_btn" data-bs-toggle="modal"
-                                        (click)="patchUpdate(ticketType)" data-bs-target="#ct_delete_modal">
+                                        (click)="patchUpdate(ticketType.COLUMN_NAME)" data-bs-target="#ct_delete_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -177,14 +184,37 @@
                     <tbody>
                         <tr *ngFor="let route of allRoutes">
                             <!-- Route Information -->
-                            <td>{{ route.pickup_point.city_name }} - {{ route.dropoff_point.city_name }}</td>
-
+                            <td>{{ route.start_city_name }} - {{route.end_city_name}} </td>
+                            <td>
+                                <div class="mb-3">
+                                    <label class="form-label">Available</label>
+                                    <div>
+                                        <label class="switch">
+                                            <input type="checkbox" [(ngModel)]="route.is_active"
+                                                [ngModelOptions]="{ standalone: true }"
+                                                (click)="statusChange(route, route.is_active)" />
+                                            <span class="slider">
+                                                <span class="slider-text-left">NOT AVAILABLE</span>
+                                                <span class="slider-text-right">AVAILABLE</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
                             <!-- Dynamic Ticket Types -->
                             <td *ngFor="let ticketType of ticketTypes">
-                                <input type="number" [placeholder]="ticketType + ' Price'"
-                                    [(ngModel)]="route.ticket_type[0][ticketType]"
-                                    [ngClass]="{ 'border-danger': route.ticket_type[0][ticketType] < 0 }"
-                                    (ngModelChange)="updateTicketPrice(route, ticketType, $event)" [min]="0" />
+                                @if(route.is_active){
+                                <input type="number" [placeholder]="ticketType.COLUMN_NAME + ' Price'"
+                                    [(ngModel)]="route[ticketType.COLUMN_NAME]"
+                                    [ngClass]="{ 'border-danger': ticketType.COLUMN_NAME[ticketType.COLUMN_NAME] < 0 }"
+                                    (ngModelChange)="updateTicketPrice(route, ticketType.COLUMN_NAME, $event)"
+                                    [min]="0" />
+                                } @else {
+                                <!-- Show disabled state or message when unavailable -->
+                                <span class="text-muted">
+                                    Not Available
+                                </span>
+                                }
                             </td>
                         </tr>
                     </tbody>
@@ -198,6 +228,10 @@
                     <p class="ct_fs_15 mt-3">No items found</p>
                 </div> -->
             </div>
+        </div>
+        <div class="actions mt-3">
+            <button (click)="saveUpdatedTicketPrices()" type="submit">Save</button>
+            <button (click)="cancel()" type="button">Cancel</button>
         </div>
     </div>
 </div>

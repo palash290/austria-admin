@@ -6,6 +6,8 @@ import { ErrorMessageService } from '../../../services/error-message.service';
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-management',
@@ -27,15 +29,26 @@ export class CategoryManagementComponent {
   loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
-  allRoutes: any[] = [];
+  allRoutes: any;
   newTicketPrice: number | null = null;
   newTicketType: string = '';
   newTicketTypes: any;
+  status: boolean = true;
+  route_id: any;
 
-  constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService, private router: Router, private activRout: ActivatedRoute) { }
 
   ngOnInit() {
-    this.getRoutesWithTicketTypes()
+    this.activRout.queryParams.subscribe({
+      next: (params) => {
+        this.route_id = params['route_id'];
+        // if (this.route_id) {
+        //   this.addTicketType(this.route_id)
+        // }
+        console.log(this.route_id);
+      }
+    })
+    this.addRouteById()
     //this.getType();
     this.initForm();
   }
@@ -46,19 +59,89 @@ export class CategoryManagementComponent {
     })
   }
 
-  getRoutesWithTicketTypes() {
-    this.service.getApi('get-all-ticket-type').subscribe({
-      next: (resp: any) => {
-        this.allRoutes = resp.data;
-        this.extractTicketTypes();
+  ticketTypes: any[] = [];
+  stopNames: any;
+
+  addRouteById(filterId?: any) {
+    if(!this.route_id){
+      return
+    }
+    const formURlData = new URLSearchParams();
+    formURlData.set('route_id', this.route_id);
+    formURlData.set('stop_id', filterId ? filterId : "");
+    this.service.postAPI('get-ticket-type-by-routeid', formURlData.toString()).subscribe({
+      next: (response) => {
+        if (response.success) {
+          //debugger
+          this.allRoutes = response.data[0].ticket_type;
+          console.log(this.allRoutes);
+          this.ticketTypes = response.data[0].ticket_type_column;
+
+          this.addRouteById1()
+
+
+        } else {
+          console.log(response.message);
+        }
       },
       error: (error) => {
-        console.error(error.message);
+        if (error.error.message) {
+          console.log(error.error.message);
+        } else {
+          console.log('Something went wrong!');
+        }
       }
     });
   }
 
-  ticketTypes: string[] = [];
+
+
+  addRouteById1() {
+    if (this.route_id) {
+      const formURlData = new URLSearchParams();
+      formURlData.set('route_id', this.route_id);
+      this.service.postAPI('get-route-by-id', formURlData.toString()).subscribe({
+        next: (response) => {
+          if (response.success) {
+            //this.lines = response.data.route_stops;
+            this.stopNames = response.data.route_stops.map((item: any) => ({
+              start_city_name: item.stop_city.city_name,
+              startPointCityId: item.stop_city.city_id
+            }));
+
+            // Remove duplicates
+            // this.stopNames = stopNamesWithDuplicates.filter(
+            //   (item: { start_city_name: any; }, index: any, self: any[]) =>
+            //     index === self.findIndex((t) => t.start_city_name === item.start_city_name)
+            // );
+            console.log('this.stopNames', this.stopNames);
+          } else {
+            console.log(response.message);
+          }
+        },
+        error: (error) => {
+          if (error.error.message) {
+            console.log(error.error.message);
+          } else {
+            console.log('Something went wrong!');
+          }
+        }
+      });
+    }
+  }
+
+  // getRoutesWithTicketTypes() {
+  //   this.service.getApi('get-all-ticket-type').subscribe({
+  //     next: (resp: any) => {
+  //       this.allRoutes = resp.data;
+  //       this.extractTicketTypes();
+  //     },
+  //     error: (error) => {
+  //       console.error(error.message);
+  //     }
+  //   });
+  // }
+
 
   // extractTicketTypes() {
   //   if (this.allRoutes.length > 0 && this.allRoutes[0].ticket_type.length > 0) {
@@ -71,46 +154,105 @@ export class CategoryManagementComponent {
 
   // }
 
-    // Extract ticket type keys dynamically from the first route
-    extractTicketTypes() {
-      if (this.allRoutes.length > 0 && this.allRoutes[0].ticket_type.length > 0) {
-        this.ticketTypes = Object.keys(this.allRoutes[0].ticket_type[0]).filter(
-          (key) =>
-            key !== 'ticket_type_id' &&
-            key !== 'created_at' &&
-            key !== 'updated_at' &&
-            key !== 'routeRouteId' &&
-            key !== 'is_deleted'
-        );
+  // Extract ticket type keys dynamically from the first route
+  // extractTicketTypes() {
+  //   if (this.allRoutes.length > 0 && this.allRoutes[0].ticket_type_column.length > 0) {
+  //     this.ticketTypes = Object.keys(this.allRoutes[0].ticket_type_column[0]).filter(
+  //       (key) =>
+  //         key !== 'ticket_type_id' &&
+  //         key !== 'created_at' &&
+  //         key !== 'updated_at' &&
+  //         key !== 'routeRouteId' &&
+  //         key !== 'is_deleted'
+  //     );
+  //   }
+  // }
+
+
+
+  // updateTicketPrice(route: any, ticketType: any, newPrice: any) {
+  //   //debugger
+  //   if (parseFloat(newPrice) >= 0) {
+  //     const updatedTicket = {
+  //       ticket_type_id: route.ticket_type_id,
+  //       ticket_type: ticketType,
+  //       ticket_price: parseFloat(newPrice),
+  //       is_active: route.is_active
+  //     };
+
+  //     this.service.postData('update-ticket-price', updatedTicket).subscribe(response => {
+  //       console.log('Ticket data successfully posted', response);
+  //     }, error => {
+  //       console.error('Error posting ticket data', error);
+  //     });
+  //   } else {
+  //     this.toastr.error('Negative value not allow!')
+  //   }
+
+  // }
+
+
+  updatedTickets: any[] = []; // Array to track updated ticket prices
+
+  updateTicketPrice(ticket: any, field: string, newValue: any) {
+    if (parseFloat(newValue) >= 0) {
+      // Update the ticket object locally
+      ticket[field] = newValue;
+
+      // Add to updatedTickets array if not already present
+      const existingTicket = this.updatedTickets.find(t => t.ticket_type_id === ticket.ticket_type_id);
+      if (existingTicket) {
+        existingTicket[field] = newValue;
+      } else {
+        this.updatedTickets.push({
+          ticket_type_id: ticket.ticket_type_id,
+          is_active: ticket.is_active,
+          Adult: ticket.Adult,
+          Child: ticket.Child,
+          Baseprice: ticket.Baseprice,
+        });
       }
-    }
-
-
-
-
-
-  updateTicketPrice(route: any, ticketType: string, newPrice: string) {
-    //debugger
-    if(parseFloat(newPrice) >= 0){
-      const updatedTicket = {
-        ticket_type_id: route.ticket_type[0].ticket_type_id,
-        ticket_type: ticketType,
-        ticket_price: parseFloat(newPrice),
-      };
-  
-      this.service.postData('update-ticket-price', updatedTicket).subscribe(response => {
-        console.log('Ticket data successfully posted', response);
-      }, error => {
-        console.error('Error posting ticket data', error);
-      });
     } else {
-      this.toastr.error('Negative value not allow!')
+      this.toastr.error('Negative value not allowed!');
     }
+  }
 
+  saveUpdatedTicketPrices() {
+    if (this.updatedTickets.length > 0) {
+      this.service.postData('update-ticket-price', this.updatedTickets).subscribe(
+        response => {
+          console.log('Ticket data successfully updated', response);
+          this.toastr.success('Tickets updated successfully!');
+          this.updatedTickets = []; // Clear the updated tickets array
+        },
+        error => {
+          console.error('Error updating ticket data', error);
+          this.toastr.error('Error updating ticket data');
+        }
+      );
+    } else {
+      this.toastr.warning('No updates to save');
+    }
+  }
+
+  statusChange(ticket: any, status: any) {
+    //console.log(status);
+    this.updatedTickets.push({
+      ticket_type_id: ticket.ticket_type_id,
+      is_active: status ? 0 : 1,
+      Adult: ticket.Adult,
+      Child: ticket.Child,
+      Baseprice: ticket.Baseprice,
+    });
+    console.log(this.updatedTickets);
+  }
+
+  ngOnDestroy() {
+    this.updatedTickets = [];
   }
 
   // Update all ticket prices
-  
+
   // updateAllTicketPrices() {
   //   const updatedTickets: any[] = [];
 
@@ -203,14 +345,14 @@ export class CategoryManagementComponent {
             this.toastr.success(resp.message);
             this.btnLoader = false;
             this.closeModal.nativeElement.click();
-            this.getRoutesWithTicketTypes();
+            this.addRouteById();
             this.form.reset();
             this.loading = false;
           } else {
             this.toastr.warning(resp.message);
             this.btnLoader = false;
             this.loading = false;
-            this.getRoutesWithTicketTypes();
+            this.addRouteById();
           }
         },
         error: (error) => {
@@ -226,11 +368,11 @@ export class CategoryManagementComponent {
     }
   }
 
-  updateId: any;
+  COLUMN_NAMEId: any;
 
   patchUpdate(details: any) {
     //debugger
-    this.updateId = details;
+    this.COLUMN_NAMEId = details;
   }
 
   @ViewChild('closeModal2') closeModal2!: ElementRef;
@@ -238,13 +380,13 @@ export class CategoryManagementComponent {
   deleteTicketType() {
     //console.log(`Deleting header: ${header}`);
     const formURlData = new URLSearchParams();
-    formURlData.set('ticket_type', this.updateId);
+    formURlData.set('ticket_type', this.COLUMN_NAMEId);
 
     this.service.postAPI(`delete-ticket-type`, formURlData.toString()).subscribe({
       next: (resp) => {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
-          this.getRoutesWithTicketTypes();
+          this.addRouteById();
           this.toastr.success(resp.message)
 
         } else {
@@ -272,6 +414,24 @@ export class CategoryManagementComponent {
     this.pageSize = newPageSize;
     this.currentPage = 1;
     //this.getType();
+  }
+
+  cancel() {
+    this.router.navigate(['/home/routes-management'])
+  }
+
+  selectedBusId: any = '';
+  selectedBusName: any;
+
+  onBusChange(event: any): void {
+    const selectedId = event.target.value;
+
+    this.selectedBusId = selectedId;
+
+    console.log('Selected austriaCityId ID:', this.selectedBusId);
+
+    this.addRouteById(selectedId);
+
   }
 
 

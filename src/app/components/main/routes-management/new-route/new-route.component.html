@@ -1,7 +1,8 @@
 <div class="ct_right_dash_content">
     <div class="update-line-container">
-        <h2>Update Line</h2>
-        <p class="breadcrumb">Home > Bus Schedule > Stops & Lines > Update Line</p>
+        <h2>{{route_id == undefined ? 'Add Line' : 'Update Line'}}</h2>
+        <!-- <p class="breadcrumb">Home > Bus Schedule > Stops & Lines > {{route_id == undefined ? 'Add Line' : 'Update
+            Line'}}</p> -->
 
         <div class="alert">
             ⚠️ There are bookings for this route, and changes are not possible.
@@ -13,49 +14,52 @@
                 <!-- Details Section -->
                 <div class="details-section w-50">
                     <h3>Details</h3>
-                    <!-- <label class="switch">
+                    <label *ngIf="route_id" class="switch">
                         <input type="checkbox" [(ngModel)]="status" [ngModelOptions]="{standalone: true}" />
-                        <span class="slider"></span>
-                    </label> -->
-                    <span class="status-label">{{ status ? 'ACTIVE' : 'INACTIVE' }}</span>
+                        <span class="slider">
+                            <span class="slider-text-left">INACTIVE</span>
+                            <span class="slider-text-right">ACTIVE</span>
+                        </span>
+                    </label>
+                    <!-- <span class="status-label">{{ status ? 'ACTIVE' : 'INACTIVE' }}</span> -->
 
                     <div class="mt-3">
                         <label for="title">Title</label>
-                        <input id="title" type="text" class="form-control ct_input ct_fs_18 " [(ngModel)]="title"
-                            [ngModelOptions]="{standalone: true}" />
+                        <input id="title" type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="title"
+                            [ngModelOptions]="{standalone: true}" placeholder="Enter Title" />
                     </div>
                     <div class="mt-3">
                         <label for="description">Description</label>
                         <textarea id="description" rows="5" [(ngModel)]="description"
-                            [ngModelOptions]="{standalone: true}" class="form-control ct_fs_18 "></textarea>
+                            [ngModelOptions]="{standalone: true}" class="form-control ct_fs_18"
+                            placeholder="Enter Description"></textarea>
                     </div>
                 </div>
 
-                <div class="bus-stops-section w-50">
+                <div cdkDropList class="bus-stops-section w-50" (cdkDropListDropped)="drop($event)">
                     <h3>Bus Stops</h3>
-                    <div *ngFor="let stop of busStops; let i = index" class="form-group mb-4 position-relative">
+                    <div *ngFor="let stop of busStops; let i = index" cdkDrag cdkDragBoundary=".bus-stops-section"
+                        class="form-group mb-4 position-relative overflow-hidden">
                         <label for="location-{{ i }}">Location {{ i + 1 }}:</label>
-                        <select id="location-{{ i }}" [(ngModel)]="stop.city_id" [ngModelOptions]="{standalone: true}"
-                            class="location-select form-control ct_input ps-4 width_60">
-                            <!-- <option value="select" disabled selected>-- Choose --</option> -->
-                            <option *ngFor="let location of allCities">
+                        <select id="location-{{ i }}" class="location-select form-control ct_input ps-4 width_60"
+                            [ngModel]="stop.city_id" (ngModelChange)="onLocationChange($event, i)"
+                            [ngModelOptions]="{standalone: true}" [disabled]="!stop.isNew && route_id">
+                            <option value=null disabled selected>-- Select --</option>
+                            <option *ngFor="let location of allCities" [value]="location.city_id">
                                 {{ location.city_name }}
                             </option>
                         </select>
+                        <!-- Only show buttons for new stops -->
 
-                        <div *ngIf="stop.isNew" class="action-buttons">
-                            <!-- Action Buttons -->
-                            <button type="button" class="btn-delete" (click)="deleteBusStop(i)"
-                                aria-label="Delete Stop">
-                                🗑️
+                        <div class="action-buttons">
+
+                            <button class="btn btn-secondary" [class.d-none]="!stop.isNew">
+                                <i cdkDragHandle class="fa fa-arrows"></i>
                             </button>
-                            <button type="button" class="btn-reorder" (click)="reorderBusStop(i, i - 1)"
-                                [disabled]="i === 0" aria-label="Move Up">
-                                ⬆️
-                            </button>
-                            <button type="button" class="btn-reorder" (click)="reorderBusStop(i, i + 1)"
-                                [disabled]="i === busStops.length - 1" aria-label="Move Down">
-                                ⬇️
+
+                            <button type="button" class="btn btn-danger" [class.d-none]="!stop.isNew"
+                                (click)="deleteBusStop(i)" aria-label="Delete Stop">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
@@ -69,13 +73,13 @@
         </form>
 
         <!-- Departure Times Section -->
-        <div class="departure-times-section mt-5 w-50">
+        <!-- <div class="departure-times-section mt-5 w-50">
             <h3>Departure Times</h3>
-            <!-- <div>
-                            <label>Departure times</label>
-                            <input type="time" [(ngModel)]="newDepartureTime" [ngModelOptions]="{standalone: true}" />
-                            <button type="button" (click)="addDepartureTime()">+ Add New</button>
-                        </div> -->
+            <div>
+                <label>Departure times</label>
+                <input type="time" [(ngModel)]="newDepartureTime" [ngModelOptions]="{standalone: true}" />
+                <button type="button" (click)="addDepartureTime()">+ Add New</button>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -97,11 +101,12 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+        </div> -->
 
         <div class="actions mt-3">
-            <button (click)="saveBusStops()" type="submit">Save</button>
-            <button type="button" (click)="cancel()">Cancel</button>
+            <button (click)="saveBusStops()" class="btn-add" type="submit">{{route_id == undefined ? 'Save' :
+                'Update'}}</button>
+            <button (click)="cancel()" type="button">Cancel</button>
         </div>
 
     </div>

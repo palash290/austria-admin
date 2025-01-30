@@ -22,7 +22,7 @@ export const routes: Routes = [
             { path: 'change-password', loadComponent: () => import('./components/main/change-password/change-password.component').then(m => m.ChangePasswordComponent) },
             { path: 'all-users', loadComponent: () => import('./components/main/all-users/all-users.component').then(m => m.AllUsersComponent) },
             { path: 'routes-management', loadComponent: () => import('./components/main/routes-management/routes-management.component').then(m => m.RoutesManagementComponent) },
-            { path: 'bus-schedule/:routeId/:pickupId/:dropoffId', loadComponent: () => import('./components/main/bus-schedule/bus-schedule.component').then(m => m.BusScheduleComponent) },
+            { path: 'bus-schedule', loadComponent: () => import('./components/main/bus-schedule/bus-schedule.component').then(m => m.BusScheduleComponent) },
             { path: 'all-bus-schedule', loadComponent: () => import('./components/main/all-bus-schedule/all-bus-schedule.component').then(m => m.AllBusScheduleComponent) },
             { path: 'booking-management', loadComponent: () => import('./components/main/booking-management/booking-management.component').then(m => m.BookingManagementComponent) },
             { path: 'terminal-management', loadComponent: () => import('./components/main/terminal-management/terminal-management.component').then(m => m.TerminalManagementComponent) },
@@ -30,6 +30,7 @@ export const routes: Routes = [
             { path: 'out-of-service', loadComponent: () => import('./components/main/out-of-service/out-of-service.component').then(m => m.OutOfServiceComponent) },
             { path: 'category-management', loadComponent: () => import('./components/main/category-management/category-management.component').then(m => m.CategoryManagementComponent) },
             { path: 'new-route', loadComponent: () => import('./components/main/routes-management/new-route/new-route.component').then(m => m.NewRouteComponent) },
+            { path: 'edit-city', loadComponent: () => import('./components/main/routes-management/edit-city/edit-city.component').then(m => m.EditCityComponent) },
             //category-management
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'user-profile/:id', loadComponent: () => import('./components/user/user-profile/user-profile.component').then(m => m.UserProfileComponent) },

@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 declare var google: any;
 
 @Component({
@@ -40,12 +41,10 @@ export class RoutesManagementComponent {
   stopName: any;
   terminalName: any;
   allRoutes: any;
-
-  lines:any
-
+  lines: any
 
 
-  constructor(private service: SharedService, private toastr: ToastrService, private errorMessageService: ErrorMessageService, private router: Router) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService, private router: Router) { }
 
   ngOnInit() {
     this.getRoutes();
@@ -67,12 +66,74 @@ export class RoutesManagementComponent {
     });
   }
 
+  getRoutes() {
+    this.service.getApi(`get-all-routes`).subscribe({
+      next: resp => {
+        this.lines = resp.data;
+        this.totalPages = resp.data.pagination?.totalPages
+      },
+      error: error => {
+        console.log(error.message);
+      }
+    });
+  }
+
+  singleLatLog: any;
+  isSingleLatLog: boolean = false;
+
+  getLatLog(latLog: any) {
+    this.isSingleLatLog = !this.isSingleLatLog;
+    this.singleLatLog = latLog;
+    console.log('latlog', latLog);
+    this.initMap();
+  }
+
   initMap(): void {
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB0V1g5YyGB_NE1Lw1QitZZGECA5-1Xnng`;
     script.onload = () => this.createMap();
     document.body.appendChild(script);
   }
+
+  // createMap(): void {
+  //   const mapOptions = {
+  //     zoom: 9,
+  //     center: { lat: 25.304867300025933, lng: 78.56014738728993 }
+  //   };
+
+  //   const map = new google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
+  //   const bounds = new google.maps.LatLngBounds();
+
+  //   const infoWindow = new google.maps.InfoWindow();
+
+  //   this.allRoutes.forEach((city: any) => {
+  //     if (city.latitude && city.longitude) {
+  //       const marker = new google.maps.Marker({
+  //         position: { lat: parseFloat(city.latitude), lng: parseFloat(city.longitude) },
+  //         map: map,
+  //         title: city.city_name || 'City Location'
+  //       });
+
+  //       // Extend bounds to include this marker's position
+  //       bounds.extend(new google.maps.LatLng(parseFloat(city.latitude), parseFloat(city.longitude)));
+
+  //       // Click event to open InfoWindow with buttons
+  //       marker.addListener("click", () => {
+  //         infoWindow.setContent(`
+  //           <div>
+  //             <h4>${city.city_name}</h4>
+  //             <button onclick="editCity('${city.city_name}')">Edit</button>
+  //             <button onclick="deleteCity('${city.city_name}')">Delete</button>
+  //           </div>
+  //         `);
+  //         infoWindow.open(map, marker);
+  //       });
+  //     }
+  //   });
+
+  //   // Fit the map bounds to include all markers
+  //   map.fitBounds(bounds);
+  // }
 
 
   createMap(): void {
@@ -85,24 +146,86 @@ export class RoutesManagementComponent {
     const map = new google.maps.Map(document.getElementById('map') as HTMLElement, mapOptions);
     const bounds = new google.maps.LatLngBounds();
 
+    const infoWindow = new google.maps.InfoWindow();
 
-    // Loop through the cities in this.allRoutes and add markers
-    this.allRoutes.forEach((city: any) => {
-      if (city.latitude && city.longitude) {
-        const marker = new google.maps.Marker({
-          position: { lat: parseFloat(city.latitude), lng: parseFloat(city.longitude) },
-          map: map,
-          title: city.city_name || 'City Location'
-        });
+    if (this.singleLatLog?.length > 0 && this.isSingleLatLog) {
+      this.singleLatLog.forEach((city: any, index: number) => {
+        if (city.stop_city.latitude && city.stop_city.longitude) {
+          const marker = new google.maps.Marker({
+            position: { lat: parseFloat(city.stop_city.latitude), lng: parseFloat(city.stop_city.longitude) },
+            map: map,
+            title: city.stop_city.city_name || 'City Location',
+            label: `${index + 1}`
+          });
 
-        // Extend bounds to include this marker's position
-        bounds.extend(new google.maps.LatLng(parseFloat(city.latitude), parseFloat(city.longitude)));
-      }
-    });
+          // Extend bounds to include this marker's position
+          bounds.extend(new google.maps.LatLng(parseFloat(city.stop_city.latitude), parseFloat(city.stop_city.longitude)));
+
+          // Click event to open InfoWindow with buttons
+          marker.addListener("click", () => {
+            infoWindow.setContent(`
+            <div>
+              <h4>${city.city_name}</h4>
+              <button onclick="editCity('${city.city_name}')">Edit</button>
+              <button onclick="deleteCity('${city.city_name}')">Delete</button>
+            </div>
+          `);
+            infoWindow.open(map, marker);
+          });
+
+        }
+      });
+    } else {
+      // Loop through the cities in this.allRoutes and add markers
+      this.allRoutes.forEach((city: any) => {
+        if (city.latitude && city.longitude) {
+          const marker = new google.maps.Marker({
+            position: { lat: parseFloat(city.latitude), lng: parseFloat(city.longitude) },
+            map: map,
+            title: city.city_name || 'City Location'
+          });
+
+          // Extend bounds to include this marker's position
+          bounds.extend(new google.maps.LatLng(parseFloat(city.latitude), parseFloat(city.longitude)));
+
+          // Click event to open InfoWindow with buttons
+          marker.addListener("click", () => {
+            infoWindow.setContent(`
+            <div>
+              <h4>${city.city_name}</h4>
+              <button id="editBtn">Edit</button>
+                <button id="deleteBtn">Delete</button>
+            </div>
+          `);
+            infoWindow.open(map, marker);
+
+            setTimeout(() => {
+              document.getElementById("editBtn")?.addEventListener("click", () => this.editCity(city.city_id));
+              document.getElementById("deleteBtn")?.addEventListener("click", () => this.deleteCity(city.city_id));
+            }, 100);
+
+          });
+
+        }
+      });
+    }
+
 
     // Fit the map bounds to include all markers
     map.fitBounds(bounds);
   }
+
+  editCity(cityName: string): void {
+    console.log("Edit clicked for:", cityName);
+    this.router.navigate(['/home/edit-city'], { queryParams: { cityName } });
+  }
+  
+
+  deleteCity(cityName: string): void {
+    console.log("Delete clicked for:", cityName);
+    //alert(`Deleting ${cityName}`);
+  }
+
 
 
   isSearchActiveFrom = false;
@@ -167,6 +290,111 @@ export class RoutesManagementComponent {
       }
     });
   }
+
+
+  singleLine: any;
+  reverseLine: any;
+  copyTitle: any;
+  copyDescription: any
+
+
+  addRouteById(id?: any) {
+    //if(this.route_id || id){
+    const formURlData = new URLSearchParams();
+    formURlData.set('route_id', id);
+    this.service.postAPI('get-route-by-id', formURlData.toString()).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.singleLine = response.data.route_stops.map((stop: any) => stop.stop_city.city_id);
+          this.reverseLine = response.data.route_stops
+            .map((stop: any) => stop.stop_city.city_id)
+            .reverse();
+          console.log(this.singleLine);
+          this.copyTitle = response.data.title;
+          this.copyDescription = response.data.description;
+        } else {
+          console.log(response.message);
+        }
+      },
+      error: (error) => {
+        if (error.error.message) {
+          console.log(error.error.message);
+        } else {
+          console.log('Something went wrong!');
+        }
+      }
+    });
+    // }
+  }
+
+
+  copyRoute() {
+    const formData = new URLSearchParams();
+    formData.append('title', this.copyTitle);
+    formData.append('route_stops', this.singleLine.toString());
+    formData.append('description', this.copyDescription);
+
+    let url = 'create-route';
+
+    this.service
+      .postAPI(url, formData.toString())
+      .subscribe({
+        next: res => {
+          if (res.success == true) {
+            this.router.navigate(['/home/routes-management'])
+            //  this.allTerminalsList = res.data;
+            this.toastr.success(res.message);
+            this.getRoutes();
+            this.isSingleLatLog = false;
+            this.initMap();
+          } else {
+            this.toastr.warning(res.message);
+          }
+        },
+        error: error => {
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+        }
+      });
+
+  };
+
+  reverseRoute() {
+    const formData = new URLSearchParams();
+    formData.append('title', this.copyTitle);
+    formData.append('route_stops', this.reverseLine.toString());
+    formData.append('description', this.copyDescription);
+
+    let url = 'create-route';
+
+    this.service
+      .postAPI(url, formData.toString())
+      .subscribe({
+        next: res => {
+          if (res.success == true) {
+            this.router.navigate(['/home/routes-management'])
+            //  this.allTerminalsList = res.data;
+            this.toastr.success(res.message);
+            this.getRoutes();
+            this.isSingleLatLog = false;
+            this.initMap();
+          } else {
+            this.toastr.warning(res.message);
+          }
+        },
+        error: error => {
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+        }
+      });
+
+  };
 
 
 
@@ -245,17 +473,6 @@ export class RoutesManagementComponent {
     }
   }
 
-  getRoutes() {
-    this.service.getApi(`get-all-routes`).subscribe({
-      next: resp => {
-        this.lines = resp.data;
-        this.totalPages = resp.data.pagination?.totalPages
-      },
-      error: error => {
-        console.log(error.message);
-      }
-    });
-  }
 
   onAustriaCityChange(event: any): void {
     const selectedId = event.target.value;
@@ -290,7 +507,7 @@ export class RoutesManagementComponent {
     if (this.selectedOption == '1') {
       this.loading = true;
       const formURlData = new URLSearchParams();
-      formURlData.set('route_direction', `Austria to Ukraine`);
+      //formURlData.set('route_direction', `Austria to Ukraine`);
       formURlData.set('pickup_point', this.selectedAustriaCityId);
       formURlData.set('dropoff_point', this.selectedUkraneCityId);
       //formURlData.set('fixed_price', this.price);
@@ -322,7 +539,7 @@ export class RoutesManagementComponent {
     } else {
       this.loading = true;
       const formURlData = new URLSearchParams();
-      formURlData.set('route_direction', `Ukraine to Austria`);
+      //formURlData.set('route_direction', `Ukraine to Austria`);
       formURlData.set('pickup_point', this.selectedUkraneCityId);
       formURlData.set('dropoff_point', this.selectedAustriaCityId);
       //formURlData.set('fixed_price', this.price);

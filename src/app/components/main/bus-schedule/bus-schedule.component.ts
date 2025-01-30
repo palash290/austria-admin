@@ -1,86 +1,134 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
+import { CategoryManagementComponent } from '../category-management/category-management.component';
 
 @Component({
   selector: 'app-bus-schedule',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
+  imports: [HeaderComponent, CategoryManagementComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './bus-schedule.component.html',
   styleUrl: './bus-schedule.component.css'
 })
 export class BusScheduleComponent {
 
-  data: any;
-  routeId: any;
-  pickupId: any;
-  dropoffId: any;
-  adultPrice: any;
-  childPrice: any;
-  extraPrice: any;
-  selectedRecurrence: any = 'Daily';
-  weekDays: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  selectedDays: string[] = [];
+
   loading: boolean = false;
+  route_id: any;
+  form!: FormGroup;
+  daysOfWeek: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  status: boolean = true;
+  routeList: any;
+  busList: any;
+  allDrivers: any;
 
-  dropdownOpen: boolean = false;
-  selectedOptions: { [key: string]: boolean } = {};
 
-  toggleDropdown(): void {
-    this.dropdownOpen = !this.dropdownOpen;
-  }
-
-  getSelectedOptions(): string {
-    const selected = Object.keys(this.selectedOptions).filter(
-      (key) => this.selectedOptions[key]
-    );
-    return selected.length > 0 ? selected.join(', ') : '';
-  }
-
-  constructor(private service: SharedService, private toastr: ToastrService, private actRoute: ActivatedRoute) { }
+  constructor(private service: SharedService, private toastr: ToastrService, private activRout: ActivatedRoute, private fb: FormBuilder, private errorMessageService: ErrorMessageService) { }
 
   ngOnInit() {
-    this.actRoute.params.subscribe(params => {
-      const id = params['routeId'];
-      const pickupId = params['pickupId'];
-      const dropoffId = params['dropoffId'];
-      this.routeId = id;
-      this.pickupId = pickupId;
-      this.dropoffId = dropoffId;
+    this.activRout.queryParams.subscribe({
+      next: (params) => {
+        this.route_id = params['route_id'];
+      }
     });
-    this.getBuseSchedule();
+    this.addRouteById();
+    this.getRoutes();
     this.getBuses();
     this.getDrivers();
-    this.getPickupTerminalsByCity();
-    this.getDropoffTerminalsByCity();
-    this.fetchCategories();
+    this.initForm();
+    // Listen to changes in 'status' to toggle required validators for 'fromDate' and 'toDate'
+    this.form.get('status')?.valueChanges.subscribe((statusValue) => {
+      this.toggleDateValidators(statusValue);
+    });
+    this.dateValidation();
   }
 
-  categories: { ticket_type: string, price?: string }[] = [];
+  initForm() {
+    const controls: any = {};
+    // Create form controls for each day
+    this.daysOfWeek.forEach(day => {
+      controls[day] = new FormControl(false);
+    });
 
-  fetchCategories() {
-    this.service.getApi('get-all-ticket-type')
-      .subscribe(response => {
-        this.categories = response.data.map((category: any) => ({
-          ...category,
-          price: '' // Initialize with an empty string
-        }));
-      });
+    this.form = this.fb.group({
+      line: ['', Validators.required],
+      busName: ['', Validators.required],
+      driver: ['', Validators.required],
+      status: [true],
+      fromDate: [''],
+      toDate: [''],
+      recurrence_pattern: new FormControl('Daily'),
+      ...controls,
+    });
+    // Initialize validators based on default 'status' value
+    this.toggleDateValidators(this.form.get('status')?.value);
   }
 
+  minDate: any;
 
-  getBuseSchedule() {
-    const formURlData = new URLSearchParams();
-    formURlData.set('route_id', this.routeId);
-    this.service.postAPI('get-all-busschedule-by-routeid', formURlData.toString()).subscribe({
+  dateValidation() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Ensure two-digit month
+    const day = today.getDate().toString().padStart(2, '0'); // Ensure two-digit day
+    this.minDate = `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+  }
+
+  minDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (control.value) {
+      const inputDate = new Date(control.value);
+      const today = new Date(this.minDate);
+
+      if (inputDate < today) {
+        return { minDate: true }; // Error key if date is invalid
+      }
+    }
+    return null; // Valid date
+  }
+
+  toggleDateValidators(isStatusTrue: boolean): void {
+    const fromDateControl = this.form.get('fromDate');
+    const toDateControl = this.form.get('toDate');
+
+    if (!isStatusTrue) {
+      fromDateControl?.setValidators([Validators.required, this.minDateValidator.bind(this)]);
+      toDateControl?.setValidators([Validators.required, this.minDateValidator.bind(this)]);
+    } else {
+      fromDateControl?.clearValidators();
+      toDateControl?.clearValidators();
+    }
+
+    fromDateControl?.updateValueAndValidity();
+    toDateControl?.updateValueAndValidity();
+  }
+
+  dateGreaterOrEqualValidator(fromControlName: string) {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      const fromDateValue = this.form?.get(fromControlName)?.value;
+      const toDateValue = control.value;
+
+      if (fromDateValue && toDateValue) {
+        const fromDate = new Date(fromDateValue);
+        const toDate = new Date(toDateValue);
+
+        if (toDate < fromDate) {
+          return { dateGreaterOrEqual: true }; // Error key if the to_date is less than from_date
+        }
+      }
+      return null; // Valid date
+    };
+  }
+
+  getRoutes() {
+    this.service.getApi(`get-all-active-routes`).subscribe({
       next: resp => {
-        this.data = resp.data;
+        this.routeList = resp.data;
       },
       error: error => {
         console.log(error.message);
@@ -88,14 +136,10 @@ export class BusScheduleComponent {
     });
   }
 
-  allBuses: any;
-  allDrivers: any;
-
   getBuses() {
-    this.service.getApi('get-all-buses').subscribe({
+    this.service.getApi(`get-all-buses-by-limit-search`).subscribe({
       next: resp => {
-        this.allBuses = resp.data;
-        //this.selectedBusId = this.allBuses[0].bus_id;
+        this.busList = resp.data.buses;
       },
       error: error => {
         console.log(error.message);
@@ -104,10 +148,9 @@ export class BusScheduleComponent {
   }
 
   getDrivers() {
-    this.service.getApi('get-all-drivers').subscribe({
+    this.service.getApi(`get-all-drivers-by-limit-search`).subscribe({
       next: resp => {
-        this.allDrivers = resp.data;
-        //this.selectedDriverId = this.allDrivers[0].driver_id;
+        this.allDrivers = resp.data.drivers;
       },
       error: error => {
         console.log(error.message);
@@ -115,151 +158,175 @@ export class BusScheduleComponent {
     });
   }
 
+  lines: any;
+
+  addRouteById(id?: any) {
+    if (this.route_id || id) {
+      const formURlData = new URLSearchParams();
+      formURlData.set('route_id', id ? id : this.route_id);
+      this.service.postAPI('get-route-by-id', formURlData.toString()).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.lines = response.data.route_stops;
+            console.log(this.lines);
+          } else {
+            console.log(response.message);
+          }
+        },
+        error: (error) => {
+          if (error.error.message) {
+            console.log(error.error.message);
+          } else {
+            console.log('Something went wrong!');
+          }
+        }
+      });
+    }
+  }
+
+  updateDepartureTime(index: any): void {
+    //debugger
+    if (index === 0 || index === this.lines.length - 1) {
+      // Do nothing for the first and last row.
+      return;
+    }
+
+    const stop = this.lines[index];
+    //stop.stop_time = '00:00';
+    // Ensure both arrival time and stop time are valid.
+    //debugger
+    // if (stop.stop_time == "00:00:00") {
+    //   stop.stop_time = 0;
+    // }
+
+    if (stop.arrival_time && stop.stop_time !== null) {
+
+      // Convert arrival time to a Date object.
+      const [hours, minutes] = stop.arrival_time.split(':').map(Number);
+      const arrivalDate = new Date();
+      arrivalDate.setHours(hours, minutes, 0);
+
+      // Add stop time to arrival time.
+      const departureDate = new Date(arrivalDate);
+      departureDate.setMinutes(arrivalDate.getMinutes() + stop.stop_time);
+
+      // Format the departure time back to HH:mm format.
+      const formattedDepartureTime = departureDate
+        .toTimeString()
+        .split(':')
+        .slice(0, 2)
+        .join(':');
+
+      // Update the departure time.
+      stop.departure_time = formattedDepartureTime;
+    } else {
+      stop.departure_time = null; // Reset departure time if input is invalid.
+    }
+  }
+
+  selectedLineId: any = '';
+  selectedDriverId: any = '';
   selectedBusId: any = '';
   selectedBusName: any;
 
-  onBusChange(event: any): void {
+  onLineChange(event: any): void {
     const selectedId = event.target.value;
-    const selectedCategory = this.allBuses.find((language: any) => language.bus_id == selectedId);
+    //const selectedCategory = this.routeList.find((language: any) => language.route_id == selectedId);
 
-    if (selectedCategory) {
-      this.selectedBusId = selectedId;
-      this.selectedBusName = selectedCategory.bus_name;
-      console.log('Selected austriaCityId ID:', this.selectedBusId);
-      console.log('Selected austriaCity name:', this.selectedBusName);
-    }
-  }
-
-  selectedDriverId: any = '';
-  selectedDriverName: any;
-
-  onDriverChange(event: any): void {
-    const selectedId = event.target.value;
-    const selectedCategory = this.allDrivers.find((language: any) => language.driver_id == selectedId);
-
-    if (selectedCategory) {
-      this.selectedDriverId = selectedId;
-      this.selectedDriverName = selectedCategory.driver_name;
-      console.log('Selected austriaCityId ID:', this.selectedDriverId);
-      console.log('Selected austriaCity name:', this.selectedDriverName);
-      console.log(this.departure_time);
-
-    }
+    // if (selectedCategory) {
+    this.selectedLineId = selectedId;
+    //this.selectedBusName = selectedCategory.bus_name;
+    console.log('Selected austriaCityId ID:', this.selectedLineId);
+    //console.log('Selected austriaCity name:', this.selectedBusName);
+    this.addRouteById(selectedId);
+    //}
   }
 
 
-  selectedPickupTerminalId: any = '';
-  selectedPickupTerminalName: any;
-
-  onPickupTerminalChange(event: any): void {
-    const selectedId = event.target.value;
-    const selectedCategory = this.pickupTerminals.find((language: any) => language.terminal_id == selectedId);
-
-    if (selectedCategory) {
-      this.selectedPickupTerminalId = selectedId;
-      this.selectedPickupTerminalName = selectedCategory.terminal_name;
-      console.log('Selected austriaCityId ID:', this.selectedPickupTerminalId);
-      console.log('Selected austriaCity name:', this.selectedPickupTerminalName);
+  onSubmit(): void {
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      console.log('Form Data:', this.form.value);
     }
   }
 
-
-  selectedDropTerminalId: any = '';
-  selectedDropTerminalName: any;
-
-  onDropTerminalChange(event: any): void {
-    const selectedId = event.target.value;
-    const selectedCategory = this.dropoffTerminals.find((language: any) => language.terminal_id == selectedId);
-
-    if (selectedCategory) {
-      this.selectedDropTerminalId = selectedId;
-      this.selectedDropTerminalName = selectedCategory.terminal_name;
-      console.log('Selected austriaCityId ID:', this.selectedDropTerminalId);
-      console.log('Selected austriaCity name:', this.selectedDropTerminalName);
-
-    }
+  onCancel(): void {
+    this.form.reset();
   }
 
-  @ViewChild('closeModal') closeModal!: ElementRef;
-  departure_time: any;
-  total_running_hours: any;
-  base_price: any;
 
-  // Method to format data into the desired array
-  getPricesData(): any[] {
-    // return [
-    //   { category: 'Adult', price: this.adultPrice },
-    //   { category: 'Child', price: this.childPrice },
-    //   { category: 'Extra', price: this.extraPrice }
-    // ];
 
-    return this.categories.map(category => ({
-      category: category.ticket_type,
-      price: category.price || null
-    }));
-  }
+  updatedTickets: any[] = []; // Array to track updated ticket prices
 
-  addTerminal() {
-    // debugger
-    this.loading = true;
-    if (
-      !this.selectedBusId || 
-      !this.routeId || 
-      !this.selectedDriverId || 
-      !this.departure_time || 
-      !this.total_running_hours 
-      //!this.base_price
-    ) {
-      this.toastr.warning('Please fill in all the required fields.');
-      this.loading = false;
-      return;
-    }
-    //const formattedData = JSON.stringify(this.getPricesData());
-    const formURlData = new URLSearchParams();
-    formURlData.set('bus_id', this.selectedBusId);
-    formURlData.set('route_id', this.routeId);
-    formURlData.set('driver_id', this.selectedDriverId);
-    formURlData.set('departure_time', this.departure_time);
-    formURlData.set('total_running_hours', this.total_running_hours);
-    formURlData.set('recurrence_pattern', this.selectedRecurrence);
+  updateTicketPrice(stop: any, index: any, newValue: any) {
 
-    const selected: any = Object.keys(this.selectedOptions).filter(
-      (key) => this.selectedOptions[key]
-    );
+    this.updateDepartureTime(index)
+    //debugger
 
-    if (this.selectedRecurrence == 'Custom') {
-      if (selected?.length > 0) {
-        formURlData.set('days_of_week', selected);
-      } else {
-        this.toastr.warning('Please select days of week for custom recurrence');
-        this.loading = false;
-        return
-      }
+    // Update the `updatedTickets` array for the corresponding `stop_id`
+    const ticketIndex = this.updatedTickets.findIndex(ticket => ticket.stop_id == stop.stop_id);
+    if (ticketIndex > -1) {
+      this.updatedTickets[ticketIndex].departure_time = stop.departure_time;
+      this.updatedTickets[ticketIndex].stop_time = stop.stop_time;
+      //this.updatedTickets[ticketIndex].departure_time = stop.departure_time;
     } else {
-      const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      formURlData.set('days_of_week', allDays.join(','));
+      this.updatedTickets.push({
+        stop_id: stop.stop_id,
+        arrival_time: stop.arrival_time,
+        stop_time: stop.stop_time,
+        departure_time: stop.departure_time,
+      });
     }
+    console.log('updatedTickets:', this.updatedTickets);
 
-    // formURlData.set('base_pricing', formattedData);
-    //formURlData.set('base_pricing', this.base_price);
 
-    this.service.postAPI('create-busschedule', formURlData.toString()).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.closeModal.nativeElement.click();
-          this.toastr.success(response.message);
-          this.getBuseSchedule();
-          this.selectedOptions = {};
-          this.selectedRecurrence = 'Daily';
-          this.total_running_hours = '';
-          this.departure_time = '';
-          this.adultPrice = '';
-          this.childPrice = '';
-          this.extraPrice = '';
+  }
+
+  saveUpdatedTicketPrices() {
+    if (this.updatedTickets.length > 0) {
+      this.service.postData('update-departuretime', this.updatedTickets).subscribe(
+        response => {
+          console.log('Ticket data successfully updated', response);
+          this.toastr.success('Tickets updated successfully!');
+          this.updatedTickets = []; // Clear the updated tickets array
+        },
+        error => {
+          console.error('Error updating ticket data', error);
+          this.toastr.error('Error updating ticket data');
+        }
+      );
+    } else {
+      this.toastr.warning('No updates to save');
+    }
+  }
+
+  addBus() {
+    // this.form.markAllAsTouched();
+    // const busName = this.form.value.busName?.trim();
+    // const number = this.form.value.number?.trim();
+    // //const totalSeats = this.form.value.totalSeats?.trim();
+    // const regNum = this.form.value.regNum?.trim();
+
+    // if (!busName || !number || !regNum) {
+    //   return;
+    // }
+
+    //if (this.form.valid) {
+    this.loading = true;
+    const formURlData = new URLSearchParams();
+    formURlData.set('bus_name', this.form.value.busName);
+    formURlData.set('bus_number_plate', this.form.value.number);
+    formURlData.set('number_of_seats', this.form.value.totalSeats);
+    formURlData.set('bus_registration_number', this.form.value.regNum);
+
+    this.service.postAPI('create-bus', formURlData.toString()).subscribe({
+      next: (resp) => {
+        if (resp.success == true) {
+          this.toastr.success(resp.message);
           this.loading = false;
-          this.resetPrices();
+          //this.form.reset();
         } else {
-          this.toastr.warning(response.message);
+          this.toastr.warning(resp.message);
           this.loading = false;
         }
       },
@@ -272,93 +339,30 @@ export class BusScheduleComponent {
         }
       }
     });
+    //}
   }
 
-  // Method to reset the prices for all categories
-  resetPrices() {
-    this.categories.forEach(category => {
-      category.price = ''; // Reset the price to an empty string
-    });
-  }
-
-  // validateMaxLength(event: Event, length: number): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.value.length > length) {
-  //     input.value = input.value.slice(0, length); // Trim value to the first 3 characters
-  //     //this.total_running_hours = input.value; // Update the model value
-  //   }
+  // getRouteById(id: number) {
+  //   const formData = new URLSearchParams();
+  //   formData.append('route_id', id.toString());
+  //   this.service.postAPI('get-route-by-id', formData).subscribe({
+  //     next: resp => {
+  //       this.form.patchValue({
+  //         route: item.route.route_id,
+  //         from_date: item.from_date,
+  //         to_date: item.to_date,
+  //         closure_reason: item.closure_reason
+  //       });
+  //     },
+  //     error: error => {
+  //       if (error.error.message) {
+  //         this.toastr.error(error.error.message);
+  //       } else {
+  //         this.toastr.error('Something went wrong!');
+  //       }
+  //     }
+  //   });
   // }
-
-  validateMaxLength(event: Event, length: number): void {
-    const input = event.target as HTMLInputElement;
-
-    // Prevent negative numbers
-    if (input.value.startsWith('-')) {
-      input.value = input.value.slice(1); // Remove the negative sign
-      //this.toastr.warning('Negative values are not allowed!', 'Invalid Input');
-    }
-
-    // Enforce maximum length
-    if (input.value.length > length) {
-      input.value = input.value.slice(0, length); // Limit to the specified length
-    }
-  }
-
-
-  pickupTerminals: any;
-
-  getPickupTerminalsByCity() {
-    const formURlData = new URLSearchParams();
-    formURlData.set('city_id', this.pickupId);
-
-    this.service.postAPI('get-city-terminal-cityid', formURlData.toString()).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.pickupTerminals = response.data;
-          //this.selectedPickupTerminalId = this.pickupTerminals[0].terminal_id;
-        } else {
-          this.toastr.warning(response.message);
-        }
-      },
-      error: (error) => {
-        if (error.error.message) {
-          this.toastr.error(error.error.message);
-        } else {
-          this.toastr.error('Something went wrong!');
-        }
-      }
-    });
-  }
-
-  dropoffTerminals: any;
-
-  getDropoffTerminalsByCity() {
-    const formURlData = new URLSearchParams();
-    formURlData.set('city_id', this.dropoffId);
-
-    this.service.postAPI('get-city-terminal-cityid', formURlData.toString()).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.dropoffTerminals = response.data;
-          //this.selectedDropTerminalId = this.dropoffTerminals[0].terminal_id;
-        } else {
-          this.toastr.warning(response.message);
-        }
-      },
-      error: (error) => {
-        if (error.error.message) {
-          this.toastr.error(error.error.message);
-        } else {
-          this.toastr.error('Something went wrong!');
-        }
-      }
-    });
-  }
-
-  isFieldTouched: { [key: string]: boolean } = {};
-  onBlur(field: string): void {
-    this.isFieldTouched[field] = true;
-  }
 
 
 }

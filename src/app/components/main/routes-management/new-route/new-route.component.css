@@ -56,8 +56,8 @@ form {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 140px;
+  height: 30px;
 }
 
 .switch input {
@@ -78,24 +78,39 @@ form {
   border-radius: 34px;
 }
 
-.slider:before {
+.slider-text-left,
+.slider-text-right {
   position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  border-radius: 50%;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
   transition: 0.4s;
 }
 
-input:checked + .slider {
-  background-color: #4caf50;
+.slider-text-left {
+  left: 10px;
 }
 
-input:checked + .slider:before {
-  transform: translateX(26px);
+.slider-text-right {
+  right: 10px;
+  opacity: 0;
+  /* Initially hidden on the left */
+}
+
+input:checked+.slider {
+  background-color: #4CAF50;
+}
+
+input:checked+.slider .slider-text-left {
+  opacity: 0;
+  /* Hide 'OFF' text when checked */
+}
+
+input:checked+.slider .slider-text-right {
+  opacity: 1;
+  /* Show 'ON' text when checked */
 }
 
 .status-label {
@@ -184,6 +199,11 @@ table td {
 
 .action-buttons{
   position: absolute;
-    right: -5px;
-    top: 31px;
+  right: 8rem;
+  top: 31px;
+  display: flex
+;
+  gap: 10px;
+  align-items: center;
 }
+

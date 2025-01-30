@@ -1,43 +1,48 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedService } from '../../../../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-new-route',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   templateUrl: './new-route.component.html',
   styleUrl: './new-route.component.css'
 })
 export class NewRouteComponent {
   stopCityID = ''
-  status: boolean = false;
-  title: string = 'Відень - Львів - Київ';
+  status: boolean = true;
+  title: string = '';
   description: string = '';
   busStops: any[] = [
-    { city_id: '1', isNew: false },
-    { city_id: '2', isNew: false }
+    { city_id: null, isNew: false }, // First default location
+    { city_id: null, isNew: false }, // Second default location
   ];
   departureTimes: string[] = ['08:00'];
   newDepartureTime: string = '';
   route_id: any;
 
-  constructor(private service: SharedService, private toastr: ToastrService, private activRout: ActivatedRoute) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private activRout: ActivatedRoute, private router: Router, private cdrf: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.activRout.queryParams.subscribe({
       next: (params) => {
         this.route_id = params['route_id'];
+        if (this.route_id) {
+          this.getRouteById(this.route_id)
+        }
+        console.log(this.route_id);
       }
     })
     this.getAllCity();
   }
 
   addBusStop() {
-    debugger
     this.busStops.push({ city_id: null, isNew: true });
   }
 
@@ -56,18 +61,23 @@ export class NewRouteComponent {
     this.departureTimes = this.departureTimes.filter(t => t !== time);
   }
 
-  cancel() {
-    // Logic to cancel and return to the previous page
+  drop(event: CdkDragDrop<any[]>) {
+    moveItemInArray(this.busStops, event.previousIndex, event.currentIndex);
   }
+
 
   deleteBusStop(index: number) {
     this.busStops.splice(index, 1);
   }
 
+  // Reorder dropdowns
   reorderBusStop(currentIndex: number, newIndex: number) {
+    console.log("ree");
     if (newIndex >= 0 && newIndex < this.busStops.length) {
-      const movedStop = this.busStops.splice(currentIndex, 1)[0];
-      this.busStops.splice(newIndex, 0, movedStop);
+      // Swap the current item with the target item
+      const temp = this.busStops[currentIndex];
+      this.busStops[currentIndex] = this.busStops[newIndex];
+      this.busStops[newIndex] = temp;
     }
   }
 
@@ -77,21 +87,9 @@ export class NewRouteComponent {
     //debugger
     this.service.getApi('get-all-city').subscribe({
       next: resp => {
-        const allCities = resp.data;
-        allCities.unshift({
-          city_id: null,
-          country_name: "select",
-          city_name: "--Select--",
-          city_address: "",
-          latitude: "47.2675322",
-          longitude: "11.3910349",
-          is_active: true,
-          created_at: "2025-01-07T08:07:20.224Z",
-          updated_at: "2025-01-07T08:07:20.224Z",
-        });
+        this.allCities = resp.data;
 
-        // Assign the modified array to this.allCities
-        this.allCities = allCities;
+        // this.busStops.push({ city_id: null, isNew: true });
         console.log(this.allCities);
       },
       error: error => {
@@ -100,16 +98,123 @@ export class NewRouteComponent {
     });
   }
 
-  // onChange(event: Event, index: number) {
-  //   debugger
-  //   const selectedValue = (event.target as HTMLSelectElement).value;
-  //   this.busStops[index].city_id = selectedValue;
-  // }
+  getRouteById(id: number) {
+    const formData = new URLSearchParams();
+    formData.append('route_id', id.toString());
+    //debugger
+    this.service.postAPI('get-route-by-id', formData).subscribe({
+      next: resp => {
+        this.title = resp.data.title;
+        this.description = resp.data.description;
+        this.status = resp.data.is_active;
+
+        this.busStops = resp.data.route_stops.map((item: any) => ({
+          city_id: item.stop_city.city_id,
+          isNew: false // Set isNew to false since these are pre-existing stops
+        }));
+        // this.busStops.push({ city_id: null, isNew: true });
+        console.log(this.busStops);
+      },
+      error: error => {
+        if (error.error.message) {
+          this.toastr.error(error.error.message);
+        } else {
+          this.toastr.error('Something went wrong!');
+        }
+      }
+    });
+  }
 
   saveBusStops() {
-   debugger
     const selectedIds = this.busStops.map((stop) => stop.city_id);
-    console.log('Selected Values:', selectedIds);
+    const nullIds = selectedIds.filter(items => items == null)
+    if (nullIds.length > 0) {
+      this.toastr.warning('Bus stop can not be empty!')
+      return
+    }
+
+    const startCountry = this.allCities.find((items: any) => items.city_id == selectedIds[0]).country_name;
+    const endCountry = this.allCities.find((items: any) => items.city_id == selectedIds[selectedIds.length - 1]).country_name;
+
+    if (startCountry == endCountry) {
+      console.log("validation to be applied same country");
+      return
+    }
+    const routeDirection = `${startCountry} to ${endCountry}`
+    const formData = new URLSearchParams();
+    //formData.append('route_direction', routeDirection.toString());
+    formData.append('title', this.title.toString());
+    formData.append('route_stops', selectedIds.toString());
+    formData.append('description', this.description.toString());
+    if (this.route_id) {
+      formData.append('route_id', this.route_id.toString());
+      formData.append('is_active', this.status.toString());
+    }
+
+    let url = this.route_id == undefined ? 'create-route' : 'update-route';
+
+    this.service
+      .postAPI(url, formData.toString())
+      .subscribe({
+        next: res => {
+          if (res.success == true) {
+            this.router.navigate(['/home/routes-management'])
+            //  this.allTerminalsList = res.data;
+            if (this.route_id) {
+              this.toastr.success(res.message);
+            } else {
+              this.toastr.success(res.message);
+            }
+          } else {
+            this.toastr.warning(res.message);
+          }
+        },
+        error: error => {
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+        }
+      });
+
+  };
+
+
+  // // Handle location change
+  // onLocationChange(cityId: string, index: number) {
+  //   this.busStops[index].city_id = cityId;
+  //   console.log('Updated Bus Stops:', this.busStops);
+  // }
+
+  onLocationChange(cityId: string, index: number) {
+    // Check if the cityId already exists in other bus stops
+    //debugger
+    const duplicate = this.busStops.some((stop, i) => stop.city_id == cityId && i !== index);
+    console.log(duplicate)
+
+    if (duplicate) {
+      this.toastr.warning('This city is already selected. Please choose a different city.');
+      this.busStops[index].city_id = null;
+      setTimeout(() => {
+        const locationSelect: any = document.getElementById(`location-${index}`) as HTMLSelectElement;
+        if (locationSelect) {
+          locationSelect.value = null;
+        }
+      }, 0);
+    } else {
+      // Update the city_id if no duplicate
+      this.busStops[index].city_id = cityId;
+      console.log('Updated Bus Stops:', this.busStops);
+    }
+  }
+
+  ngOnDestroy() {
+    this.route_id = '';
+  }
+
+  cancel(){
+    this.router.navigate(['/home/routes-management'])
   }
 
 

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RootComponent } from './root.component';
+import { EditCityComponent } from './edit-city.component';
 
-describe('RootComponent', () => {
-  let component: RootComponent;
-  let fixture: ComponentFixture<RootComponent>;
+describe('EditCityComponent', () => {
+  let component: EditCityComponent;
+  let fixture: ComponentFixture<EditCityComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RootComponent]
+      imports: [EditCityComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(RootComponent);
+    fixture = TestBed.createComponent(EditCityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

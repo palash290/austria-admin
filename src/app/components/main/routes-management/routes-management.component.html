@@ -1,9 +1,21 @@
 <div class="ct_right_dash_content">
+    <div class="ct_dash_header">
+        <div class="d-flex align-items-center gap-3">
+            <div class="ct_toggle_bar">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <!-- <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Change Password</h4> -->
+        </div>
+        <div class="ct_profile_drop">
+            <app-header />
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>Stops and Lines</h1>
             <p>Manage all stops and lines that your company operates.</p>
-            <p class="breadcrumb">Home / Bus Schedule / Stops and Lines</p>
+            <!-- <p class="breadcrumb">Home / Bus Schedule / Stops and Lines</p> -->
         </div>
 
         <div class="content row">
@@ -18,11 +30,12 @@
 
                 <div class="accordion" id="linesAccordion">
                     <div class="accordion-item" *ngFor="let line of lines">
-                        <h2 class="accordion-header" id="heading{{ line.route_id }}">
+                        <h2 class="accordion-header" id="heading{{ line.route_id }}"
+                            (click)="addRouteById(line.route_id)">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 [attr.data-bs-target]="'#collapse' + line.route_id" aria-expanded="false"
-                                [attr.aria-controls]="'collapse' + line.route_id">
-                                {{ line.route_direction }}
+                                [attr.aria-controls]="'collapse' + line.route_id" (click)="getLatLog(line.route_stops)">
+                                {{ line.title }}, {{line.route_stops?.length}} stops
                             </button>
                         </h2>
                         <div id="collapse{{ line.route_id }}" class="accordion-collapse collapse"
@@ -69,7 +82,15 @@
                                         </svg>
                                         <strong>To:</strong> {{ stop.stop_city.city_name }}
                                     </p>
-                                    <p><strong>Departure time:</strong> {{ line.route_stops[0]?.departure_time }}</p>
+                                    <p style="cursor: pointer;" routerLink="/home/bus-schedule"
+                                        [queryParams]="{'route_id':line.route_id}">
+                                        <strong>Departure time:</strong> {{ line.route_stops[0]?.departure_time }}
+                                    </p>
+
+                                    <p style="cursor: pointer;" routerLink="/home/bus-schedule">
+                                        <strong>+ Add Departure time</strong>
+                                    </p>
+
                                     <div class="d-flex justify-content-between align-items-center">
                                         <button routerLink="/home/new-route" [queryParams]="{'route_id':line.route_id}"
                                             class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto p-2">Edit
@@ -91,8 +112,11 @@
                                                 </svg>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="actionMenu">
-                                                <li style="cursor: pointer;"><a class="dropdown-item" >Delete Line</a></li>
-                                                <!-- <li><a class="dropdown-item" href="#">Option 2</a></li> -->
+                                                <!-- <li style="cursor: pointer;"><a class="dropdown-item">Delete Line</a>
+                                                </li> -->
+                                                <li (click)="reverseRoute()"><a class="dropdown-item">Create Reverse
+                                                        Line</a></li>
+                                                <li (click)="copyRoute()"><a class="dropdown-item">Copy Line</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -138,25 +162,24 @@
                 </div> -->
             <div class="modal-body border-0 pt-5">
                 <div class="ct_edit_modal_cnt">
-                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add Route</h4>
+                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add Stop</h4>
                     <form action="" class="pt-2">
 
                         <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Drop-off Point<span
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Bus Stop<span
                                     class="ct_text_red">*</span></label>
                             <div class="form-group position-relative">
 
-                                <input type="text" class="form-control ct_input ct_fs_18"
-                                    placeholder="Enter contact number" [(ngModel)]="stopName"
-                                    [ngModelOptions]="{standalone: true}">
+                                <input type="text" class="form-control ct_input ct_fs_18" placeholder="Enter stop name"
+                                    [(ngModel)]="stopName" [ngModelOptions]="{standalone: true}">
 
                             </div>
                         </div>
 
                         <div class="form-group mb-4 position-relative">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Terminal Name<span
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Address<span
                                     class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control ct_input ct_fs_18" placeholder="Enter Terminal Name"
+                            <input type="text" class="form-control ct_input ct_fs_18" placeholder="Enter address"
                                 [(ngModel)]="terminalName" [ngModelOptions]="{standalone: true}"
                                 (keyup)="searchTerminal()" (blur)="onBlur()">
 
@@ -199,7 +222,7 @@
                     data-bs-dismiss="modal">Cancel</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal
                     data-bs-dismiss="modal">Close</button>
-                <button type="button" (click)="addTerminal()" class="ct_blue_btn py-2 ct_fw_400">Add Terminal</button>
+                <button type="button" (click)="addTerminal()" class="ct_blue_btn py-2 ct_fw_400">Add Stop</button>
             </div>
         </div>
     </div>

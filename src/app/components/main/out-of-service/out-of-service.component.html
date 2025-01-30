@@ -39,8 +39,8 @@
                               <thead>
                                     <tr>
                                           <th>S No.</th>
-                                          <th>From</th>
-                                          <th>To</th>
+                                          <th>Title</th>
+                                          <!-- <th>To</th> -->
                                           <th>From Date</th>
                                           <th>To Date</th>
                                           <!-- <th>Reson</th> -->
@@ -53,11 +53,11 @@
                                     <tr *ngFor="let item of data; let i = index">
                                           <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                                           <td>
-                                                {{item.route.pickup_point.city_name}}
+                                                {{item.route.title}}
                                           </td>
-                                          <td>
+                                          <!-- <td>
                                                 {{item.route.dropoff_point.city_name}}
-                                          </td>
+                                          </td> -->
                                           <td>{{item.from_date | date}}</td>
                                           <td>{{item.to_date | date}}</td>
                                           <!-- <td>{{item.closure_reason}}</td> -->
@@ -147,8 +147,7 @@
                                                 <select class="form-control ct_input ct_fs_18" formControlName="route">
                                                       <option value="" disabled>Select</option>
                                                       <option *ngFor="let route of routes" [value]="route.route_id">
-                                                            {{route.pickup_point.city_name}} -
-                                                            {{route.dropoff_point.city_name}}
+                                                            {{route.title}}
                                                       </option>
                                                 </select>
                                           </div>
@@ -227,7 +226,7 @@
                   <div class="modal-footer border-0 justify-content-end">
                         <button #closeModal type="button" class="ct_blue_btn ct_outline_btn_blue ct_fw_400"
                               data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="ct_blue_btn py-2 ct_fw_400" (click)="submit()">Update</button>
+                        <button type="button" class="ct_blue_btn py-2 ct_fw_400" (click)="submit()">Add</button>
                   </div>
             </div>
       </div>
@@ -253,15 +252,13 @@
                                                 <select class="form-control ct_input ct_fs_18" formControlName="route">
                                                       <option value="" disabled>Select</option>
                                                       <option *ngFor="let route of routes" [value]="route.route_id">
-                                                            {{route.pickup_point.city_name}} -
-                                                            {{route.dropoff_point.city_name}}
+                                                            {{route.title}}
                                                       </option>
                                                 </select>
                                           </div>
                                           <p *ngIf="editForm.get('route')?.touched && editForm.get('route')?.errors"
                                                 class="err_msg">
                                                 {{ getErrorMessage('route') }}
-
                                           </p>
                                     </div>
                                     <div class="form-group mb-4">
