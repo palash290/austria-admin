@@ -1,123 +1,143 @@
 <div class="ct_right_dash_content">
-    <div class="container">
-        <h2>Update Bus Stop</h2>
-        <p>Modify the Bus Stop name or the other related details and click 'Save' to update the entry.</p>
+    <div class="container-fluid">
+        <div class="mb-4">
+            <a href="#" class="ct_back_btn " style="width: fit-content;"><i
+                    class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
+        </div>
+        <h2 class="ct_fs_24 ct_fw_700 mb-1">Update Bus Stop</h2>
+        <p class="mb-0">Modify the Bus Stop name or the other related details and click 'Save' to update the entry.</p>
 
-        <form [formGroup]="busStopForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-                <label for="busStop">Bus Stop</label>
-                <input type="text" id="busStop" class="form-control" formControlName="busStop">
+        <form [formGroup]="busStopForm" (ngSubmit)="onSubmit()" class="mt-4">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="ct_white_box_shadow">
+                        <div class="form-group">
+                            <label for="busStop" class="ct_fw_500 mb-1">Bus Stop</label>
+                            <input type="text" id="busStop" class="form-control" formControlName="busStop">
 
-                <div *ngIf="busStopForm.controls['busStop'].invalid && busStopForm.controls['busStop'].touched"
-                    class="err_msg">
-                    <div *ngIf="busStopForm.controls['busStop'].errors?.['required']">Please enter
-                        bus stop name</div>
+                            <div *ngIf="busStopForm.controls['busStop'].invalid && busStopForm.controls['busStop'].touched"
+                                class="err_msg">
+                                <div *ngIf="busStopForm.controls['busStop'].errors?.['required']">Please enter
+                                    bus stop name</div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="ct_fw_500 mb-1">Description</label>
+                            <textarea id="description" class="form-control" rows="3"
+                                formControlName="description"></textarea>
+                            <div *ngIf="busStopForm.controls['description'].invalid && busStopForm.controls['description'].touched"
+                                class="err_msg">
+                                <div *ngIf="busStopForm.controls['description'].errors?.['required']">Please enter
+                                    description</div>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label ct_fw_500 mb-1">From Ukraine</label>
+                            <div>
+                                <label class="switch ct_custom_switch1">
+                                    <input type="checkbox" id="fromUkraine" formControlName="fromUkraine" />
+
+                                    <span class="slider"></span>
+                                    <span class="text on mt-0">NO</span>
+                                    <span class="text off mt-0">YES</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label ct_fw_500 mb-1">Status</label>
+                            <div>
+                                <label class="switch ct_custom_switch1">
+                                    <input type="checkbox" id="status" formControlName="status" />
+
+                                    <span class="slider"></span>
+                                    <span class="text on mt-0">INACTIVE</span>
+                                    <span class="text off mt-0">ACTIVE</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="ct_white_box_shadow">
+                        <div class="form-group mb-4 position-relative">
+                            <label for="" class=" ct_fw_500 mb-1">Address<span class="ct_text_red">*</span></label>
+                            <input type="text" class="form-control  ct_fs_18" placeholder="Enter address"
+                                [(ngModel)]="terminalName" [ngModelOptions]="{standalone: true}"
+                                (keyup)="searchTerminal()" (blur)="onBlur()">
+
+                            <p *ngIf="!terminalName && isTouched" class="err_msg">
+                                This field cannot be empty
+                            </p>
+
+                            @if(isSearchActiveFrom){
+                            <div class="ct_suggstion_search">
+                                <ul class="ps-0 mb-0">
+                                    @if(allTerminalsList?.length > 0){
+                                    @for (item of allTerminalsList; track $index) {
+                                    <li (click)="searchByFromCity(item)" style="cursor: pointer;">
+                                        <h6 class="mb-1 mt-1 ct_fw_600">{{item.description}}</h6>
+                                        <!-- <p class=" mb-3 ct_fs_14">{{item.country_name}} </p> -->
+                                    </li>
+                                    }
+                                    } @else {
+                                    <li> <img src="assets/img/Search_icon.svg" alt="">Not found
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
+                            }
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="ct_fw_500 mb-1">Latitude</label>
+                            <input type="text" id="latitude" class="form-control" formControlName="latitude">
+
+                            <div *ngIf="busStopForm.controls['latitude'].invalid && busStopForm.controls['latitude'].touched"
+                                class="err_msg">
+                                <div *ngIf="busStopForm.controls['latitude'].errors?.['required']">Please enter
+                                    latitude</div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="ct_fw_500 mb-1">Longitude</label>
+                            <input type="text" id="longitude" class="form-control" formControlName="longitude">
+
+                            <div *ngIf="busStopForm.controls['longitude'].invalid && busStopForm.controls['longitude'].touched"
+                                class="err_msg">
+                                <div *ngIf="busStopForm.controls['longitude'].errors?.['required']">Please enter
+                                    longitude</div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="ct_fw_500 mb-1">Map</label>
+                            <div id="map" style="width: 100%; height: 300px;"></div>
+                        </div>
+                    </div>
                 </div>
 
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" class="form-control" rows="3" formControlName="description"></textarea>
-                <div *ngIf="busStopForm.controls['description'].invalid && busStopForm.controls['description'].touched"
-                    class="err_msg">
-                    <div *ngIf="busStopForm.controls['description'].errors?.['required']">Please enter
-                        description</div>
-                </div>
-            </div>
-
-
-            <div class="mb-3">
-                <label class="form-label">From Ukraine</label>
-                <div>
-                    <label class="switch">
-                        <input type="checkbox" id="fromUkraine" formControlName="fromUkraine" />
-                        <span class="slider">
-                            <span class="slider-text-left">NO</span>
-                            <span class="slider-text-right">YES</span>
-                        </span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Status</label>
-                <div>
-                    <label class="switch">
-                        <input type="checkbox" id="status" formControlName="status" />
-                        <span class="slider">
-                            <span class="slider-text-left">INACTIVE</span>
-                            <span class="slider-text-right">ACTIVE</span>
-                        </span>
-                    </label>
-                </div>
             </div>
 
             <!-- <div class="form-group">
                 <label for="address">Address</label>
                 <input type="text" id="address" class="form-control" formControlName="address">
               </div> -->
-            <div class="form-group mb-4 position-relative">
-                <label for="" class="ct_fs_18 ct_fw_500 mb-2">Address<span class="ct_text_red">*</span></label>
-                <input type="text" class="form-control ct_input ct_fs_18" placeholder="Enter address"
-                    [(ngModel)]="terminalName" [ngModelOptions]="{standalone: true}" (keyup)="searchTerminal()"
-                    (blur)="onBlur()">
 
-                <p *ngIf="!terminalName && isTouched" class="err_msg">
-                    This field cannot be empty
-                </p>
 
-                @if(isSearchActiveFrom){
-                <div class="ct_suggstion_search">
-                    <ul>
-                        @if(allTerminalsList?.length > 0){
-                        @for (item of allTerminalsList; track $index) {
-                        <div (click)="searchByFromCity(item)" style="cursor: pointer;">
-                            <h6 class="mb-1 mt-1 ct_fw_600">{{item.description}}</h6>
-                            <!-- <p class=" mb-3 ct_fs_14">{{item.country_name}} </p> -->
-                        </div>
-                        }
-                        } @else {
-                        <li> <img src="assets/img/Search_icon.svg" alt="">Not found
-                        </li>
-                        }
-                    </ul>
-                </div>
-                }
-
+            <div class="d-flex align-item-center gap-3 mt-4">
+                <button type="submit" class="ct_blue_btn">Save</button>
+                <button type="button" class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
             </div>
-
-            <div class="form-group">
-                <label>Latitude</label>
-                <input type="text" id="latitude" class="form-control" formControlName="latitude">
-
-                <div *ngIf="busStopForm.controls['latitude'].invalid && busStopForm.controls['latitude'].touched"
-                    class="err_msg">
-                    <div *ngIf="busStopForm.controls['latitude'].errors?.['required']">Please enter
-                        latitude</div>
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                <label>Longitude</label>
-                <input type="text" id="longitude" class="form-control" formControlName="longitude">
-
-                <div *ngIf="busStopForm.controls['longitude'].invalid && busStopForm.controls['longitude'].touched"
-                    class="err_msg">
-                    <div *ngIf="busStopForm.controls['longitude'].errors?.['required']">Please enter
-                        longitude</div>
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                <label>Map</label>
-                <div id="map" style="width: 100%; height: 300px;"></div>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-secondary">Cancel</button>
         </form>
 
 

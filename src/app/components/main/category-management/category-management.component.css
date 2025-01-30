@@ -1,61 +1,81 @@
 .switch {
+  font-size: 14px;
   position: relative;
   display: inline-block;
-  width: 140px;
-  height: 30px;
+  width: 158px;
+  height: 25px;
+  overflow: hidden;
 }
 
-.switch input {
+/* Hide default HTML checkbox */
+.ct_custom_switch1.switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.slider {
+/* The slider */
+.ct_custom_switch1 .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #eee;
   transition: 0.4s;
-  border-radius: 34px;
+  border-radius: 30px;
 }
 
-.slider-text-left,
-.slider-text-right {
+.ct_custom_switch1 .slider:before {
+  position: absolute;
+  content: "";
+  height: 1.4em;
+  width: 1.4em;
+  border-radius: 20px;
+  border: 1px solid #fff;
+  left: 4px;
+  bottom: 0.2em;
+  background-color: white;
+  transition: 0.4s;
+}
+
+.ct_custom_switch1 input:checked + .slider {
+  background-color: #2196f3;
+}
+
+.ct_custom_switch1 input:checked + .slider:before {
+  transform: translateX(131px);
+}
+
+.ct_custom_switch1.switch .text {
   position: absolute;
   top: 50%;
+  pointer-events: none;
+  text-transform: uppercase;
   transform: translateY(-50%);
-  font-size: 12px;
-  color: white;
-  font-weight: bold;
   transition: 0.4s;
+  font-size: 14px;
+  color: #fff;
+  margin-top: 2px;
 }
 
-.slider-text-left {
-  left: 10px;
+.ct_custom_switch1.switch .text.on {
+  left: 0.8rem;
+  transform: translateX(-131px) translateY(-50%);
 }
 
-.slider-text-right {
-  right: 10px;
-  opacity: 0;
-  /* Initially hidden on the left */
+.ct_custom_switch1.switch .text.off {
+  color: #999;
+  right: 0.8rem;
 }
 
-input:checked+.slider {
-  background-color: #4CAF50;
+.ct_custom_switch1 input:checked ~ .text.off {
+  transform: translateX(131px) translateY(-50%);
 }
 
-input:checked+.slider .slider-text-left {
-  opacity: 0;
-  /* Hide 'OFF' text when checked */
-}
-
-input:checked+.slider .slider-text-right {
-  opacity: 1;
-  /* Show 'ON' text when checked */
+.ct_custom_switch1 input:checked ~ .text.on {
+  transform: translateX(0) translateY(-50%);
 }
 
 .actions {
@@ -72,4 +92,9 @@ input:checked+.slider .slider-text-right {
 
 .actions button:hover {
   background-color: #f0f0f0;
+}
+
+.ct_cancle_btn_3 {
+  background-color: #e6e6e6;
+  color: #000;
 }

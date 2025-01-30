@@ -11,137 +11,201 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Stops and Lines</h1>
-            <p>Manage all stops and lines that your company operates.</p>
-            <!-- <p class="breadcrumb">Home / Bus Schedule / Stops and Lines</p> -->
-        </div>
+    <div class="ct_white_box_shadow">
 
-        <div class="content row">
-            <!-- Lines Section -->
-            <div class="col-md-6 lines-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3>Lines</h3>
-                    <button class="btn btn-primary" routerLink="/home/new-route">+ Add New
-                        Line</button>
-                </div>
-                <p>View and manage lines. Click on a line to view and edit details, manage departure times.</p>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="header mb-4">
+                        <h1>Stops and Lines</h1>
+                        <p>Manage all stops and lines that your company operates.</p>
+                        <!-- <p class="breadcrumb">Home / Bus Schedule / Stops and Lines</p> -->
+                    </div>
 
-                <div class="accordion" id="linesAccordion">
-                    <div class="accordion-item" *ngFor="let line of lines">
-                        <h2 class="accordion-header" id="heading{{ line.route_id }}"
-                            (click)="addRouteById(line.route_id)">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                [attr.data-bs-target]="'#collapse' + line.route_id" aria-expanded="false"
-                                [attr.aria-controls]="'collapse' + line.route_id" (click)="getLatLog(line.route_stops)">
-                                {{ line.title }}, {{line.route_stops?.length}} stops
-                            </button>
-                        </h2>
-                        <div id="collapse{{ line.route_id }}" class="accordion-collapse collapse"
-                            [attr.aria-labelledby]="'heading'+ line.route_id " data-bs-parent="#linesAccordion">
-                            <div class="accordion-body">
-                                <!-- Content inside the collapse -->
+                    <div class=" row">
+                        <!-- Lines Section -->
+                        <div class="col-xl-6 mb-4 mb-xl-0 ">
+                            <div class="lines-section">
                                 <div>
-                                    <p *ngFor="let stop of line.route_stops.slice(0,1)"
-                                        class="d-flex align-items-center gap-1 m-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24">
-                                            <g fill="currentColor">
-                                                <path
-                                                    d="m14.829 11.948l1.414-1.414L12 6.29l-4.243 4.243l1.415 1.414L11 10.12v7.537h2V10.12z" />
-                                                <path fill-rule="evenodd"
-                                                    d="M19.778 4.222c-4.296-4.296-11.26-4.296-15.556 0s-4.296 11.26 0 15.556s11.26 4.296 15.556 0s4.296-11.26 0-15.556m-1.414 1.414A9 9 0 1 0 5.636 18.364A9 9 0 0 0 18.364 5.636"
-                                                    clip-rule="evenodd" />
-                                            </g>
-                                        </svg>
-                                        <strong>From:</strong>{{
-                                        stop.stop_city.city_name }}
-                                    </p>
-                                    <ul class="p-0 m-2">
-                                        <li *ngFor="let stop of line.route_stops.slice(1, line.route_stops?.length-1)"
-                                            class="d-flex align-items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                viewBox="0 0 24 24">
-                                                <path fill="currentColor"
-                                                    d="M19 9A7 7 0 1 0 5 9c0 1.387.409 2.677 1.105 3.765h-.008L12 22l5.903-9.235h-.007A6.97 6.97 0 0 0 19 9m-7 3a3 3 0 1 1 0-6a3 3 0 0 1 0 6" />
-                                            </svg> {{ stop.stop_city.city_name }}
-                                        </li>
-                                    </ul>
-                                    <p *ngFor="let stop of line.route_stops.slice(line.route_stops?.length-1, line.route_stops?.length)"
-                                        class="d-flex align-items-center gap-1 m-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24">
-                                            <g fill="currentColor">
-                                                <path
-                                                    d="m14.829 12.026l1.414 1.414L12 17.683L7.757 13.44l1.415-1.414L11 13.854V6.317h2v7.537z" />
-                                                <path fill-rule="evenodd"
-                                                    d="M19.778 19.778c-4.296 4.296-11.26 4.296-15.556 0s-4.296-11.26 0-15.556s11.26-4.296 15.556 0s4.296 11.26 0 15.556m-1.414-1.414A9 9 0 1 1 5.636 5.636a9 9 0 0 1 12.728 12.728"
-                                                    clip-rule="evenodd" />
-                                            </g>
-                                        </svg>
-                                        <strong>To:</strong> {{ stop.stop_city.city_name }}
-                                    </p>
-                                    <p style="cursor: pointer;" routerLink="/home/bus-schedule"
-                                        [queryParams]="{'route_id':line.route_id}">
-                                        <strong>Departure time:</strong> {{ line.route_stops[0]?.departure_time }}
-                                    </p>
-
-                                    <p style="cursor: pointer;" routerLink="/home/bus-schedule">
-                                        <strong>+ Add Departure time</strong>
-                                    </p>
-
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <button routerLink="/home/new-route" [queryParams]="{'route_id':line.route_id}"
-                                            class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto p-2">Edit
+                                    <div class="d-flex justify-content-between align-items-center mb-1 gap-3">
+                                        <div>
+                                            <h4 class="ct_fs_20 ct_fw_700 mb-0">Lines</h4>
+                                        </div>
+                                        <button
+                                            class="ct_blue_btn ct_white_nowrap d-flex align-items-center justify-content-center"
+                                            routerLink="/home/new-route">+ Add New
                                             Line</button>
-                                        <div class="dropdown d-inline">
-                                            <button
-                                                class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto d-flex align-items-center gap-1 p-2"
-                                                type="button" id="actionMenu" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="currentColor"
-                                                        d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z" />
-                                                </svg>
-                                                Action
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="currentColor" d="m12 16l-6-6h12z" />
-                                                </svg>
+                                    </div>
+                                    <p class="mb-0">View and manage lines. Click on a line to view and edit details,
+                                        manage departure
+                                        times.
+                                    </p>
+                                </div>
+
+
+                                <div class="accordion ct_custom_accordian1 mt-4" id="linesAccordion">
+                                    <div class="accordion-item" *ngFor="let line of lines">
+                                        <h2 class="accordion-header" id="heading{{ line.route_id }}"
+                                            (click)="addRouteById(line.route_id)">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                [attr.data-bs-target]="'#collapse' + line.route_id"
+                                                aria-expanded="false" [attr.aria-controls]="'collapse' + line.route_id"
+                                                (click)="getLatLog(line.route_stops)">
+                                                <strong class="ct_text_overflow_route">{{ line.title }}, </strong> <span
+                                                    class="ct_text_op_05 ct_fw_600"> {{line.route_stops?.length}}
+                                                    stops</span>
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="actionMenu">
-                                                <!-- <li style="cursor: pointer;"><a class="dropdown-item">Delete Line</a>
-                                                </li> -->
-                                                <li (click)="reverseRoute()"><a class="dropdown-item">Create Reverse
-                                                        Line</a></li>
-                                                <li (click)="copyRoute()"><a class="dropdown-item">Copy Line</a></li>
-                                            </ul>
+                                        </h2>
+                                        <div id="collapse{{ line.route_id }}" class="accordion-collapse collapse"
+                                            [attr.aria-labelledby]="'heading'+ line.route_id "
+                                            data-bs-parent="#linesAccordion">
+                                            <div class="accordion-body">
+                                                <div class=" d-flex  justify-content-between gap-3">
+                                                    <!-- Content inside the collapse -->
+                                                    <div>
+
+                                                        <p *ngFor="let stop of line.route_stops.slice(0,1)"
+                                                            class="d-flex align-items-center gap-1 ct_fs_16 mb-0 ">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="18" viewBox="0 0 24 24">
+                                                                <g fill="currentColor">
+                                                                    <path
+                                                                        d="m14.829 11.948l1.414-1.414L12 6.29l-4.243 4.243l1.415 1.414L11 10.12v7.537h2V10.12z" />
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M19.778 4.222c-4.296-4.296-11.26-4.296-15.556 0s-4.296 11.26 0 15.556s11.26 4.296 15.556 0s4.296-11.26 0-15.556m-1.414 1.414A9 9 0 1 0 5.636 18.364A9 9 0 0 0 18.364 5.636"
+                                                                        clip-rule="evenodd" />
+                                                                </g>
+                                                            </svg>
+                                                            <strong>From:</strong>{{
+                                                            stop.stop_city.city_name }}
+                                                        </p>
+
+
+                                                        <ul class="p-0 mt-2">
+                                                            <li *ngFor="let stop of line.route_stops.slice(1, line.route_stops?.length-1)"
+                                                                class="d-flex align-items-center gap-1 mt-2 ct_text_op_05 ">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                    height="20" viewBox="0 0 24 24">
+                                                                    <path fill="currentColor"
+                                                                        d="M19 9A7 7 0 1 0 5 9c0 1.387.409 2.677 1.105 3.765h-.008L12 22l5.903-9.235h-.007A6.97 6.97 0 0 0 19 9m-7 3a3 3 0 1 1 0-6a3 3 0 0 1 0 6" />
+                                                                </svg> {{ stop.stop_city.city_name }}
+                                                            </li>
+                                                        </ul>
+                                                        <p *ngFor="let stop of line.route_stops.slice(line.route_stops?.length-1, line.route_stops?.length)"
+                                                            class="d-flex align-items-center gap-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                height="18" viewBox="0 0 24 24">
+                                                                <g fill="currentColor">
+                                                                    <path
+                                                                        d="m14.829 12.026l1.414 1.414L12 17.683L7.757 13.44l1.415-1.414L11 13.854V6.317h2v7.537z" />
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M19.778 19.778c-4.296 4.296-11.26 4.296-15.556 0s-4.296-11.26 0-15.556s11.26-4.296 15.556 0s4.296 11.26 0 15.556m-1.414-1.414A9 9 0 1 1 5.636 5.636a9 9 0 0 1 12.728 12.728"
+                                                                        clip-rule="evenodd" />
+                                                                </g>
+                                                            </svg>
+                                                            <strong>To:</strong> {{ stop.stop_city.city_name }}
+                                                        </p>
+
+
+                                                    </div>
+                                                    <div>
+                                                        <p style="cursor: pointer;" routerLink="/home/bus-schedule"
+                                                            [queryParams]="{'route_id':line.route_id}">
+                                                            <strong>Departure time:</strong> {{
+                                                            line.route_stops[0]?.departure_time
+                                                            }}
+                                                        </p>
+
+                                                        <p style="cursor: pointer;"
+                                                            class="ct_blue_text mb-0 ct_border_top_1 pt-2"
+                                                            routerLink="/home/bus-schedule">
+                                                            <strong>+ Add Departure time</strong>
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+
+                                                <div
+                                                    class="d-flex justify-content-between align-items-center w-100 gap-3  ct_border_top_1 pt-3">
+                                                    <button routerLink="/home/new-route"
+                                                        [queryParams]="{'route_id':line.route_id}"
+                                                        class="ct_blue_btn px-4 py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto p-2">Edit
+                                                        Line</button>
+                                                    <div class="dropdown d-inline">
+                                                        <button
+                                                            class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto d-flex align-items-center gap-1 p-2"
+                                                            type="button" id="actionMenu" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24">
+                                                                <path fill="currentColor"
+                                                                    d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z" />
+                                                            </svg>
+                                                            Action
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24">
+                                                                <path fill="currentColor" d="m12 16l-6-6h12z" />
+                                                            </svg>
+                                                        </button>
+                                                        <ul class="dropdown-menu ct_dropdwon_custom_12"
+                                                            aria-labelledby="actionMenu">
+                                                            <!-- <li style="cursor: pointer;"><a class="dropdown-item">Delete Line</a>
+                                                            </li> -->
+                                                            <li (click)="reverseRoute()"><a class="dropdown-item">Create
+                                                                    Reverse
+                                                                    Line</a></li>
+                                                            <li (click)="copyRoute()"><a class="dropdown-item">Copy
+                                                                    Line</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                        </div>
+
+
+                        <!-- Bus Stops Section -->
+                        <div class="col-xl-6 mb-4 mb-xl-0 ">
+                            <div class="bus-stops-section">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1 gap-3">
+                                        <div>
+                                            <h3 class="ct_fs_20 ct_fw_700 mb-1">Bus stops</h3>
+
+                                        </div>
+                                        <button
+                                            class="ct_blue_btn ct_white_nowrap d-flex align-items-center justify-content-center"
+                                            data-bs-toggle="modal" data-bs-target="#ct_add_route">+
+                                            Add
+                                            Bus
+                                            Stop</button>
+                                    </div>
+                                    <p class="mb-0">Manage all bus stops that your lines go to. Click on a pin on the
+                                        map to edit or
+                                        delete
+                                        an
+                                        existing
+                                        stop.</p>
+
+                                </div>
+
+                                <div class="image-container mt-4">
+                                    <div id="map" style="width: 100%; height: 400px"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
-            </div>
-
-
-            <!-- Bus Stops Section -->
-            <div class="col-md-6 bus-stops-section">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3>Bus stops</h3>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ct_add_route">+ Add Bus
-                        Stop</button>
-                </div>
-                <p>Manage all bus stops that your lines go to. Click on a pin on the map to edit or delete an existing
-                    stop.</p>
-
-                <div class="image-container">
-                    <div id="map" style="width: 100%; height: 400px;"></div>
-                </div>
             </div>
         </div>
     </div>

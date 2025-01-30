@@ -1,4 +1,9 @@
-<div class="ct_right_dash_content">
+<div class="ct_right_dash_content ct_custom_tab_2">
+    <div class="mb-4">
+        <a href="#" class="ct_back_btn " style="width: fit-content;"><i
+                class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
+    </div>
+
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
@@ -12,17 +17,18 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="container mt-4">
+            <div class="container-fluid mt-4">
                 <!-- Page Header -->
+
                 <div class="mb-4">
-                    <h2>Add Departure Time</h2>
-                    <p>Use the form below to add new departure time for a specific bus line.</p>
+                    <h2 class="ct_fs_24 ct_fw_700 mb-1">Add Departure Time</h2>
+                    <p class="mb-0">Use the form below to add new departure time for a specific bus line.</p>
                 </div>
 
                 <!-- Details and Schedule -->
                 <div class="row">
                     <!-- Details Section -->
-                    <div class="col-md-6">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
                         <!-- <form [formGroup]="form">
                             <div class="card p-3">
                                 <h5>Details</h5>
@@ -141,54 +147,64 @@
                                   </option>
                                 </select>
                               </div> -->
-                                <div class="mb-3">
-                                    <label for="line" class="form-label">Line</label>
-                                    @if(route_id){
-                                    <select class="form-control ct_input ct_fs_18 ct_text_indent_30">
-                                        <option value="" disabled>Select</option>
-                                        <option *ngFor="let lan of routeList" [value]="lan.route_id"
-                                            [selected]="lan.route_id == route_id" [disabled]="route_id">
-                                            {{ lan.title }}
-                                        </option>
-                                    </select>
-                                    } @else {
-                                    <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                        (change)="onLineChange($event)" formControlName="line">
-                                        <option value="" disabled>Select</option>
-                                        <option *ngFor="let lan of routeList" [value]="lan.route_id">
-                                            {{ lan.title }}
-                                        </option>
-                                    </select>
-                                    <div class="err_msg"
-                                        *ngIf="form.controls['line']?.invalid && form.controls['line']?.touched">
-                                        <div *ngIf="form.controls['line'].errors?.['required']">Line is required.</div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="line" class="form-label ct_fw_500 mb-1">Line</label>
+                                            @if(route_id){
+                                            <select class="form-control ct_input ct_fs_18 ">
+                                                <option value="" disabled>Select</option>
+                                                <option *ngFor="let lan of routeList" [value]="lan.route_id"
+                                                    [selected]="lan.route_id == route_id" [disabled]="route_id">
+                                                    {{ lan.title }}
+                                                </option>
+                                            </select>
+                                            } @else {
+                                            <select class="form-control ct_input ct_fs_18 "
+                                                (change)="onLineChange($event)" formControlName="line">
+                                                <option value="" disabled>Select</option>
+                                                <option *ngFor="let lan of routeList" [value]="lan.route_id">
+                                                    {{ lan.title }}
+                                                </option>
+                                            </select>
+                                            <div class="err_msg"
+                                                *ngIf="form.controls['line']?.invalid && form.controls['line']?.touched">
+                                                <div *ngIf="form.controls['line'].errors?.['required']">Line is
+                                                    required.</div>
+                                            </div>
+                                            }
+
+                                        </div>
+
                                     </div>
-                                    }
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="busType" class="form-label  ct_fw_500 mb-1">Bus Name</label>
+                                            <select class="form-control ct_input ct_fs_18 " formControlName="busName">
+                                                <option value="" disabled>Select</option>
+                                                <option *ngFor="let lan of busList" [value]="lan.bus_id">
+                                                    {{ lan.bus_name }}
+                                                </option>
+                                            </select>
+                                            <div class="err_msg"
+                                                *ngIf="form.controls['busName']?.invalid && form.controls['busName']?.touched">
+                                                <div *ngIf="form.controls['busName'].errors?.['required']">Bus name is
+                                                    required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
                                 <!-- Bus Name -->
-                                <div class="mb-3">
-                                    <label for="busType" class="form-label">Bus Name</label>
-                                    <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                        formControlName="busName">
-                                        <option value="" disabled>Select</option>
-                                        <option *ngFor="let lan of busList" [value]="lan.bus_id">
-                                            {{ lan.bus_name }}
-                                        </option>
-                                    </select>
-                                    <div class="err_msg"
-                                        *ngIf="form.controls['busName']?.invalid && form.controls['busName']?.touched">
-                                        <div *ngIf="form.controls['busName'].errors?.['required']">Bus name is required.
-                                        </div>
-                                    </div>
-                                </div>
+
 
                                 <!-- Driver Name -->
                                 <div class="mb-3">
-                                    <label for="driver" class="form-label">Driver</label>
-                                    <select class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                        formControlName="driver">
+                                    <label for="driver" class="form-label  ct_fw_500 mb-1">Driver</label>
+                                    <select class="form-control ct_input ct_fs_18 " formControlName="driver">
                                         <option value="" disabled>Select</option>
                                         <option *ngFor="let lan of allDrivers" [value]="lan.driver_id">
                                             {{ lan.driver_name }}
@@ -203,88 +219,101 @@
 
                                 <!-- Availability Toggle -->
                                 <div class="mb-3">
-                                    <label class="form-label">Available</label>
+                                    <label class="form-label  ct_fw_500 mb-1">Available</label>
                                     <div>
-                                        <label class="switch">
+                                        <label class="switch ct_custom_switch1">
                                             <input type="checkbox" formControlName="status" />
-                                            <span class="slider">
-                                                <span class="slider-text-left">SPECIFIC-PERIOD</span>
-                                                <span class="slider-text-right">NON-STOP</span>
-                                            </span>
+                                            <span class="slider"></span>
+                                            <span class="text on mt-0">NON STOP</span>
+                                            <span class="text off mt-0">SPECIFIC PERIOD</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <!-- Specific Period Dates -->
                                 <div *ngIf="!form.get('status')?.value" class="calendar-section">
-                                    <div class="mb-3">
-                                        <label class="form-label">From</label>
-                                        <input type="date" class="form-control" formControlName="fromDate"
-                                            [min]="minDate" />
-                                        <!-- <div class="err_msg"
-                                            *ngIf="form.controls['fromDate']?.invalid && form.controls['fromDate']?.touched">
-                                            <div *ngIf="form.controls['fromDate'].errors?.['required']">From date is
-                                                required.</div>
-                                        </div> -->
-                                        <div *ngIf="form.controls['fromDate'].invalid && form.controls['fromDate'].touched"
-                                            class="err_msg">
-                                            <div *ngIf="form.controls['fromDate'].errors?.['required']">
-                                                This field is required.
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label  ct_fw_500 mb-1">From</label>
+                                                <input type="date" class="form-control" formControlName="fromDate"
+                                                    [min]="minDate" />
+                                                <!-- <div class="err_msg"
+                                                *ngIf="form.controls['fromDate']?.invalid && form.controls['fromDate']?.touched">
+                                                <div *ngIf="form.controls['fromDate'].errors?.['required']">From date is
+                                                    required.</div>
+                                            </div> -->
+                                                <div *ngIf="form.controls['fromDate'].invalid && form.controls['fromDate'].touched"
+                                                    class="err_msg">
+                                                    <div *ngIf="form.controls['fromDate'].errors?.['required']">
+                                                        This field is required.
+                                                    </div>
+                                                    <div *ngIf="form.controls['fromDate'].errors?.['minDate']">
+                                                        Date cannot be earlier than today.
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div *ngIf="form.controls['fromDate'].errors?.['minDate']">
-                                                Date cannot be earlier than today.
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label  ct_fw_500 mb-1">To</label>
+                                                <input type="date" class="form-control" formControlName="toDate"
+                                                    [min]="minDate" />
+                                                <!-- <div class="err_msg"
+                                                *ngIf="form.controls['toDate']?.invalid && form.controls['toDate']?.touched">
+                                                <div *ngIf="form.controls['toDate'].errors?.['required']">To date is
+                                                    required.</div>
+                                            </div> -->
+                                                <!-- <div *ngIf="form.controls['toDate'].invalid && form.controls['toDate'].touched"
+                                                class="err_msg">
+                                                <div *ngIf="form.controls['toDate'].errors?.['required']">
+                                                    This field is required.
+                                                </div>
+                                                <div *ngIf="form.controls['toDate'].errors?.['minDate']">
+                                                    Date cannot be earlier than today.
+                                                </div>
+                                                <div *ngIf="form.controls['toDate'].errors?.['dateGreaterOrEqual']">
+                                                    Date must be equal to or greater than From date.
+                                                </div>
+                                            </div> -->
+                                                <div *ngIf="form.controls['toDate'].invalid && form.controls['toDate'].touched"
+                                                    class="err_msg">
+                                                    <div *ngIf="form.controls['toDate'].errors?.['required']">
+                                                        This field is required.
+                                                    </div>
+                                                    <div *ngIf="form.controls['toDate'].errors?.['minDate']">
+                                                        Date cannot be earlier than today.
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">To</label>
-                                        <input type="date" class="form-control" formControlName="toDate"
-                                            [min]="minDate" />
-                                        <!-- <div class="err_msg"
-                                            *ngIf="form.controls['toDate']?.invalid && form.controls['toDate']?.touched">
-                                            <div *ngIf="form.controls['toDate'].errors?.['required']">To date is
-                                                required.</div>
-                                        </div> -->
-                                        <!-- <div *ngIf="form.controls['toDate'].invalid && form.controls['toDate'].touched"
-                                            class="err_msg">
-                                            <div *ngIf="form.controls['toDate'].errors?.['required']">
-                                                This field is required.
-                                            </div>
-                                            <div *ngIf="form.controls['toDate'].errors?.['minDate']">
-                                                Date cannot be earlier than today.
-                                            </div>
-                                            <div *ngIf="form.controls['toDate'].errors?.['dateGreaterOrEqual']">
-                                                Date must be equal to or greater than From date.
-                                            </div>
-                                        </div> -->
-                                        <div *ngIf="form.controls['toDate'].invalid && form.controls['toDate'].touched"
-                                            class="err_msg">
-                                            <div *ngIf="form.controls['toDate'].errors?.['required']">
-                                                This field is required.
-                                            </div>
-                                            <div *ngIf="form.controls['toDate'].errors?.['minDate']">
-                                                Date cannot be earlier than today.
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
 
                                 <!-- Recurring Days -->
                                 <div class="mb-3">
-                                    <label class="form-label">Recurrence</label>
-                                    <div *ngFor="let day of daysOfWeek">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" [formControlName]="day" />
-                                            <label class="form-check-label" for="{{day}}">{{ day | titlecase }}</label>
+                                    <label class="form-label  ct_fw_500 mb-1">Recurrence</label>
+                                    <div class="ct_grid_2_flex1">
+                                        <div *ngFor="let day of daysOfWeek">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    [formControlName]="day" />
+                                                <label class="form-check-label" for="{{day}}">{{ day | titlecase
+                                                    }}</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Action Buttons -->
                                 <!-- [disabled]="form.invalid" -->
-                                <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+                                <div class="mt-3 d-flex align-items-center gap-3">
+                                    <button type="submit" class="ct_blue_btn">Save</button>
+                                    <button type="button" class="ct_blue_btn ct_outline_btn_blue"
+                                        (click)="onCancel()">Cancel</button>
                                 </div>
                             </div>
                         </form>
@@ -292,43 +321,47 @@
                     </div>
 
                     <!-- Create Schedule Section -->
-                    <div class="col-md-6">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
                         <div class="card p-3">
                             <h5>Create Schedule</h5>
                             <p>Enter departing time, travel, and stop durations to calculate arrival times for each
                                 stop.</p>
 
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Stop</th>
-                                        <th>Arrival Time</th>
-                                        <th>Stop Time</th>
-                                        <th>Departure Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let stop of lines; let i = index; let last = last; let first = first">
-                                        <td>{{ stop.stop_city.city_name }}</td>
-                                        <td>
-                                            <!-- Set Arrival Time as N/A for the first index -->
-                                            <ng-container *ngIf="first; else arrivalInput">N/A</ng-container>
-                                            <ng-template #arrivalInput>
-                                                <input type="time" class="form-control" [(ngModel)]="stop.arrival_time"
-                                                    (ngModelChange)="updateTicketPrice(stop, i, '')" />
-                                            </ng-template>
-                                        </td>
-                                        <td>
-                                            <!-- Set Stop Time as N/A for the first and last indices -->
-                                            <ng-container *ngIf="first || last; else stopTimeInput">N/A</ng-container>
-                                            <ng-template #stopTimeInput>
-                                                <input type="number" class="form-control" [min]="0"
-                                                    [(ngModel)]="stop.stop_time"
-                                                    (ngModelChange)="updateTicketPrice(stop, i, '')"
-                                                    placeholder="Stop Time (min)" />
-                                            </ng-template>
-                                        </td>
-                                        <!-- <td>
+                            <div class="table-responsive mt-4">
+                                <table class="table ct_booking_table12">
+                                    <thead>
+                                        <tr>
+                                            <th>Stop</th>
+                                            <th>Arrival Time</th>
+                                            <th>Stop Time</th>
+                                            <th>Departure Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let stop of lines; let i = index; let last = last; let first = first">
+                                            <td>{{ stop.stop_city.city_name }}</td>
+                                            <td>
+                                                <!-- Set Arrival Time as N/A for the first index -->
+                                                <ng-container *ngIf="first; else arrivalInput">N/A</ng-container>
+                                                <ng-template #arrivalInput>
+                                                    <input type="time" class="form-control"
+                                                        [(ngModel)]="stop.arrival_time"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')" />
+                                                </ng-template>
+                                            </td>
+                                            <td>
+                                                <!-- Set Stop Time as N/A for the first and last indices -->
+                                                <ng-container
+                                                    *ngIf="first || last; else stopTimeInput">N/A</ng-container>
+                                                <ng-template #stopTimeInput>
+                                                    <input type="number" class="form-control" [min]="0"
+                                                        [(ngModel)]="stop.stop_time"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')"
+                                                        placeholder="Stop Time (min)" />
+                                                </ng-template>
+                                            </td>
+                                            <!-- <td>
                                             <ng-container *ngIf="last; else departureInput">
                                                 N/A
                                             </ng-container>
@@ -337,7 +370,7 @@
                                                     readonly />
                                             </ng-template>
                                         </td> -->
-                                        <!-- <td>
+                                            <!-- <td>
                                             <ng-container *ngIf="first; else departureInput">
                                                 <input type="time" class="form-control" [(ngModel)]="stop.departure_time"
                                                     name="departureTime{{ i }}" />
@@ -349,31 +382,33 @@
                                             </ng-template>
                                         </td> -->
 
-                                        <td>
-                                            @if(first){
-                                            <div>
-                                                <input type="time" class="form-control"
-                                                    [(ngModel)]="stop.departure_time" name="departureTime{{ i }}"
-                                                    (ngModelChange)="updateTicketPrice(stop, i, '')" />
+                                            <td>
+                                                @if(first){
+                                                <div>
+                                                    <input type="time" class="form-control"
+                                                        [(ngModel)]="stop.departure_time" name="departureTime{{ i }}"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')" />
+                                                    <span *ngIf="last">N/A</span>
+                                                </div>
+                                                } @else if (last) {
                                                 <span *ngIf="last">N/A</span>
-                                            </div>
-                                            } @else if (last) {
-                                            <span *ngIf="last">N/A</span>
-                                            } @else {
-                                            <div>
-                                                <input type="time" class="form-control"
-                                                    [(ngModel)]="stop.departure_time" disabled />
-                                            </div>
-                                            }
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                                } @else {
+                                                <div>
+                                                    <input type="time" class="form-control"
+                                                        [(ngModel)]="stop.departure_time" disabled />
+                                                </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
 
 
-                            </table>
-                            <div class="mt-3">
-                                <button (click)="saveUpdatedTicketPrices()" class="btn btn-primary">Save</button>
-                                <button class="btn btn-secondary">Cancel</button>
+                                </table>
+
+                            </div>
+                            <div class="mt-3 d-flex align-items-center gap-3">
+                                <button (click)="saveUpdatedTicketPrices()" class="ct_blue_btn">Save</button>
+                                <button class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -383,7 +418,7 @@
 
 
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="container mt-4">
+            <div class="container-fluid mt-4">
                 <app-category-management />
             </div>
         </div>

@@ -166,8 +166,8 @@ export class RoutesManagementComponent {
             infoWindow.setContent(`
             <div>
               <h4>${city.city_name}</h4>
-              <button onclick="editCity('${city.city_name}')">Edit</button>
-              <button onclick="deleteCity('${city.city_name}')">Delete</button>
+               <button  id="editBtn">Edit</button>
+    <button class="info-window-btn" id="deleteBtn">Delete</button>
             </div>
           `);
             infoWindow.open(map, marker);
@@ -219,7 +219,7 @@ export class RoutesManagementComponent {
     console.log("Edit clicked for:", cityName);
     this.router.navigate(['/home/edit-city'], { queryParams: { cityName } });
   }
-  
+
 
   deleteCity(cityName: string): void {
     console.log("Delete clicked for:", cityName);
