@@ -118,7 +118,7 @@
                         class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
                         data-bs-toggle="modal" data-bs-target="#ct_add_bus">
                         +
-                        Add Passenger Type</button>
+                        Add Ticket Type</button>
                 </div>
 
             </div>
@@ -252,21 +252,15 @@
             </div>
             <div class="modal-body border-0 pt-0">
                 <div class="ct_edit_modal_cnt">
-                    <h4 class="ct_fs_24 ct_fw_600 text-center">Add Passenger Type</h4>
+                    <h4 class="ct_fs_24 ct_fw_600 text-center">Add Ticket Type</h4>
                     <form [formGroup]="form" class="pt-2">
                         <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Passenger Type</label>
-                            <input type="text" placeholder="Enter Passenger Type" formControlName="busName"
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Ticket Type</label>
+                            <input type="text" placeholder="Enter Ticket Type" formControlName="busName"
                                 class="form-control ct_input ct_fs_18">
 
                             <p *ngIf="form.get('busName')?.touched && form.get('busName')?.errors" class="err_msg">
                                 {{ getErrorMessage('busName') }}
-                                <svg width="13" height="13" viewBox="0 0 17 17" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M7.65 11.05H9.35V12.75H7.65V11.05ZM7.65 4.25H9.35V9.35H7.65V4.25ZM8.4915 4.25039e-06C6.81072 0.00168503 5.16817 0.501629 3.77147 1.43664C2.37478 2.37166 1.28663 3.69976 0.644591 5.25308C0.00254921 6.8064 -0.164567 8.5152 0.164367 10.1635C0.4933 11.8118 1.30352 13.3255 2.4926 14.5134C3.68168 15.7013 5.19625 16.51 6.84486 16.8373C8.49346 17.1646 10.2021 16.9958 11.7548 16.3522C13.3074 15.7086 14.6345 14.6191 15.5681 13.2215C16.5017 11.8238 17 10.1808 17 8.5C17 7.38305 16.7799 6.27705 16.3522 5.24523C15.9245 4.21341 15.2976 3.276 14.5074 2.48659C13.7172 1.69718 12.7792 1.07125 11.7469 0.644587C10.7147 0.217922 9.60845 -0.0011127 8.4915 4.25039e-06ZM8.5 15.3C7.15509 15.3 5.84038 14.9012 4.72213 14.154C3.60387 13.4068 2.7323 12.3448 2.21762 11.1022C1.70295 9.85971 1.56828 8.49246 1.83066 7.17339C2.09304 5.85432 2.74068 4.64267 3.69168 3.69168C4.64267 2.74068 5.85432 2.09304 7.17339 1.83066C8.49246 1.56828 9.85971 1.70295 11.1022 2.21762C12.3448 2.7323 13.4068 3.60387 14.154 4.72213C14.9012 5.84038 15.3 7.15509 15.3 8.5C15.3 10.3035 14.5836 12.0331 13.3083 13.3083C12.0331 14.5836 10.3035 15.3 8.5 15.3Z"
-                                        fill="#F80000" />
-                                </svg>
                             </p>
                         </div>
                     </form>

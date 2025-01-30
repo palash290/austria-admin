@@ -164,12 +164,14 @@ export class RoutesManagementComponent {
           marker.addListener("click", () => {
             infoWindow.setContent(`
             <div>
-              <h4>${city.city_name}</h4>
-              <button onclick="editCity('${city.city_name}')">Edit</button>
-              <button onclick="deleteCity('${city.city_name}')">Delete</button>
+              <h4>${city.stop_city.city_name}</h4>
+           <button id="editBtn" class="custom-edit-btn">Edit</button>
+           <button id="deleteBtn" class="custom-delete-btn">Delete</button>
             </div>
           `);
             infoWindow.open(map, marker);
+
+            
           });
 
         }
@@ -192,8 +194,8 @@ export class RoutesManagementComponent {
             infoWindow.setContent(`
             <div>
               <h4>${city.city_name}</h4>
-              <button id="editBtn">Edit</button>
-                <button id="deleteBtn">Delete</button>
+              <button id="editBtn" onclick="editCity('${city.city_name}'">Edit</button>
+              <button id="deleteBtn" onclick="deleteCity('${city.city_name}')">Delete</button>
             </div>
           `);
             infoWindow.open(map, marker);
@@ -218,7 +220,7 @@ export class RoutesManagementComponent {
     console.log("Edit clicked for:", cityName);
     this.router.navigate(['/home/edit-city'], { queryParams: { cityName } });
   }
-  
+
 
   deleteCity(cityName: string): void {
     console.log("Delete clicked for:", cityName);

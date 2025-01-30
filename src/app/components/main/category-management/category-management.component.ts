@@ -323,7 +323,6 @@ export class CategoryManagementComponent {
 
   addType() {
     this.form.markAllAsTouched();
-    // const busName = this.form.value.busName?.trim();
 
     const busName = this.form.value.busName?.trim();
     this.form.patchValue({ busName });

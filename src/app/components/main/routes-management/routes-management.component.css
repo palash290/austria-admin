@@ -86,3 +86,35 @@
     max-width: 100%;
     border-radius: 8px;
 }
+
+.custom-edit-btn,
+.custom-delete-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 4px;
+  text-transform: uppercase;
+}
+
+.custom-edit-btn {
+  background-color: #4caf50; /* Green */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.custom-edit-btn:hover {
+  background-color: #45a049; /* Darker green */
+}
+
+.custom-delete-btn {
+  background-color: #f44336; /* Red */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.custom-delete-btn:hover {
+  background-color: #d32f2f; /* Darker red */
+}
