@@ -122,7 +122,7 @@ export class BusListComponent {
             this.getBuses();
             this.form.reset();
           } else {
-            this.toastr.warning(resp.message);
+            this.toastr.warning(resp.message, { nzDuration: 160000 });
             this.btnLoader = false;
             this.loading = false;
             this.getBuses();
@@ -132,7 +132,7 @@ export class BusListComponent {
           this.btnLoader = false;
           this.loading = false;
           if (error.error.message) {
-            this.toastr.error(error.error.message);
+            this.toastr.error(error.error.message, { nzDuration: 160000 });
           } else {
             this.toastr.error('Something went wrong!');
           }
@@ -171,7 +171,7 @@ export class BusListComponent {
       formURlData.set('bus_name', this.editForm.value.busName);
       formURlData.set('bus_number_plate', this.editForm.value.number);
       formURlData.set('number_of_seats', this.editForm.value.totalSeats);
-      formURlData.set('bus_registration_number',  this.updateDet?.bus_registration_number);
+      formURlData.set('bus_registration_number', this.updateDet?.bus_registration_number);
       formURlData.set('bus_id', this.updateId);
 
       this.service.postAPI('update-bus', formURlData.toString()).subscribe({
@@ -257,5 +257,44 @@ export class BusListComponent {
     }
   }
 
-  
+
+  confirmationMessage: string = '';
+  selectedBus: any;
+
+  onToggleBusStatus(bus: any) {
+    //debugger
+    this.selectedBus = bus;
+    this.confirmationMessage = bus.is_active == true
+      ? 'You want to deactivate this bus!'
+      : 'You want to activate this bus!';
+  }
+
+  @ViewChild('closeModal3') closeModal3!: ElementRef;
+
+  confirmChange() {
+    const formURlData = new URLSearchParams();
+    formURlData.set('bus_id', this.selectedBus.bus_id); // Assuming `id` is the bus identifier
+    formURlData.set('is_active', this.selectedBus.is_active ? 'false' : 'true'); // Toggle active status
+
+    this.service.postAPI('update-bus-status', formURlData).subscribe({
+      next: (res: any) => {
+        if (res.success) { // Assuming the API response has a `success` field
+          this.toastr.success('Bus status updated successfully!');
+          // Update the local data state
+          this.selectedBus.is_active = !this.selectedBus.is_active; // Toggle `is_active`
+          this.getBuses(); // Refresh the bus list
+          this.closeModal3.nativeElement.click();
+        } else {
+          this.toastr.warning(res.message || 'Unable to update bus status.'); // Handle API warnings
+        }
+      },
+      error: (err) => {
+        this.toastr.error('Failed to update bus status.');
+      }
+    });
+  }
+
+
+
+
 }

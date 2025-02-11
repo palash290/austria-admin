@@ -36,14 +36,17 @@ export class RoutesManagementComponent {
   loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
+  @ViewChild('closeModal12') closeModal12!: ElementRef;
 
   stopName: any;
   terminalName: any;
   allRoutes: any;
   lines: any
+  showMessage(): void {
+    this.toastr.create('success', 'This is a success message!', { nzDuration: 20000 }); // 20 seconds
+  }
 
-
-  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService, private router: Router) { }
+  constructor(private service: SharedService, private toastr: NzMessageService, private router: Router) { }
 
   ngOnInit() {
     this.getRoutes();
@@ -81,10 +84,15 @@ export class RoutesManagementComponent {
   isSingleLatLog: boolean = false;
 
   getLatLog(latLog: any) {
-    this.isSingleLatLog = !this.isSingleLatLog;
+    if(this.isSingleLatLog && JSON.stringify(this.singleLatLog) == JSON.stringify(latLog)){
+      this.isSingleLatLog = false;
+      this.initMap();
+    }else{
+      this.isSingleLatLog = true;
+    // this.isSingleLatLog = !this.isSingleLatLog;
     this.singleLatLog = latLog;
-    console.log('latlog', latLog);
     this.initMap();
+    }
   }
 
   initMap(): void {
@@ -146,7 +154,6 @@ export class RoutesManagementComponent {
     const bounds = new google.maps.LatLngBounds();
 
     const infoWindow = new google.maps.InfoWindow();
-
     if (this.singleLatLog?.length > 0 && this.isSingleLatLog) {
       this.singleLatLog.forEach((city: any, index: number) => {
         if (city.stop_city.latitude && city.stop_city.longitude) {
@@ -164,6 +171,7 @@ export class RoutesManagementComponent {
           marker.addListener("click", () => {
             infoWindow.setContent(`
             <div>
+   
               <h4>${city.stop_city.city_name}</h4>
            <button id="editBtn" class="custom-edit-btn">Edit</button>
            <button id="deleteBtn" class="custom-delete-btn">Delete</button>
@@ -171,7 +179,10 @@ export class RoutesManagementComponent {
           `);
             infoWindow.open(map, marker);
 
-            
+            setTimeout(() => {
+              document.getElementById("editBtn")?.addEventListener("click", () => this.editCity(city.stop_city.city_id));
+              document.getElementById("deleteBtn")?.addEventListener("click", () => this.deleteCity(city.stop_city.city_id));
+            }, 100);
           });
 
         }
@@ -193,6 +204,7 @@ export class RoutesManagementComponent {
           marker.addListener("click", () => {
             infoWindow.setContent(`
             <div>
+           
               <h4>${city.city_name}</h4>
               <button id="editBtn" onclick="editCity('${city.city_name}'">Edit</button>
               <button id="deleteBtn" onclick="deleteCity('${city.city_name}')">Delete</button>
@@ -221,14 +233,10 @@ export class RoutesManagementComponent {
     this.router.navigate(['/home/edit-city'], { queryParams: { cityName } });
   }
 
-
-
   deleteCity(cityName: string): void {
-    console.log("Delete clicked for:", cityName);
+    this.toastr.warning("Coming soon!");
     //alert(`Deleting ${cityName}`);
   }
-
-
 
   isSearchActiveFrom = false;
   allTerminalsList: any;
@@ -260,14 +268,20 @@ export class RoutesManagementComponent {
   };
 
 
-  isTouched: boolean = false;
-
-  onBlur() {
-    this.isTouched = true;
-  }
+  isTouched: any = {
+    stopName: false,
+    terminalName: false
+  };
 
 
   addTerminal() {
+    const stopName = this.stopName?.trim();
+    const terminalName = this.terminalName?.trim();
+
+    if (!stopName || !terminalName) {
+      return;
+    }
+
     const formURlData = new URLSearchParams();
     formURlData.set('city_name', this.stopName);
     formURlData.set('city_address', this.terminalName);
@@ -311,8 +325,8 @@ export class RoutesManagementComponent {
           this.reverseLine = response.data.route_stops
             .map((stop: any) => stop.stop_city.city_id)
             .reverse();
-          console.log(this.singleLine);
-          this.copyTitle = response.data.title;
+          // console.log(this.singleLine);
+          // this.copyTitle = response.data.title;
           this.copyDescription = response.data.description;
         } else {
           console.log(response.message);
@@ -329,14 +343,19 @@ export class RoutesManagementComponent {
     // }
   }
 
+  CopyRouteId: any;
+
+  getCopyRouteId(route_id: any){
+    this.CopyRouteId = route_id;
+  }
 
   copyRoute() {
     const formData = new URLSearchParams();
-    formData.append('title', this.copyTitle);
-    formData.append('route_stops', this.singleLine.toString());
-    formData.append('description', this.copyDescription);
-
-    let url = 'create-route';
+    // formData.append('title', this.copyTitle);
+    // formData.append('route_stops', this.singleLine.toString());
+    // formData.append('description', this.copyDescription);
+    formData.append('route_id', this.CopyRouteId)
+    let url = 'create-copy-route';
 
     this.service
       .postAPI(url, formData.toString())
@@ -361,12 +380,22 @@ export class RoutesManagementComponent {
           }
         }
       });
-
   };
 
+  ngOnDestroy() {
+    this.CopyRouteId = '';
+  }
+
   reverseRoute() {
+    this.copyTitle = this.copyTitle?.trim(); // Trim spaces
+  const trimmedTitle = this.copyTitle;
+
+  if (!trimmedTitle) {
+    this.toastr.error('Title cannot be empty');
+    return;
+  }
     const formData = new URLSearchParams();
-    formData.append('title', this.copyTitle);
+    formData.append('title', trimmedTitle);
     formData.append('route_stops', this.reverseLine.toString());
     formData.append('description', this.copyDescription);
 
@@ -383,6 +412,7 @@ export class RoutesManagementComponent {
             this.getRoutes();
             this.isSingleLatLog = false;
             this.initMap();
+            this.closeModal12.nativeElement.click();
           } else {
             this.toastr.warning(res.message);
           }
@@ -399,7 +429,10 @@ export class RoutesManagementComponent {
   };
 
 
-
+  // Triggered on blur to set the field as touched
+  onBlur(fieldName: string): void {
+    this.isTouched[fieldName] = true;
+  }
 
 
 

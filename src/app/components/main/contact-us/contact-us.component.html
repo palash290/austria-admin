@@ -307,15 +307,18 @@
                                                       placeholder="Enter driver name" rows="5"></textarea>
                                           </div>
                                     </div>
+                                    @if(currentMsg.response){
                                     <div class="form-group mb-4">
                                           <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reply<span
                                                       class="ct_text_red">*</span></label>
                                           <div class="position-relative">
                                                 <textarea type="text" class="form-control ct_fs_18" [(ngModel)]="currentMsg.response
-                                                " disabled [ngModelOptions]="{standalone: true}"
+                                                      " disabled [ngModelOptions]="{standalone: true}"
                                                       placeholder="Type Here...." rows="5"></textarea>
                                           </div>
                                     </div>
+                                    }
+
 
                               </form>
                         </div>

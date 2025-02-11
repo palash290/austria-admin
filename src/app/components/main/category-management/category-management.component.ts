@@ -47,9 +47,10 @@ export class CategoryManagementComponent {
         console.log(this.route_id);
       }
     })
-    this.addRouteById()
+    this.getTicketTypeById()
     //this.getType();
     this.initForm();
+    this.addRouteById1();
   }
 
   initForm() {
@@ -61,8 +62,8 @@ export class CategoryManagementComponent {
   ticketTypes: any[] = [];
   stopNames: any;
 
-  addRouteById(filterId?: any) {
-    if(!this.route_id){
+  getTicketTypeById(filterId?: any) {
+    if (!this.route_id) {
       return
     }
     const formURlData = new URLSearchParams();
@@ -71,14 +72,9 @@ export class CategoryManagementComponent {
     this.service.postAPI('get-ticket-type-by-routeid', formURlData.toString()).subscribe({
       next: (response) => {
         if (response.success) {
-          //debugger
           this.allRoutes = response.data[0].ticket_type;
           console.log(this.allRoutes);
           this.ticketTypes = response.data[0].ticket_type_column;
-
-          this.addRouteById1()
-
-
         } else {
           console.log(response.message);
         }
@@ -92,8 +88,6 @@ export class CategoryManagementComponent {
       }
     });
   }
-
-
 
   addRouteById1() {
     if (this.route_id) {
@@ -194,7 +188,12 @@ export class CategoryManagementComponent {
   updatedTickets: any[] = []; // Array to track updated ticket prices
 
   updateTicketPrice(ticket: any, field: string, newValue: any) {
-    if (parseFloat(newValue) >= 0) {
+    //debugger
+    if (parseFloat(newValue) <= 0) {
+      this.toastr.error('Price should be greater than 0');
+      return
+    }
+    //if (parseFloat(newValue) >= 0) {
       // Update the ticket object locally
       ticket[field] = newValue;
 
@@ -211,18 +210,22 @@ export class CategoryManagementComponent {
           Baseprice: ticket.Baseprice,
         });
       }
-    } else {
-      this.toastr.error('Negative value not allowed!');
-    }
+    // } else {
+    //   this.toastr.error('Negative value not allowed!');
+    // }
   }
 
   saveUpdatedTicketPrices() {
     if (this.updatedTickets.length > 0) {
       this.service.postData('update-ticket-price', this.updatedTickets).subscribe(
-        response => {
-          console.log('Ticket data successfully updated', response);
-          this.toastr.success('Tickets updated successfully!');
-          this.updatedTickets = []; // Clear the updated tickets array
+        res => {
+          if (res.success == true) {
+            this.toastr.success('Tickets updated successfully!');
+            this.updatedTickets = []; // Clear the updated tickets array
+            this.router.navigate(['/home/routes-management'])
+          } else {
+            this.toastr.warning(res.message);
+          }
         },
         error => {
           console.error('Error updating ticket data', error);
@@ -343,14 +346,14 @@ export class CategoryManagementComponent {
             this.toastr.success(resp.message);
             this.btnLoader = false;
             this.closeModal.nativeElement.click();
-            this.addRouteById();
+            this.getTicketTypeById();
             this.form.reset();
             this.loading = false;
           } else {
             this.toastr.warning(resp.message);
             this.btnLoader = false;
             this.loading = false;
-            this.addRouteById();
+            this.getTicketTypeById();
           }
         },
         error: (error) => {
@@ -384,7 +387,7 @@ export class CategoryManagementComponent {
       next: (resp) => {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
-          this.addRouteById();
+          this.getTicketTypeById();
           this.toastr.success(resp.message)
 
         } else {
@@ -421,14 +424,11 @@ export class CategoryManagementComponent {
   selectedBusId: any = '';
   selectedBusName: any;
 
-  onBusChange(event: any): void {
+  onStopChange(event: any): void {
     const selectedId = event.target.value;
-
     this.selectedBusId = selectedId;
-
     console.log('Selected austriaCityId ID:', this.selectedBusId);
-
-    this.addRouteById(selectedId);
+    this.getTicketTypeById(selectedId);
 
   }
 

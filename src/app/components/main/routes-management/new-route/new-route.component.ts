@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedService } from '../../../../services/shared.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { LoaderComponent } from '../../loader/loader.component';
 
 @Component({
   selector: 'app-new-route',
   standalone: true,
-  imports: [CommonModule, FormsModule, DragDropModule],
+  imports: [CommonModule, FormsModule, DragDropModule, RouterLink, LoaderComponent],
   templateUrl: './new-route.component.html',
   styleUrl: './new-route.component.css'
 })
@@ -25,6 +26,7 @@ export class NewRouteComponent {
   departureTimes: string[] = ['08:00'];
   newDepartureTime: string = '';
   route_id: any;
+  loading: boolean = false;
 
   constructor(private service: SharedService, private toastr: NzMessageService, private activRout: ActivatedRoute, private router: Router, private cdrf: ChangeDetectorRef) { }
 
@@ -84,7 +86,7 @@ export class NewRouteComponent {
 
   getAllCity() {
     //debugger
-    this.service.getApi('get-all-city').subscribe({
+    this.service.getApi('get-all-active-city').subscribe({
       next: resp => {
         this.allCities = resp.data;
 
@@ -124,7 +126,19 @@ export class NewRouteComponent {
     });
   }
 
+  @ViewChild('closeModal44') closeModal44!: ElementRef;
+
   saveBusStops() {
+    
+    const title = this.title?.trim();
+    const description = this.description?.trim();
+
+    if (!title || !description) {
+      this.toastr.error('Please fill in all fields.');
+      return;
+    }
+
+
     const selectedIds = this.busStops.map((stop) => stop.city_id);
     const nullIds = selectedIds.filter(items => items == null)
     if (nullIds.length > 0) {
@@ -132,14 +146,14 @@ export class NewRouteComponent {
       return
     }
 
-    const startCountry = this.allCities.find((items: any) => items.city_id == selectedIds[0]).country_name;
-    const endCountry = this.allCities.find((items: any) => items.city_id == selectedIds[selectedIds.length - 1]).country_name;
+    const startCountry = this.allCities.find((items: any) => items.city_id == selectedIds[0]).city_id;
+    const endCountry = this.allCities.find((items: any) => items.city_id == selectedIds[selectedIds.length - 1]).city_id;
 
     if (startCountry == endCountry) {
       console.log("validation to be applied same country");
       return
     }
-    const routeDirection = `${startCountry} to ${endCountry}`
+    //const routeDirection = `${startCountry} to ${endCountry}`
     const formData = new URLSearchParams();
     //formData.append('route_direction', routeDirection.toString());
     formData.append('title', this.title.toString());
@@ -151,24 +165,28 @@ export class NewRouteComponent {
     }
 
     let url = this.route_id == undefined ? 'create-route' : 'update-route';
-
+    this.loading = true;
     this.service
       .postAPI(url, formData.toString())
       .subscribe({
         next: res => {
           if (res.success == true) {
+            this.loading = false;
             this.router.navigate(['/home/routes-management'])
             //  this.allTerminalsList = res.data;
+            this.closeModal44.nativeElement.click();
             if (this.route_id) {
               this.toastr.success(res.message);
             } else {
               this.toastr.success(res.message);
             }
           } else {
+            this.loading = false;
             this.toastr.warning(res.message);
           }
         },
         error: error => {
+          this.loading = false;
           if (error.error.message) {
             this.toastr.error(error.error.message);
           } else {
@@ -212,7 +230,7 @@ export class NewRouteComponent {
     this.route_id = '';
   }
 
-  cancel(){
+  cancel() {
     this.router.navigate(['/home/routes-management'])
   }
 

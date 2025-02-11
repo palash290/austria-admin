@@ -24,16 +24,19 @@ export class AllBusScheduleComponent {
   constructor(private service: SharedService) { }
 
   ngOnInit() {
-
     this.getBuseSchedule();
   }
 
+  noOfStops: any;
 
   getBuseSchedule() {
 
     this.service.getApi(`get-all-busschedule?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}&filter=${this.filterQuery}`).subscribe({
       next: resp => {
-        this.data = resp.data.busschedule;
+        //debugger
+        this.data = resp.data.schedulesWithStops;
+        
+        this.noOfStops = resp.data.schedulesWithStops[0].route_stops?.length;
         this.totalPages = resp.data.pagination?.totalPages
       },
       error: error => {
@@ -53,4 +56,13 @@ export class AllBusScheduleComponent {
     this.currentPage = 1;
     this.getBuseSchedule();
   }
+
+  viewDetails: any;
+
+  viewMessage(item: any) {
+    this.viewDetails = item;
+    console.log(this.viewDetails);
+  }
+
+
 }

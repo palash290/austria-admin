@@ -35,7 +35,7 @@
                             <th>Bus Number </th>
                             <!-- <th>Type</th> -->
                             <th>Capacity</th>
-                            <!-- <th>Status</th> -->
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -46,18 +46,22 @@
                             <td>{{item.bus_number_plate}}</td>
                             <!-- <td>{{item.bus_type}}</td> -->
                             <td>{{item.number_of_seats}}</td>
-                            <!-- "bus_id": 1,
-                            "bus_name": "Hans Travels",
-                            "bus_number_plate": "MP06ZD3679",
-                            "bus_registration_number": "MP4343434343434",
-                            "number_of_seats": 30,
-                            "bus_type": "Seater",
-                            "is_active": true,
-                            "created_at": "2025-01-13T09:27:42.208Z",
-                            "updated_at": "2025-01-13T09:27:42.208Z" -->
-                            <!-- <td><span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
-                                    style="background-color: #E2EDE5;color: #28A745;">Active</span></td> -->
 
+                            <!-- <td [ngClass]="{'highlight-row': data.is_active === 0}">
+                                <div class="form-check form-switch ct_switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckDefault" [(ngModel)]="data.is_active"
+                                        [ngModel]="data.is_active == 0" >
+                                </div>
+                            </td> -->
+                            <td>
+                                <div class="form-check form-switch ct_switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckDefault" [checked]="item.is_active == false"
+                                        (change)="onToggleBusStatus(item)" data-bs-toggle="modal"
+                                        data-bs-target="#ct_active_modal">
+                                </div>
+                            </td>
                             <td>
                                 <div class="ct_actions_btn">
                                     <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
@@ -126,7 +130,8 @@
 <!-- All Modal Section S -->
 
 <!-- Add Modal S -->
-<div class="modal fade " id="ct_add_bus" tabindex="-1" aria-labelledby="ct_edit_modalLabel" aria-hidden="true">
+<div class="modal fade ct_z_index_1" id="ct_add_bus" tabindex="-1" aria-labelledby="ct_edit_modalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content pb-4">
             <div class="modal-header border-0">
@@ -170,7 +175,8 @@
                                 {{ getErrorMessage('totalSeats') }}
                                
                             </p> -->
-                            <div *ngIf="form.controls['totalSeats'].invalid && form.controls['totalSeats'].touched" class="err_msg">
+                            <div *ngIf="form.controls['totalSeats'].invalid && form.controls['totalSeats'].touched"
+                                class="err_msg">
                                 <div *ngIf="form.controls['totalSeats'].errors?.['required']">This field is required
                                 </div>
                                 <div *ngIf="form.controls['totalSeats'].errors?.['pattern']">Please enter a valid number
@@ -358,6 +364,48 @@
     </div>
 </div>
 <!-- delete Modal E -->
+
+
+
+<!-- Active Modal S -->
+<!-- Active Modal -->
+<div class="modal fade" id="ct_active_modal" tabindex="-1" aria-labelledby="ct_active_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button (click)="getBuses()" type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_delete_modal_cnt">
+                    <div class="text-center mb-4 ct_delete_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                            <path
+                                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24l0 112c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-112c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                        </svg>
+                    </div>
+                    <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Are you sure?</h4>
+                    <p class="mb-0 text-center ct_fs_18">
+                        {{ confirmationMessage }}
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button (click)="getBuses()" type="button" class="ct_btn_red bg-danger py-3 px-5"
+                    data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="ct_blue_btn py-3 px-5" (click)="confirmChange()">
+                    Confirm
+                </button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal3
+                    data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Active Modal E -->
 
 <!-- All Modal Section E -->
 

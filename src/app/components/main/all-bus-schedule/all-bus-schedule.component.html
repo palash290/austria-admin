@@ -14,7 +14,7 @@
     <div class="ct_middle_content">
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">All Scheduled Bus</h4>
+                <h4 class="ct_fs_20 ct_fw_600 mb-0">Scheduled Buses</h4>
                 <div class="d-flex gap-3 align-items-center  justify-content-between">
                     <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route"
                         (ngModelChange)="getBuseSchedule()">
@@ -40,27 +40,14 @@
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <!-- <th>Bus No.</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Departure</th>
-                            <th>Arrival</th>
-                            <th>Driver</th>
-                            <th>Actions</th> -->
-
                             <th>S No.</th>
                             <th>Bus Number </th>
                             <th>Name/Type</th>
                             <th>Capacity</th>
-                            <th>Direction</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Departure</th>
-                            <th>Arrival</th>
-                            <th>Duration</th>
-                            <th>Driver</th>
-                            <!-- <th>Status</th> -->
-                            <!-- <th>Actions</th> -->
+                            <th>Title</th>
+                            <th>Recurrence Status</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,13 +57,24 @@
                             <td>{{item.bus.bus_number_plate}}</td>
                             <td>{{item.bus.bus_name}}</td>
                             <td>{{item.bus.number_of_seats}}</td>
-                            <td>{{item.route.route_direction}}</td>
-                            <td>{{item.route.pickup_point.city_name}}</td>
-                            <td>{{item.route.dropoff_point.city_name}}</td>
-                            <td>{{item.departure_time}}</td>
-                            <td>{{item.arrival_time}}</td>
-                            <td>{{item.duration_time}}</td>
-                            <td>{{item.driver.driver_name}}</td>
+                            <td>{{item.route.title}}, {{item.route_stops?.length}}</td>
+                            <td>{{item.recurrence_pattern}}</td>
+                            <td>
+                                @if (item.route.is_active) {
+                                Active
+                                } @else {
+                                Inactive
+                                }
+                            </td>
+
+                            <td>
+                                <div class="ct_actions_btn" (click)="viewMessage(item)">
+                                    <button class="ct_action_btn" data-bs-toggle="modal" data-bs-target="#view_model">
+                                        <i class="fa-regular fa-eye ct_hide_pass_wye"></i>
+                                    </button>
+                                </div>
+                            </td>
+
                             <!-- <td>
                                 <div class="ct_actions_btn">
                                     <button class="ct_action_btn" data-bs-toggle="modal"
@@ -131,6 +129,65 @@
                         </li>
                     </ul>
                 </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="view_model" tabindex="-1" aria-labelledby="view_modelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content pb-4">
+            <!-- <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+            <div class="modal-body border-0 pt-5">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">View Details</h4>
+                    <form class="pt-2">
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Route<span
+                                    class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control ct_input ct_fs_18" disabled
+                                    [value]="viewDetails?.route.title">
+                            </div>
+
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">From<span class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+                                <input type="date" class="form-control ct_input ct_fs_18"
+                                    [value]="viewDetails?.from_date" disabled>
+                            </div>
+
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">To<span class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+                                <input type="date" class="form-control ct_input ct_fs_18" [value]="viewDetails?.to_date"
+                                    disabled>
+                            </div>
+
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Reason<span
+                                    class="ct_text_red">*</span></label>
+                            <div class="position-relative">
+                                <textarea type="text" class="form-control ct_fs_18" disabled
+                                    [value]="viewDetails?.closure_reason" placeholder="Type Here...."
+                                    rows="5"></textarea>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-end">
+
+                <button type="button" class="ct_blue_btn py-2 ct_fw_400" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -15,9 +15,9 @@
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
                 <!-- <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4> -->
                 <div class="d-flex gap-3 align-items-center  justify-content-between">
-                    <select class="form-control w-auto" (change)="onBusChange($event)">
-                        <option value="" disabled selected>-- Select --</option>
-                        <!-- <option value="1">All</option> -->
+                    <select class="form-control w-auto" (change)="onStopChange($event)">
+                        <!-- <option value="" disabled selected>-- Select --</option> -->
+                        <option value="">All</option>
                         <option *ngFor="let lan of stopNames" [value]="lan.startPointCityId">{{lan.start_city_name}}
                         </option>
                     </select>
@@ -81,13 +81,15 @@
                                 </button> -->
                                     <button class="ct_action_btn" data-bs-toggle="modal"
                                         (click)="patchUpdate(ticketType.COLUMN_NAME)" data-bs-target="#ct_delete_modal">
-                                        <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
+                                        <div class="ct_col_dlt_icon">
+                                            <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
                                                 stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round" />
                                         </svg>
+                                        </div>
                                     </button>
                                 </span>
                             </th>
@@ -99,7 +101,7 @@
                             <td>{{ route.start_city_name }} - {{route.end_city_name}} </td>
                             <td>
                                 <div class="mb-3">
-                                    <label class="form-label">Available</label>
+                                    <!-- <label class="form-label">Available</label> -->
                                     <div>
                                         <label class="switch ct_custom_switch1">
                                             <input type="checkbox" [(ngModel)]="route.is_active"
@@ -107,8 +109,8 @@
                                                 (click)="statusChange(route, route.is_active)" />
 
                                             <span class="slider"></span>
-                                            <span class="text on ">NOT AVAILABLE</span>
-                                            <span class="text off">AVAILABLE</span>
+                                            <span class="text on mt-0">AVAILABLE</span>
+                                            <span class="text off mt-0">NOT AVAILABLE</span>
                                         </label>
                                     </div>
                                 </div>
@@ -116,16 +118,16 @@
                             <!-- Dynamic Ticket Types -->
                             <td *ngFor="let ticketType of ticketTypes">
                                 @if(route.is_active){
-                                <input type="number" class="form-control"
-                                    [placeholder]="ticketType.COLUMN_NAME + ' Price'"
-                                    [(ngModel)]="route[ticketType.COLUMN_NAME]"
+                                <input type="number" class="form-control" style="width: 122px;" [placeholder]="ticketType.COLUMN_NAME === 'Baseprice' 
+                                ? 'Base' + ' Price'
+                                : ticketType.COLUMN_NAME + ' Price'" [(ngModel)]="route[ticketType.COLUMN_NAME]"
                                     [ngClass]="{ 'border-danger': ticketType.COLUMN_NAME[ticketType.COLUMN_NAME] < 0 }"
                                     (ngModelChange)="updateTicketPrice(route, ticketType.COLUMN_NAME, $event)"
                                     [min]="0" />
                                 } @else {
                                 <!-- Show disabled state or message when unavailable -->
                                 <span class="text-muted">
-                                    Not Available
+
                                 </span>
                                 }
                             </td>
@@ -137,9 +139,9 @@
                     <button class="btn btn-primary" (click)="updateAllTicketPrices()">Update All</button>
                 </div> -->
 
-                <!-- <div *ngIf="data1?.length == 0 || !data1" class="text-center">
-                    <p class="ct_fs_15 mt-3">No items found</p>
-                </div> -->
+                <div *ngIf="allRoutes?.length == 0 || !allRoutes" class="text-center">
+                    <p class="ct_fs_15 mt-3">No route found</p>
+                </div>
             </div>
         </div>
         <div class="actions mt-3 d-flex align-items-center justify-content-end">
@@ -179,7 +181,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_blue_btn py-3" (click)="addType()">Add Category</button>
+                <button type="button" class="ct_blue_btn py-3" (click)="addType()">Add</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal
                     data-bs-dismiss="modal">Close</button>
             </div>

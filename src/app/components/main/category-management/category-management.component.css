@@ -41,7 +41,7 @@
 }
 
 .ct_custom_switch1 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: #3b82f6;
 }
 
 .ct_custom_switch1 input:checked + .slider:before {
@@ -98,3 +98,16 @@
   background-color: #e6e6e6;
   color: #000;
 }
+.ct_col_dlt_icon {
+  background-color: #ff000024;
+  width: 30px;
+  height: 30px;
+  display: flex
+;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  position: relative;
+  top: 2px;
+}
+

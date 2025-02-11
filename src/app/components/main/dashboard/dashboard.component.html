@@ -245,7 +245,7 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.mobile_number ? item.mobile_number : '-'}}</td>
                                     <td>
-                                        @if(item.signup_method == 'guest'){
+                                        @if(item.guest_user != null){
                                             Guest User
                                         } @else {
                                             Verified User

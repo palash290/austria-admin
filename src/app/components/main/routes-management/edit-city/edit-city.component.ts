@@ -4,12 +4,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../../loader/loader.component';
 declare var google: any;
 
 @Component({
   selector: 'app-edit-city',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
+  imports: [LoaderComponent, CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './edit-city.component.html',
   styleUrl: './edit-city.component.css'
 })
@@ -19,12 +20,14 @@ export class EditCityComponent {
   marker!: google.maps.Marker;
   city_id: any;
   busStopForm!: FormGroup;
+  loading: boolean = false;
 
   constructor(private fb: FormBuilder, private service: SharedService, private toastr: NzMessageService, private router: Router, private activRout: ActivatedRoute) { }
 
   ngOnInit() {
     this.activRout.queryParams.subscribe({
       next: (params) => {
+
         this.city_id = params['cityName'];
         if (this.city_id) {
           this.addRouteById(this.city_id)
@@ -38,7 +41,7 @@ export class EditCityComponent {
 
   initForm() {
     this.busStopForm = this.fb.group({
-      busStop: ['', Validators.required],
+      busStop: [{ value: this.cityName, disabled: true }, Validators.required],
       description: ['', Validators.required],
       fromUkraine: [],
       status: [],
@@ -84,12 +87,15 @@ export class EditCityComponent {
     });
   }
 
+  cityName: any;
 
   addRouteById(id?: any) {
     //if(this.route_id || id){
-    this.service.getApi(`get-city-by-id?city_id=${15}`).subscribe({
+
+    this.service.getApi(`get-city-by-id?city_id=${this.city_id}`).subscribe({
       next: (response) => {
         if (response.success) {
+          this.cityName = response.data.city_name;
           this.busStopForm.patchValue({
             busStop: response.data.city_name,
             description: response.data.city_description,
@@ -101,11 +107,14 @@ export class EditCityComponent {
           });
           this.terminalName = response.data.city_address;
           this.initMap();
+
         } else {
           console.log(response.message);
+
         }
       },
       error: (error) => {
+
         if (error.error.message) {
           console.log(error.error.message);
         } else {
@@ -121,20 +130,24 @@ export class EditCityComponent {
     if (!this.busStopForm.valid) {
       return
     }
-
-    const busStop = this.busStopForm.value.busStop?.trim();
+    //const busStop = this.busStopForm.value.busStop?.trim();
     const description = this.busStopForm.value.description?.trim();
-    const terminalName = this.busStopForm.value.terminalName?.trim();
-    const latitude = this.busStopForm.value.latitude?.trim();
-    const longitude = this.busStopForm.value.longitude?.trim();
+    const terminalName = this.terminalName?.trim();
+    const latitude = String(this.busStopForm.value.latitude)?.trim();
+    const longitude = String(this.busStopForm.value.longitude)?.trim();
 
-    if (!busStop || !description || !terminalName || !latitude || !longitude) {
+    if (!description || !latitude || !longitude) {
       return;
     }
+    if (!terminalName) {
+      this.toastr.warning('Please enter address!')
+      return;
+    }
+    this.loading = true;
 
     console.log('Form Submitted:', this.busStopForm.value);
     const formURlData = new FormData();
-    formURlData.set('city_name', this.busStopForm.value.busStop);
+    formURlData.set('city_name', this.cityName);
     formURlData.set('city_id', this.city_id);
     formURlData.set('city_description', this.busStopForm.value.description);
     formURlData.set('city_address', this.terminalName);
@@ -147,11 +160,15 @@ export class EditCityComponent {
       response => {
         if (response.success === true) {
           this.toastr.success(response.message);
+          this.router.navigate(['/home/routes-management']);
+          this.loading = false;
         } else {
           this.toastr.warning(response.message);
+          this.loading = false;
         }
       },
       error => {
+        this.loading = false;
         if (error.error.message) {
           this.toastr.error(error.error.message);
         } else {
@@ -159,7 +176,10 @@ export class EditCityComponent {
         }
       }
     );
+  }
 
+  cancel() {
+    this.router.navigate(['/home/routes-management'])
   }
 
   isSearchActiveFrom = false;

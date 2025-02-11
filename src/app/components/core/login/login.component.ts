@@ -20,7 +20,12 @@ export class LoginComponent {
   loginForm!: FormGroup;
   loading: boolean = false;
 
-  constructor(private route: Router, private apiService: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
+  constructor(private route: Router, private apiService: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) {
+    if (this.apiService.isLogedIn()) {
+      this.route.navigate(['/home/dashboard']);
+    }
+    localStorage.removeItem('austriaAdminToken');
+  }
 
   ngOnInit(): void {
     this.initForm();

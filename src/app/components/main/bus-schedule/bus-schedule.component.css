@@ -273,7 +273,7 @@ body {
 }
 
 .ct_custom_switch1 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: #3b82f6;
 }
 
 .ct_custom_switch1 input:checked + .slider:before {
@@ -313,16 +313,24 @@ body {
   border: 0px;
   border-radius: 5px;
   overflow: hidden;
+  background-color: #e6e6e67a;
+  padding: 10px;
+  gap: 5px;
 }
 .ct_custom_tab_2 .nav-tabs .nav-link {
   border-radius: 0px;
   background-color: #fff;
   color: #000;
+  font-size: 18px;
+  padding-block: 12px;
+  border-radius: 5px;
+
 }
 .ct_custom_tab_2 .nav-tabs .nav-item.show .nav-link,
 .ct_custom_tab_2 .nav-tabs .nav-link.active {
   background-color: var(--blue);
   color: #fff;
+  font-weight: 600;
 }
 .ct_cancle_btn_3 {
   background-color: #e6e6e6;

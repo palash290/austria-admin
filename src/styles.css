@@ -1,31 +1,68 @@
 .err_msg {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    /* flex-direction: row-reverse; */
-    color: red;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* flex-direction: row-reverse; */
+  color: red;
 }
 
 .pagination-section {
-    padding: 1rem;
-    border-top: 1px solid #dcdcdc;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+  padding: 1rem;
+  border-top: 1px solid #dcdcdc;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 /* styles.css or styles.scss */
 .info-window-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 5px;
-  }
-  
-  .info-window-btn:hover {
-    background-color: #0056b3;
-  }
-  
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.info-window-btn:hover {
+  background-color: #0056b3;
+}
+
+button#editBtn {
+  border: 1px solid #3b82f6;
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 3px;
+}
+
+button#deleteBtn {
+  border: 1px solid #ff0000;
+  background-color: #ff0000;
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 3px;
+}
+
+.ct_switch .form-check-input {
+  height: 20px;
+  cursor: pointer;
+}
+
+.ct_switch .form-check-input:focus {
+  box-shadow: unset;
+}
+
+.ct_switch .form-check-input {
+  height: 20px;
+  cursor: pointer;
+}
+
+.ct_switch .form-check-input:focus {
+  box-shadow: unset;
+}
+
+.cdk-overlay-container {
+  z-index: 9999999999999 !important;
+}

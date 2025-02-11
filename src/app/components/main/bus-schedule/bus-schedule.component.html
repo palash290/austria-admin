@@ -1,6 +1,6 @@
 <div class="ct_right_dash_content ct_custom_tab_2">
     <div class="mb-4">
-        <a href="#" class="ct_back_btn " style="width: fit-content;"><i
+        <a routerLink="/home/routes-management" class="ct_back_btn " style="width: fit-content;"><i
                 class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
     </div>
 
@@ -9,7 +9,7 @@
             <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
                 role="tab" aria-controls="home" aria-selected="true">General Settings</button>
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item" role="presentation" *ngIf="route_id">
             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
                 role="tab" aria-controls="profile" aria-selected="false">Ticket & Prices</button>
         </li>
@@ -127,7 +127,7 @@
                             </div>
                         </form> -->
 
-                        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                        <form [formGroup]="form">
                             <div class="card p-3">
                                 <h5>Details</h5>
                                 <p>Fill in details for this departure time.</p>
@@ -151,8 +151,8 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="line" class="form-label ct_fw_500 mb-1">Line</label>
-                                            @if(route_id){
-                                            <select class="form-control ct_input ct_fs_18 ">
+                                            @if(isEdit == 'true'){
+                                            <select class="form-control ct_input ct_fs_18">
                                                 <option value="" disabled>Select</option>
                                                 <option *ngFor="let lan of routeList" [value]="lan.route_id"
                                                     [selected]="lan.route_id == route_id" [disabled]="route_id">
@@ -163,7 +163,8 @@
                                             <select class="form-control ct_input ct_fs_18 "
                                                 (change)="onLineChange($event)" formControlName="line">
                                                 <option value="" disabled>Select</option>
-                                                <option *ngFor="let lan of routeList" [value]="lan.route_id">
+                                                <option *ngFor="let lan of routeList" [value]="lan.route_id"
+                                                    [selected]="lan.route_id == route_id">
                                                     {{ lan.title }}
                                                 </option>
                                             </select>
@@ -224,8 +225,8 @@
                                         <label class="switch ct_custom_switch1">
                                             <input type="checkbox" formControlName="status" />
                                             <span class="slider"></span>
-                                            <span class="text on mt-0">NON STOP</span>
                                             <span class="text off mt-0">SPECIFIC PERIOD</span>
+                                            <span class="text on mt-0">NON STOP</span>
                                         </label>
                                     </div>
                                 </div>
@@ -311,9 +312,9 @@
                                 <!-- Action Buttons -->
                                 <!-- [disabled]="form.invalid" -->
                                 <div class="mt-3 d-flex align-items-center gap-3">
-                                    <button type="submit" class="ct_blue_btn">Save</button>
+                                    <button type="submit" (click)="saveBusStops()" class="ct_blue_btn">Save</button>
                                     <button type="button" class="ct_blue_btn ct_outline_btn_blue"
-                                        (click)="onCancel()">Cancel</button>
+                                        (click)="cancel()">Cancel</button>
                                 </div>
                             </div>
                         </form>
@@ -321,7 +322,7 @@
                     </div>
 
                     <!-- Create Schedule Section -->
-                    <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="col-lg-6 mb-4 mb-lg-0" *ngIf="selectedLineId || route_id">
                         <div class="card p-3">
                             <h5>Create Schedule</h5>
                             <p>Enter departing time, travel, and stop durations to calculate arrival times for each
@@ -341,24 +342,24 @@
                                         <tr
                                             *ngFor="let stop of lines; let i = index; let last = last; let first = first">
                                             <td>{{ stop.stop_city.city_name }}</td>
-                                            <td>
+                                            <td style="width: 150px;">
                                                 <!-- Set Arrival Time as N/A for the first index -->
                                                 <ng-container *ngIf="first; else arrivalInput">N/A</ng-container>
                                                 <ng-template #arrivalInput>
-                                                    <input type="time" class="form-control"
+                                                    <input type="time" class="form-control w-auto"
                                                         [(ngModel)]="stop.arrival_time"
                                                         (ngModelChange)="updateTicketPrice(stop, i, '')" />
                                                 </ng-template>
                                             </td>
-                                            <td>
+                                            <td style="width: 122px;">
                                                 <!-- Set Stop Time as N/A for the first and last indices -->
                                                 <ng-container
                                                     *ngIf="first || last; else stopTimeInput">N/A</ng-container>
                                                 <ng-template #stopTimeInput>
-                                                    <input type="number" class="form-control" [min]="0"
-                                                        [(ngModel)]="stop.stop_time"
-                                                        (ngModelChange)="updateTicketPrice(stop, i, '')"
-                                                        placeholder="Stop Time (min)" />
+                                                    <input type="number" class="form-control" style="width: 122px;"
+                                                        [min]="0" [(ngModel)]="stop.stop_time"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, $event)"
+                                                        placeholder="minnutes" />
                                                 </ng-template>
                                             </td>
                                             <!-- <td>
@@ -382,10 +383,10 @@
                                             </ng-template>
                                         </td> -->
 
-                                            <td>
+                                            <td style="width: 122px;">
                                                 @if(first){
                                                 <div>
-                                                    <input type="time" class="form-control"
+                                                    <input type="time" class="form-control" style="width: 122px;"
                                                         [(ngModel)]="stop.departure_time" name="departureTime{{ i }}"
                                                         (ngModelChange)="updateTicketPrice(stop, i, '')" />
                                                     <span *ngIf="last">N/A</span>
@@ -408,7 +409,7 @@
                             </div>
                             <div class="mt-3 d-flex align-items-center gap-3">
                                 <button (click)="saveUpdatedTicketPrices()" class="ct_blue_btn">Save</button>
-                                <button class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
+                                <button (click)="cancel()" class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
                             </div>
                         </div>
                     </div>

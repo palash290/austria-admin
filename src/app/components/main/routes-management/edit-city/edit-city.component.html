@@ -1,7 +1,7 @@
 <div class="ct_right_dash_content">
     <div class="container-fluid">
         <div class="mb-4">
-            <a href="#" class="ct_back_btn " style="width: fit-content;"><i
+            <a routerLink="/home/routes-management" class="ct_back_btn " style="width: fit-content;"><i
                     class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
         </div>
         <h2 class="ct_fs_24 ct_fw_700 mb-1">Update Bus Stop</h2>
@@ -42,8 +42,8 @@
                                     <input type="checkbox" id="fromUkraine" formControlName="fromUkraine" />
 
                                     <span class="slider"></span>
-                                    <span class="text on mt-0">NO</span>
-                                    <span class="text off mt-0">YES</span>
+                                    <span class="text on mt-0">YES</span>
+                                    <span class="text off mt-0">NO</span>
                                 </label>
                             </div>
                         </div>
@@ -55,8 +55,8 @@
                                     <input type="checkbox" id="status" formControlName="status" />
 
                                     <span class="slider"></span>
-                                    <span class="text on mt-0">INACTIVE</span>
-                                    <span class="text off mt-0">ACTIVE</span>
+                                    <span class="text on mt-0">ACTIVE</span>
+                                    <span class="text off mt-0">INACTIVE</span>
                                 </label>
                             </div>
                         </div>
@@ -136,10 +136,14 @@
 
             <div class="d-flex align-item-center gap-3 mt-4">
                 <button type="submit" class="ct_blue_btn">Save</button>
-                <button type="button" class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
+                <button (click)="cancel()" type="button" class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
             </div>
         </form>
 
 
     </div>
+</div>
+
+<div *ngIf="loading">
+    <app-loader />
 </div>
