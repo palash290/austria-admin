@@ -99,6 +99,8 @@ export class NewRouteComponent {
     });
   }
 
+  route_stops_length: any;
+
   getRouteById(id: number) {
     const formData = new URLSearchParams();
     formData.append('route_id', id.toString());
@@ -108,7 +110,8 @@ export class NewRouteComponent {
         this.title = resp.data.title;
         this.description = resp.data.description;
         this.status = resp.data.is_active;
-
+        //debugger
+        this.route_stops_length = resp.data.route_stops?.length;
         this.busStops = resp.data.route_stops.map((item: any) => ({
           city_id: item.stop_city.city_id,
           isNew: false // Set isNew to false since these are pre-existing stops
@@ -129,15 +132,14 @@ export class NewRouteComponent {
   @ViewChild('closeModal44') closeModal44!: ElementRef;
 
   saveBusStops() {
-    
+
     const title = this.title?.trim();
     const description = this.description?.trim();
 
-    if (!title || !description) {
-      this.toastr.error('Please fill in all fields.');
+    if (!title) {
+      this.toastr.error('Please enter the title.');
       return;
     }
-
 
     const selectedIds = this.busStops.map((stop) => stop.city_id);
     const nullIds = selectedIds.filter(items => items == null)
@@ -153,12 +155,23 @@ export class NewRouteComponent {
       console.log("validation to be applied same country");
       return
     }
+    // debugger
+    // console.log(selectedIds.length);
+    // return
     //const routeDirection = `${startCountry} to ${endCountry}`
     const formData = new URLSearchParams();
     //formData.append('route_direction', routeDirection.toString());
     formData.append('title', this.title.toString());
-    formData.append('route_stops', selectedIds.toString());
-    formData.append('description', this.description.toString());
+    if (selectedIds?.length != this.route_stops_length) {
+      formData.append('route_stops', selectedIds.toString());
+    } else {
+      formData.append('route_stops', '');
+    }
+    if (this.description) {
+      formData.append('description', this.description.toString());
+    } else {
+      formData.append('description', '');
+    }
     if (this.route_id) {
       formData.append('route_id', this.route_id.toString());
       formData.append('is_active', this.status.toString());

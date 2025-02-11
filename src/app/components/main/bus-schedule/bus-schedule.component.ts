@@ -59,7 +59,7 @@ export class BusScheduleComponent {
     });
 
     this.form = this.fb.group({
-      line: ['', Validators.required],
+      line: [this.route_id, Validators.required],
       busName: ['', Validators.required],
       driver: ['', Validators.required],
       status: [true],
@@ -249,7 +249,7 @@ export class BusScheduleComponent {
   isDaysOfWeekValid: boolean = true;
 
   saveBusStops() {
-    //debugger
+    debugger
     this.form.markAllAsTouched();
 
     const selectedDays = this.daysOfWeek.filter(day => this.form.value[day]); // Filter selected days
@@ -290,12 +290,10 @@ export class BusScheduleComponent {
       this.service
         .postAPI(url, formData.toString())
         .subscribe({
-          next: res => {
+          next: (res: any) => {
             if (res.success == true) {
-
               this.toastr.success(res.message);
               this.router.navigate(['/home/routes-management'])
-
             } else {
               this.toastr.warning(res.message);
             }
@@ -419,26 +417,28 @@ export class BusScheduleComponent {
       formData.append('route_id', route_id);
       this.service.postAPI('get-all-busschedule-by-routeid', formData).subscribe({
         next: resp => {
-          //debugger
-          this.getBusScheduleData = resp.data;
-          const data = resp.data[0];
-          const daysOfWeekArray = data.days_of_week?.split(','); // Split the string into an array
+          if (resp.data?.length > 0) {
+            //debugger
+            this.getBusScheduleData = resp.data;
+            const data = resp?.data[0];
+            const daysOfWeekArray = data.days_of_week?.split(','); // Split the string into an array
 
-          // Create an object to patch day controls
-          const dayControls: any = {};
-          this.daysOfWeek.forEach(day => {
-            dayControls[day] = daysOfWeekArray.includes(day); // Set true for selected days
-          });
-          this.schedule_id = resp.data[0].schedule_id;
-          this.form.patchValue({
-            line: resp.data[0].route?.route_id,
-            busName: resp.data[0].bus?.bus_id,
-            driver: resp.data[0].driver?.driver_id,
-            status: resp.data[0].available,
-            fromDate: resp.data[0].from,
-            toDate: resp.data[0].to,
-            ...dayControls
-          });
+            // Create an object to patch day controls
+            const dayControls: any = {};
+            this.daysOfWeek.forEach(day => {
+              dayControls[day] = daysOfWeekArray.includes(day); // Set true for selected days
+            });
+            this.schedule_id = resp.data[0].schedule_id;
+            this.form.patchValue({
+              line: resp.data[0].route?.route_id,
+              busName: resp.data[0].bus?.bus_id,
+              driver: resp.data[0].driver?.driver_id,
+              status: resp.data[0].available,
+              fromDate: resp.data[0].from,
+              toDate: resp.data[0].to,
+              ...dayControls
+            });
+          }
         },
         error: error => {
           if (error.error.message) {
