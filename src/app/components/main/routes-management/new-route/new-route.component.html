@@ -1,107 +1,104 @@
-<div class="ct_right_dash_content">
-    <div class="update-line-container">
-        <div class="mb-4">
-            <a routerLink="/home/routes-management" class="ct_back_btn" style="width: fit-content;"><i
-                    class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
-        </div>
+<div class="update-line-container">
+    <div class="mb-4">
+        <a routerLink="/home/routes-management" class="ct_back_btn" style="width: fit-content;"><i
+                class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
+    </div>
 
-        <div>
-            <h2 class="ct_fs_24 ct_fw_600 mb-1">{{route_id == undefined ? 'Add Line' : 'Update Line'}}</h2>
-            <p class="mb-0">Use the form below to update the selected line. </p>
-        </div>
+    <div>
+        <h2 class="ct_fs_24 ct_fw_600 mb-1">{{route_id == undefined ? 'Add Line' : 'Update Line'}}</h2>
+        <p class="mb-0">Use the form below to update the selected line. </p>
+    </div>
 
 
-        <!-- <p class="breadcrumb">Home > Bus Schedule > Stops & Lines > {{route_id == undefined ? 'Add Line' : 'Update
+    <!-- <p class="breadcrumb">Home > Bus Schedule > Stops & Lines > {{route_id == undefined ? 'Add Line' : 'Update
             Line'}}</p> -->
 
-        <div class="alert mt-4">
-            ⚠️ There are bookings for this route, and changes are not possible.
-        </div>
+    <div class="alert mt-4">
+        ⚠️ There are bookings for this route, and changes are not possible.
+    </div>
 
-        <form>
-            <div class="row">
+    <form>
+        <div class="row">
 
-                <!-- Details Section -->
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div class="details-section">
+            <!-- Details Section -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="details-section">
 
-                        <div>
-                            <h3 class="ct_fs_20 ct_fw_500 mb-1">Details</h3>
-                            <p class="mb-0">Enter line name and description which will be visible to your clients.</p>
-                        </div>
-                        <div class="ct_white_box_shadow h-auto mt-4">
-                            <label for="" class="d-block mb-1 ct_fw_500">Status</label>
-                            <label *ngIf="route_id" class="switch ct_custom_switch1">
-                                <input type="checkbox" [(ngModel)]="status" [ngModelOptions]="{standalone: true}" />
-                                <span class="slider"></span>
-                                <span class="text on">Active</span>
-                                <span class="text off">Inactive</span>
-                            </label>
-                            <!-- <span class="status-label">{{ status ? 'ACTIVE' : 'INACTIVE' }}</span> -->
-
-                            <div class="mt-3">
-                                <label for="title" class="mb-1 ct_fw_500">Title</label>
-                                <input id="title" type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="title"
-                                    [ngModelOptions]="{standalone: true}" placeholder="Enter Title" />
-                            </div>
-                            <div class="mt-3">
-                                <label for="description" class="mb-1 ct_fw_500">Description</label>
-                                <textarea id="description" rows="5" [(ngModel)]="description"
-                                    [ngModelOptions]="{standalone: true}" class="form-control ct_fs_18"
-                                    placeholder="Enter Description"></textarea>
-                            </div>
-                        </div>
+                    <div>
+                        <h3 class="ct_fs_20 ct_fw_500 mb-1">Details</h3>
+                        <p class="mb-0">Enter line name and description which will be visible to your clients.</p>
                     </div>
-                </div>
-                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="ct_white_box_shadow h-auto mt-4">
+                        <label for="" class="d-block mb-1 ct_fw_500">Status</label>
+                        <label *ngIf="route_id" class="switch ct_custom_switch1">
+                            <input type="checkbox" [(ngModel)]="status" [ngModelOptions]="{standalone: true}" />
+                            <span class="slider"></span>
+                            <span class="text on">Active</span>
+                            <span class="text off">Inactive</span>
+                        </label>
+                        <!-- <span class="status-label">{{ status ? 'ACTIVE' : 'INACTIVE' }}</span> -->
 
-                    <div cdkDropList class="bus-stops-section" (cdkDropListDropped)="drop($event)">
-                        <div>
-                            <h3 class="ct_fs_20 ct_fw_500 mb-1">Bus Stops</h3>
-                            <p class="mb-0">Add bus stops that this line goes to. Manage bus stops here</p>
+                        <div class="mt-3">
+                            <label for="title" class="mb-1 ct_fw_500">Title</label>
+                            <input id="title" type="text" class="form-control ct_input ct_fs_18" [(ngModel)]="title"
+                                [ngModelOptions]="{standalone: true}" placeholder="Enter Title" />
                         </div>
-
-                        <div class="ct_white_box_shadow h-auto mt-4">
-                            <div *ngFor="let stop of busStops; let i = index" cdkDrag
-                                cdkDragBoundary=".bus-stops-section"
-                                class="form-group mb-4 position-relative overflow-hidden">
-                                <label for="location-{{ i }}">Location {{ i + 1 }}:</label>
-                                <select id="location-{{ i }}"
-                                    class="location-select form-control ct_input ps-4 width_60" [ngModel]="stop.city_id"
-                                    (ngModelChange)="onLocationChange($event, i)" [ngModelOptions]="{standalone: true}"
-                                    [disabled]="!stop.isNew && route_id">
-                                    <option value=null disabled selected>-- Select --</option>
-                                    <option *ngFor="let location of allCities" [value]="location.city_id">
-                                        {{ location.city_name }}
-                                    </option>
-                                </select>
-                                <!-- Only show buttons for new stops -->
-
-                                <div class="action-buttons">
-
-                                    <button class="btn btn-secondary" [class.d-none]="!stop.isNew">
-                                        <i cdkDragHandle class="fa fa-arrows"></i>
-                                    </button>
-
-                                    <button type="button" class="btn btn-danger" [class.d-none]="!stop.isNew"
-                                        (click)="deleteBusStop(i)" aria-label="Delete Stop">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Add Bus Stop Button -->
-                            <button type="button" (click)="addBusStop()" class="ct_blue_btn">
-                                + Add Bus Stop
-                            </button>
+                        <div class="mt-3">
+                            <label for="description" class="mb-1 ct_fw_500">Description</label>
+                            <textarea id="description" rows="5" [(ngModel)]="description"
+                                [ngModelOptions]="{standalone: true}" class="form-control ct_fs_18"
+                                placeholder="Enter Description"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+            <div class="col-lg-6 mb-4 mb-lg-0">
 
-        <!-- Departure Times Section -->
-        <!-- <div class="departure-times-section mt-5 w-50">
+                <div cdkDropList class="bus-stops-section" (cdkDropListDropped)="drop($event)">
+                    <div>
+                        <h3 class="ct_fs_20 ct_fw_500 mb-1">Bus Stops</h3>
+                        <p class="mb-0">Add bus stops that this line goes to. Manage bus stops here</p>
+                    </div>
+
+                    <div class="ct_white_box_shadow h-auto mt-4">
+                        <div *ngFor="let stop of busStops; let i = index" cdkDrag cdkDragBoundary=".bus-stops-section"
+                            class="form-group mb-4 position-relative overflow-hidden">
+                            <label for="location-{{ i }}">Location {{ i + 1 }}:</label>
+                            <select id="location-{{ i }}" class="location-select form-control ct_input ps-4 width_60"
+                                [ngModel]="stop.city_id" (ngModelChange)="onLocationChange($event, i)"
+                                [ngModelOptions]="{standalone: true}" [disabled]="!stop.isNew && route_id">
+                                <option value=null disabled selected>-- Select --</option>
+                                <option *ngFor="let location of allCities" [value]="location.city_id">
+                                    {{ location.city_name }}
+                                </option>
+                            </select>
+                            <!-- Only show buttons for new stops -->
+
+                            <div class="action-buttons">
+
+                                <button class="btn btn-secondary" [class.d-none]="!stop.isNew">
+                                    <i cdkDragHandle class="fa fa-arrows"></i>
+                                </button>
+
+                                <button type="button" class="btn btn-danger" [class.d-none]="!stop.isNew"
+                                    (click)="deleteBusStop(i)" aria-label="Delete Stop">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Add Bus Stop Button -->
+                        <button type="button" (click)="addBusStop()" class="ct_blue_btn">
+                            + Add Bus Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Departure Times Section -->
+    <!-- <div class="departure-times-section mt-5 w-50">
             <h3>Departure Times</h3>
             <div>
                 <label>Departure times</label>
@@ -131,20 +128,19 @@
             </table>
         </div> -->
 
-        <div class="actions mt-3 ms-auto d-flex align-items-center justify-content-end">
-            @if(route_id){
-                <button data-bs-toggle="modal" data-bs-target="#ct_confirmation_modal" class="ct_blue_btn"
-                type="submit">Update</button>
-            } @else {
-                <button (click)="saveBusStops()" class="ct_blue_btn"
-                type="submit">Save</button>
-            }
-           
-            <button (click)="cancel()" type="button" class="ct_blue_btn ct_cancle_btn_3">Cancel</button>
-        </div>
+    <div class="actions mt-3 ms-auto d-flex align-items-center justify-content-end">
+        @if(route_id){
+        <button data-bs-toggle="modal" data-bs-target="#ct_confirmation_modal" class="ct_blue_btn"
+            type="submit">Update</button>
+        } @else {
+        <button (click)="saveBusStops()" class="ct_blue_btn" type="submit">Save</button>
+        }
 
+        <button (click)="cancel()" type="button" class="ct_blue_btn ct_cancle_btn_3">Cancel</button>
     </div>
+
 </div>
+
 
 <div *ngIf="loading">
     <app-loader />
@@ -173,7 +169,8 @@
                         </svg>
                     </div>
                     <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Are you sure?</h4>
-                    <p class="mb-0 text-center ct_fs_18">If any new stop is added in the route then you have to set Departure Time again.</p>
+                    <p class="mb-0 text-center ct_fs_18">If any new stop is added in the route then you have to set
+                        Departure Time again.</p>
 
 
                 </div>
@@ -181,7 +178,7 @@
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal44
-                data-bs-dismiss="modal">Close</button>
+                    data-bs-dismiss="modal">Close</button>
                 <button (click)="saveBusStops()" type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
             </div>
         </div>

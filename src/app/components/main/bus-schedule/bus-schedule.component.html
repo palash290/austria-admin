@@ -1,4 +1,4 @@
-<div class="ct_right_dash_content ct_custom_tab_2">
+<div class="ct_custom_tab_2">
     <div class="mb-4">
         <a routerLink="/home/routes-management" class="ct_back_btn " style="width: fit-content;"><i
                 class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
@@ -104,8 +104,6 @@
                                         <input type="date" class="form-control" />
                                     </div>
                                 </div>
-
-
                            
                                 <div>
                                     <label class="form-label">Recurring</label>
@@ -163,8 +161,7 @@
                                             <select class="form-control ct_input ct_fs_18 "
                                                 (change)="onLineChange($event)" formControlName="line">
                                                 <option value="" disabled>Select</option>
-                                                <option *ngFor="let lan of routeList" [value]="lan.route_id"
-                                                    >
+                                                <option *ngFor="let lan of routeList" [value]="lan.route_id">
                                                     {{ lan.title }}
                                                 </option>
                                             </select>
@@ -262,30 +259,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label  ct_fw_500 mb-1">To</label>
                                                 <input type="date" class="form-control" formControlName="toDate"
                                                     [min]="minDate" />
-                                                <!-- <div class="err_msg"
-                                                *ngIf="form.controls['toDate']?.invalid && form.controls['toDate']?.touched">
-                                                <div *ngIf="form.controls['toDate'].errors?.['required']">To date is
-                                                    required.</div>
-                                            </div> -->
-                                                <!-- <div *ngIf="form.controls['toDate'].invalid && form.controls['toDate'].touched"
-                                                class="err_msg">
-                                                <div *ngIf="form.controls['toDate'].errors?.['required']">
-                                                    This field is required.
-                                                </div>
-                                                <div *ngIf="form.controls['toDate'].errors?.['minDate']">
-                                                    Date cannot be earlier than today.
-                                                </div>
-                                                <div *ngIf="form.controls['toDate'].errors?.['dateGreaterOrEqual']">
-                                                    Date must be equal to or greater than From date.
-                                                </div>
-                                            </div> -->
+
                                                 <div *ngIf="form.controls['toDate'].invalid && form.controls['toDate'].touched"
                                                     class="err_msg">
                                                     <div *ngIf="form.controls['toDate'].errors?.['required']">
@@ -303,7 +283,7 @@
                                 </div>
 
                                 <!-- Recurring Days -->
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label  ct_fw_500 mb-1">Recurrence</label>
                                     <div class="ct_grid_2_flex1">
                                         <div *ngFor="let day of daysOfWeek">
@@ -315,8 +295,36 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div> -->
+
+
+                                <div class="mb-3">
+                                    <label class="form-label ct_fw_500 mb-1">Recurrence</label>
+                                    <div class="ct_grid_2_flex1">
+                                        <div *ngFor="let day of daysOfWeek">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" [formControlName]="day"
+                                                    (change)="onDayChange(day, $event)" />
+                                                <label class="form-check-label" for="{{ day }}">{{ day | titlecase
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
+                                <!-- Display Selected Days and Their Dates -->
+                                <div *ngFor="let day of daysOfWeek">
+                                    <div *ngIf="selectedDaysWithDates[day]">
+                                        <strong>{{ day }} Dates:</strong>
+                                        <ul>
+                                            <li *ngFor="let date of selectedDaysWithDates[day]">{{ date }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+
+                                
                                 <!-- Action Buttons -->
                                 <!-- [disabled]="form.invalid" -->
                                 <div class="mt-3 d-flex align-items-center gap-3">
@@ -354,9 +362,24 @@
                                                 <!-- Set Arrival Time as N/A for the first index -->
                                                 <ng-container *ngIf="first; else arrivalInput">N/A</ng-container>
                                                 <ng-template #arrivalInput>
-                                                    <input type="time" class="form-control w-auto"
+                                                    <!-- <input type="time" class="form-control w-auto"
                                                         [(ngModel)]="stop.arrival_time"
                                                         (ngModelChange)="updateTicketPrice(stop, i, '')" />
+
+                                                    <input type="date" class="form-control w-auto"
+                                                        [(ngModel)]="stop.arrival_date"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')" /> -->
+
+                                                    <!-- <input type="date" class="form-control w-auto"
+                                                        [(ngModel)]="stop.arrival_date"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')" /> -->
+
+                                                    <input type="time" class="form-control w-auto"
+                                                        [(ngModel)]="stop.arrival_time"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')"
+                                                        />
+
+
                                                 </ng-template>
                                             </td>
                                             <td style="width: 122px;">
@@ -397,6 +420,11 @@
                                                     <input type="time" class="form-control" style="width: 122px;"
                                                         [(ngModel)]="stop.departure_time" name="departureTime{{ i }}"
                                                         (ngModelChange)="updateTicketPrice(stop, i, '')" />
+
+                                                    <!-- <input type="date" class="form-control" style="width: 122px;"
+                                                        [(ngModel)]="stop.departure_date" name="departureTime{{ i }}"
+                                                        (ngModelChange)="updateTicketPrice(stop, i, '')" /> -->
+
                                                     <span *ngIf="last">N/A</span>
                                                 </div>
                                                 } @else if (last) {

@@ -1,17 +1,16 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SharedService } from '../../../services/shared.service';
 import { ErrorMessageService } from '../../../services/error-message.service';
-import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../loader/loader.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-category-management',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent, RouterLink],
   templateUrl: './category-management.component.html',
   styleUrl: './category-management.component.css'
 })
@@ -34,6 +33,19 @@ export class CategoryManagementComponent {
   newTicketTypes: any;
   status: boolean = true;
   route_id: any;
+  isSingle = '';
+
+  @Input() routeId: string = '';
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['routeId'] && changes['routeId'].currentValue) {
+      console.log('Received route_id:', this.routeId);
+      this.route_id = this.routeId
+      this.getTicketTypeById()
+      this.initForm();
+      this.addRouteById1();
+    }
+  }
 
   constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService, private router: Router, private activRout: ActivatedRoute) { }
 
@@ -41,10 +53,11 @@ export class CategoryManagementComponent {
     this.activRout.queryParams.subscribe({
       next: (params) => {
         this.route_id = params['route_id'];
+        this.isSingle = params['isSingle'];
         // if (this.route_id) {
         //   this.addTicketType(this.route_id)
         // }
-        console.log(this.route_id);
+        //console.log(this.route_id);
       }
     })
     this.getTicketTypeById()
@@ -251,6 +264,7 @@ export class CategoryManagementComponent {
 
   ngOnDestroy() {
     this.updatedTickets = [];
+    this.isSingle = '';
   }
 
   // Update all ticket prices
@@ -429,7 +443,6 @@ export class CategoryManagementComponent {
     this.selectedBusId = selectedId;
     console.log('Selected austriaCityId ID:', this.selectedBusId);
     this.getTicketTypeById(selectedId);
-
   }
 
 

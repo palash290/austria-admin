@@ -525,3 +525,11 @@ section.ct_login_main_bg {
 .select2-container--bootstrap-5.select2-container--open .select2-selection {
   box-shadow: unset;
 }
+
+.ct_close_sidebar{
+  display: none;
+}
+
+.ct_menu_bar{
+  display: none !important;
+}

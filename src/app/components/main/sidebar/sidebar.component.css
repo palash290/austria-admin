@@ -1,0 +1,30 @@
+.ct_dropdown_list_12 a.dropdown-item {
+    color: #000 !important;
+    padding-block: 0px;
+}
+.ct_dropdown_list_12{
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 14px;
+    display: none;
+}
+.ct_dropdown_list_12.ct_show{
+    display: block;
+}
+.ct_dropdown_list_12 li{
+    padding-block: 10px;
+}
+.ct_dropdown_list_12 li + li{
+margin-top: 10px;
+}
+.ct_dropdown_list_12 li.active a{
+    color: #fff !important;
+}
+.ct_dropdown_list_12{
+    padding-inline: 10px;
+}
+.ct_dropdown_list_12 li:focus .dropdown-item, .ct_dropdown_list_12 li:hover .dropdown-item{
+    background-color: transparent;
+    color: #fff !important;
+}

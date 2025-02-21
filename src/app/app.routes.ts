@@ -32,6 +32,8 @@ export const routes: Routes = [
             { path: 'category-management', loadComponent: () => import('./components/main/category-management/category-management.component').then(m => m.CategoryManagementComponent), canActivate: [AuthGuard] },
             { path: 'new-route', loadComponent: () => import('./components/main/routes-management/new-route/new-route.component').then(m => m.NewRouteComponent), canActivate: [AuthGuard] },
             { path: 'edit-city', loadComponent: () => import('./components/main/routes-management/edit-city/edit-city.component').then(m => m.EditCityComponent), canActivate: [AuthGuard] },
+            { path: 'price-management', loadComponent: () => import('./components/main/price-management/price-management.component').then(m => m.PriceManagementComponent), canActivate: [AuthGuard] },
+            { path: 'add-booking', loadComponent: () => import('./components/main/booking-management/add-booking/add-booking.component').then(m => m.AddBookingComponent), canActivate: [AuthGuard] },
             //category-management
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'user-profile/:id', loadComponent: () => import('./components/user/user-profile/user-profile.component').then(m => m.UserProfileComponent) },

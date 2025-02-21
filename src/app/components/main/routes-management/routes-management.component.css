@@ -102,3 +102,47 @@ button#editBtn {
   padding: 3px 9px;
   border-radius: 3px;
 }
+
+.p-15 {
+  padding: 8px 15px;
+}
+
+
+.ct_blue_btn1 {
+  background-color: var(--blue);
+  outline: none;
+  padding: 8px 26px;
+  border-radius: 8px;
+  border: 1px solid var(--blue);
+  transition: 0.4s ease all;
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  display: block;
+  font-weight: 500;
+  color: #fff;
+  overflow: hidden;
+}
+
+.ct_blue_btn1:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #da3434;
+  width: 0%;
+  height: 100%;
+  transition: 0.4s ease all;
+  z-index: -1;
+}
+
+/* .ct_outline_btn_blue:hover{
+  color: #fff;
+} */
+.ct_blue_btn1:hover:before {
+  width: 100%;
+}
+
+.ct_blue_btn1:hover {
+  color: #f7f7f7 !important;
+}

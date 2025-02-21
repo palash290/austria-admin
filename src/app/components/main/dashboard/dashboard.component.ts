@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [HeaderComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -33,7 +33,6 @@ export class DashboardComponent {
         this.driverCount = resp.data.driverCount;
         this.routeCount = resp.data.routeCount;
         if (resp.success && resp.data.userList) {
-          // Extract all buses from the bus schedule result
           this.buses = resp.data.userList
           console.log('Buses:', this.buses);
         } else {

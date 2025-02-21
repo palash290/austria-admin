@@ -10,7 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-out-of-service',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './out-of-service.component.html',
   styleUrl: './out-of-service.component.css'
 })
@@ -65,7 +65,7 @@ export class OutOfServiceComponent {
     this.service.getApi(`get-all-closures-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}`).subscribe({
       next: resp => {
         this.data = resp.data.routeClosures;
-        this.totalPages = resp.data.pagination?.totalPages
+        this.totalPages = resp.data.pagination?.totalPages;
       },
       error: error => {
         console.log(error.message);
@@ -139,7 +139,7 @@ export class OutOfServiceComponent {
   }
 
   DeletePopUp(id: any) {
-    this.deleteId = id
+    this.deleteId = id;
   }
 
   deleteData() {
@@ -152,7 +152,7 @@ export class OutOfServiceComponent {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
           this.getRoutes();
-          this.toastr.success(resp.message)
+          this.toastr.success(resp.message);
         } else {
           this.toastr.warning('Something went wrong!');
           this.getRoutes();
@@ -206,7 +206,7 @@ export class OutOfServiceComponent {
 
   getErrorMessage(controlName: any): string {
     let control: any = this.Form.get(controlName);
-    return this.errorMessageService.getErrorMessage(control)
+    return this.errorMessageService.getErrorMessage(control);
   }
 
   minDate: any;

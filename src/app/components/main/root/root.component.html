@@ -1,4 +1,8 @@
-<div class="ct_dashboard_main">
-    <app-sidebar />
-    <router-outlet />
+<div class="ct_dashboard_main" [ngClass]="{ 'ct_side_show': isMenuActive }">
+    <app-sidebar (toggleEvent)="closeMenu($event)" />
+    <div class="ct_right_dash_content">
+        <app-header (toggleEvent)="openMenu($event)" />
+        <router-outlet />
+    </div>
 </div>
+<!-- ct_side_show -->

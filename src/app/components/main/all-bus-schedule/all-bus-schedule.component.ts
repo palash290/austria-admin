@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-all-bus-schedule',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './all-bus-schedule.component.html',
   styleUrl: './all-bus-schedule.component.css'
 })

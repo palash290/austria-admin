@@ -58,6 +58,15 @@ export class SharedService {
     return this.http.post(this.baseUrl + url, data, { headers: headers })
   }
 
+  postAPIUser<T, U>(url: string, data: U): Observable<T> {
+    const authToken = localStorage.getItem('austriaAdminToken')
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${authToken}`
+    })
+    return this.http.post<T>(url, data, { headers: headers })
+  };
+
   postData(url: any, data: any): Observable<any> {
     const authToken = localStorage.getItem('austriaAdminToken')
     const headers = new HttpHeaders({
@@ -82,6 +91,7 @@ export class SharedService {
     });
     return this.http.delete(this.baseUrl + url, { headers: headers })
   };
+
 
   private refreshSidebarSource = new BehaviorSubject<void | null>(null);
   refreshSidebar$ = this.refreshSidebarSource.asObservable();

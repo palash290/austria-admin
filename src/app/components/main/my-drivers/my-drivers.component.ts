@@ -10,7 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-my-drivers',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './my-drivers.component.html',
   styleUrl: './my-drivers.component.css'
 })
@@ -100,7 +100,7 @@ export class MyDriversComponent {
     this.service.getApi(`get-all-drivers-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
       next: resp => {
         this.data = resp.data.drivers;
-        this.totalPages = resp.data.pagination?.totalPages
+        this.totalPages = resp.data.pagination?.totalPages;
       },
       error: error => {
         console.log(error.message);
@@ -165,7 +165,6 @@ export class MyDriversComponent {
   updateId: any;
 
   patchUpdate(details: any) {
-    // debugger
     this.updateDet = details;
     this.eventImage = details.driver_profile_picture;
     this.updateId = details.driver_id;
@@ -237,7 +236,7 @@ export class MyDriversComponent {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
           this.getDrivers();
-          this.toastr.success(resp.message)
+          this.toastr.success(resp.message);
           this.btnDelLoader = false;
         } else {
           this.btnDelLoader = false;
@@ -250,12 +249,12 @@ export class MyDriversComponent {
 
   getErrorMessage(controlName: any): string {
     let control: any = this.form.get(controlName);
-    return this.errorMessageService.getErrorMessage(control)
+    return this.errorMessageService.getErrorMessage(control);
   }
 
   getEditErrorMessage(controlName: any): string {
     let control: any = this.editForm.get(controlName);
-    return this.errorMessageService.getErrorMessage(control)
+    return this.errorMessageService.getErrorMessage(control);
   }
 
   changePage(page: number) {
@@ -271,15 +270,3 @@ export class MyDriversComponent {
   }
 
 }
-// "driver_id": 1,
-// "driver_name": "Rohan singh update",
-// "driver_license_number": "123456789532",
-// "driver_contact_number": "9849876543",
-// "driver_address": null,
-// "driver_dob": null,
-// "is_active": true,
-// "driver_profile_picture": null,
-// "driver_rating": 0,
-// "license_expiry_date": null,
-// "created_at": "2024-12-23T11:40:36.453Z",
-// "updated_at": "2024-12-23T11:49:09.000Z"

@@ -12,7 +12,7 @@ declare var google: any;
 @Component({
   selector: 'app-routes-management',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, RouterLink, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, LoaderComponent],
   templateUrl: './routes-management.component.html',
   styleUrl: './routes-management.component.css'
 })
@@ -37,11 +37,15 @@ export class RoutesManagementComponent {
   @ViewChild('closeModal') closeModal!: ElementRef;
   @ViewChild('closeModal1') closeModal1!: ElementRef;
   @ViewChild('closeModal12') closeModal12!: ElementRef;
+  @ViewChild('closeModalArchive') closeModalArchive!: ElementRef;
+
+
+  showArchived = false;
 
   stopName: any;
   terminalName: any;
   allRoutes: any;
-  lines: any
+  lines: any;
   showMessage(): void {
     this.toastr.create('success', 'This is a success message!', { nzDuration: 20000 }); // 20 seconds
   }
@@ -53,7 +57,6 @@ export class RoutesManagementComponent {
     // this.getAustriaCityName();
     // this.getUkraneCityName();
     this.getAllCity();
-
   }
 
   getAllCity() {
@@ -84,14 +87,14 @@ export class RoutesManagementComponent {
   isSingleLatLog: boolean = false;
 
   getLatLog(latLog: any) {
-    if(this.isSingleLatLog && JSON.stringify(this.singleLatLog) == JSON.stringify(latLog)){
+    if (this.isSingleLatLog && JSON.stringify(this.singleLatLog) == JSON.stringify(latLog)) {
       this.isSingleLatLog = false;
       this.initMap();
-    }else{
+    } else {
       this.isSingleLatLog = true;
-    // this.isSingleLatLog = !this.isSingleLatLog;
-    this.singleLatLog = latLog;
-    this.initMap();
+      // this.isSingleLatLog = !this.isSingleLatLog;
+      this.singleLatLog = latLog;
+      this.initMap();
     }
   }
 
@@ -171,10 +174,9 @@ export class RoutesManagementComponent {
           marker.addListener("click", () => {
             infoWindow.setContent(`
             <div>
-   
               <h4>${city.stop_city.city_name}</h4>
-           <button id="editBtn" class="custom-edit-btn">Edit</button>
-           <button id="deleteBtn" class="custom-delete-btn">Delete</button>
+              <button id="editBtn" class="custom-edit-btn">Edit</button>
+              <button id="deleteBtn" class="custom-delete-btn">Delete</button>
             </div>
           `);
             infoWindow.open(map, marker);
@@ -184,7 +186,6 @@ export class RoutesManagementComponent {
               document.getElementById("deleteBtn")?.addEventListener("click", () => this.deleteCity(city.stop_city.city_id));
             }, 100);
           });
-
         }
       });
     } else {
@@ -204,7 +205,6 @@ export class RoutesManagementComponent {
           marker.addListener("click", () => {
             infoWindow.setContent(`
             <div>
-           
               <h4>${city.city_name}</h4>
               <button id="editBtn" onclick="editCity('${city.city_name}'">Edit</button>
               <button id="deleteBtn" onclick="deleteCity('${city.city_name}')">Delete</button>
@@ -216,9 +216,7 @@ export class RoutesManagementComponent {
               document.getElementById("editBtn")?.addEventListener("click", () => this.editCity(city.city_id));
               document.getElementById("deleteBtn")?.addEventListener("click", () => this.deleteCity(city.city_id));
             }, 100);
-
           });
-
         }
       });
     }
@@ -229,7 +227,7 @@ export class RoutesManagementComponent {
   }
 
   editCity(cityName: string): void {
-    console.log("Edit clicked for:", cityName);
+    //console.log("Edit clicked for:", cityName);
     this.router.navigate(['/home/edit-city'], { queryParams: { cityName } });
   }
 
@@ -311,7 +309,7 @@ export class RoutesManagementComponent {
   singleLine: any;
   reverseLine: any;
   copyTitle: any;
-  copyDescription: any
+  copyDescription: any;
 
 
   addRouteById(id?: any) {
@@ -345,8 +343,15 @@ export class RoutesManagementComponent {
 
   CopyRouteId: any;
 
-  getCopyRouteId(route_id: any){
+  getCopyRouteId(route_id: any) {
     this.CopyRouteId = route_id;
+  }
+
+  archiveRouteId: any;
+
+  getArchiveRouteId(route_id: any) {
+    //debugger
+    this.archiveRouteId = route_id;
   }
 
   copyRoute() {
@@ -363,7 +368,7 @@ export class RoutesManagementComponent {
         next: res => {
           if (res.success == true) {
             this.router.navigate(['/home/routes-management'])
-            //  this.allTerminalsList = res.data;
+            // this.allTerminalsList = res.data;
             this.toastr.success(res.message);
             this.getRoutes();
             this.isSingleLatLog = false;
@@ -387,13 +392,13 @@ export class RoutesManagementComponent {
   }
 
   reverseRoute() {
-    this.copyTitle = this.copyTitle?.trim(); // Trim spaces
-  const trimmedTitle = this.copyTitle;
+    this.copyTitle = this.copyTitle?.trim();
+    const trimmedTitle = this.copyTitle;
 
-  if (!trimmedTitle) {
-    this.toastr.error('Title cannot be empty');
-    return;
-  }
+    if (!trimmedTitle) {
+      this.toastr.error('Title cannot be empty');
+      return;
+    }
     const formData = new URLSearchParams();
     formData.append('title', trimmedTitle);
     formData.append('route_stops', this.reverseLine.toString());
@@ -425,7 +430,6 @@ export class RoutesManagementComponent {
           }
         }
       });
-
   };
 
 
@@ -434,48 +438,115 @@ export class RoutesManagementComponent {
     this.isTouched[fieldName] = true;
   }
 
+  addToArchives() {
+    const formData = new URLSearchParams();
+    formData.append('route_id', this.archiveRouteId)
+    formData.append('is_delete', 'true')
+    let url = 'update-delete-route-status-by-id';
+
+    this.service
+      .postAPI(url, formData.toString())
+      .subscribe({
+        next: res => {
+          if (res.success == true) {
+            this.toastr.success(res.message);
+            this.getRoutes();
+            this.closeModalArchive.nativeElement.click();
+          } else {
+            this.toastr.warning(res.message);
+          }
+        },
+        error: error => {
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+        }
+      });
+  };
 
 
+  removeToArchives(id: any) {
+    const formData = new URLSearchParams();
+    formData.append('route_id', id)
+    formData.append('is_delete', 'false')
+    let url = 'update-delete-route-status-by-id';
+
+    this.service
+      .postAPI(url, formData.toString())
+      .subscribe({
+        next: res => {
+          if (res.success == true) {
+            this.toastr.success(res.message);
+            this.getArchivesRoutes();
+            this.closeModalArchive.nativeElement.click();
+            //this.showArchived = false;
+          } else {
+            this.toastr.warning(res.message);
+          }
+        },
+        error: error => {
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+        }
+      });
+  };
 
 
+  toggleArchive() {
+    this.showArchived = !this.showArchived;
+    this.isSingleLatLog = false;
+    this.initMap();
+    if (this.showArchived == true) {
+      this.getArchivesRoutes();
+    } else {
+      this.getRoutes();
+    }
+  }
 
-
-
-
-
-
-
-
-
-  getAustriaCityName() {
-
-    const formURlData = new URLSearchParams();
-    formURlData.set('country_name', 'Austria');
-
-    this.service.postAPI('get-cityby-countryname', formURlData.toString()).subscribe(response => {
-      if (response.success) {
-        this.austriaCity = response.data;
-        this.selectedAustriaCityId = this.austriaCity[0].city_id;
-        this.selectedAustriaCityName = this.austriaCity[0].city_name;
-        this.getLetLongAustria();
+  getArchivesRoutes() {
+    //debugger
+    this.service.getApi(`get-all-deleted-routes`).subscribe({
+      next: resp => {
+        this.lines = resp.data;
+      },
+      error: error => {
+        console.log(error.message);
       }
     });
   }
 
-  getUkraneCityName() {
-
-    const formURlData = new URLSearchParams();
-    formURlData.set('country_name', 'Ukraine');
-
-    this.service.postAPI('get-cityby-countryname', formURlData.toString()).subscribe(response => {
-      if (response.success) {
-        this.ukraneCity = response.data;
-        this.selectedUkraneCityId = this.ukraneCity[0].city_id;
-        this.selectedUkraneCityName = this.ukraneCity[0].city_name;
-        this.getLetLongUkrane();
-      }
-    });
+  goToEditSchedule(route_id: any) {
+    if (!this.showArchived) {
+      this.router.navigate(['/home/bus-schedule'], {
+        queryParams: {
+          route_id: route_id,
+          isEdit: 'true'
+        }
+      });
+    }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   letLongAustria: any;
   letLongUkrane: any;
@@ -537,121 +608,151 @@ export class RoutesManagementComponent {
     }
   }
 
-  addRoute() {
-    debugger
-    if (this.selectedOption == '1') {
-      this.loading = true;
-      const formURlData = new URLSearchParams();
-      //formURlData.set('route_direction', `Austria to Ukraine`);
-      formURlData.set('pickup_point', this.selectedAustriaCityId);
-      formURlData.set('dropoff_point', this.selectedUkraneCityId);
-      //formURlData.set('fixed_price', this.price);
-      //formURlData.set('start_location_lat_long', `${this.letLongAustria.lat}, ${this.letLongAustria.lng}`);
-      //formURlData.set('end_location_lat_long', `${this.letLongUkrane.lat}, ${this.letLongUkrane.lng}`);
+  // getAustriaCityName() {
 
-      this.service.postAPI('create-route', formURlData.toString()).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            this.letLongUkrane = response.data;
-            this.closeModal.nativeElement.click();
-            this.toastr.success(response.message);
-            this.getRoutes();
-            this.loading = false;
-          } else {
-            this.toastr.warning(response.message);
-            this.loading = false;
-          }
-        },
-        error: (error) => {
-          this.loading = false;
-          if (error.error.message) {
-            this.toastr.error(error.error.message);
-          } else {
-            this.toastr.error('Something went wrong!');
-          }
-        }
-      });
-    } else {
-      this.loading = true;
-      const formURlData = new URLSearchParams();
-      //formURlData.set('route_direction', `Ukraine to Austria`);
-      formURlData.set('pickup_point', this.selectedUkraneCityId);
-      formURlData.set('dropoff_point', this.selectedAustriaCityId);
-      //formURlData.set('fixed_price', this.price);
-      //formURlData.set('start_location_lat_long', `${this.letLongUkrane.lat}, ${this.letLongUkrane.lng}`);
-      //formURlData.set('end_location_lat_long', `${this.letLongAustria.lat}, ${this.letLongAustria.lng}`);
-      this.service.postAPI('create-route', formURlData.toString()).subscribe({
-        next: (response) => {
-          if (response.success) {
-            //this.letLongUkrane = response.data;
-            this.closeModal.nativeElement.click();
-            this.toastr.success(response.message);
-            this.getRoutes();
-            this.loading = false;
-          } else {
-            this.toastr.warning(response.message);
-            this.loading = false;
-          }
-        },
-        error: (error) => {
-          this.loading = false;
-          if (error.error.message) {
-            this.toastr.error(error.error.message);
-          } else {
-            this.toastr.error('Something went wrong!');
-          }
-        }
-      });
-    }
-  }
+  //   const formURlData = new URLSearchParams();
+  //   formURlData.set('country_name', 'Austria');
 
-  updateDet: any;
-  updateId: any;
-  updatePrice: any;
+  //   this.service.postAPI('get-cityby-countryname', formURlData.toString()).subscribe(response => {
+  //     if (response.success) {
+  //       this.austriaCity = response.data;
+  //       this.selectedAustriaCityId = this.austriaCity[0].city_id;
+  //       this.selectedAustriaCityName = this.austriaCity[0].city_name;
+  //       this.getLetLongAustria();
+  //     }
+  //   });
+  // }
 
-  patchUpdate(details: any) {
-    this.updateDet = details;
-    this.updatePrice = details.fixed_price;
-    this.updateId = details.route_id;
-  }
+  // getUkraneCityName() {
 
-  @ViewChild('closeModal21') closeModal21!: ElementRef;
+  //   const formURlData = new URLSearchParams();
+  //   formURlData.set('country_name', 'Ukraine');
 
-  deleteRoute() {
-    const formURlData = new URLSearchParams();
-    formURlData.set('route_id', this.updateId);
-    //this.btnDelLoader = true;
-    this.service.postAPI(`delete-route`, formURlData.toString()).subscribe({
-      next: (resp) => {
-        if (resp.success) {
-          this.closeModal21.nativeElement.click();
-          this.toastr.success(resp.message)
-          this.getRoutes();
-          //this.btnDelLoader = false;
-        } else {
-          //this.btnDelLoader = false;
-          this.toastr.warning('Something went wrong!');
-          this.getRoutes();
-        }
-      },
-    });
-  }
+  //   this.service.postAPI('get-cityby-countryname', formURlData.toString()).subscribe(response => {
+  //     if (response.success) {
+  //       this.ukraneCity = response.data;
+  //       this.selectedUkraneCityId = this.ukraneCity[0].city_id;
+  //       this.selectedUkraneCityName = this.ukraneCity[0].city_name;
+  //       this.getLetLongUkrane();
+  //     }
+  //   });
+  // }
 
-  goToSchedule(route_id: any, pickupId: any, dropoffId: any) {
-    this.router.navigateByUrl(`/home/bus-schedule/${route_id}/${pickupId}/${dropoffId}`)
-  }
+  // addRoute() {
+  //   debugger
+  //   if (this.selectedOption == '1') {
+  //     this.loading = true;
+  //     const formURlData = new URLSearchParams();
+  //     //formURlData.set('route_direction', `Austria to Ukraine`);
+  //     formURlData.set('pickup_point', this.selectedAustriaCityId);
+  //     formURlData.set('dropoff_point', this.selectedUkraneCityId);
+  //     //formURlData.set('fixed_price', this.price);
+  //     //formURlData.set('start_location_lat_long', `${this.letLongAustria.lat}, ${this.letLongAustria.lng}`);
+  //     //formURlData.set('end_location_lat_long', `${this.letLongUkrane.lat}, ${this.letLongUkrane.lng}`);
 
-  changePage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.getRoutes();
-  }
+  //     this.service.postAPI('create-route', formURlData.toString()).subscribe({
+  //       next: (response: any) => {
+  //         if (response.success) {
+  //           this.letLongUkrane = response.data;
+  //           this.closeModal.nativeElement.click();
+  //           this.toastr.success(response.message);
+  //           this.getRoutes();
+  //           this.loading = false;
+  //         } else {
+  //           this.toastr.warning(response.message);
+  //           this.loading = false;
+  //         }
+  //       },
+  //       error: (error) => {
+  //         this.loading = false;
+  //         if (error.error.message) {
+  //           this.toastr.error(error.error.message);
+  //         } else {
+  //           this.toastr.error('Something went wrong!');
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     this.loading = true;
+  //     const formURlData = new URLSearchParams();
+  //     //formURlData.set('route_direction', `Ukraine to Austria`);
+  //     formURlData.set('pickup_point', this.selectedUkraneCityId);
+  //     formURlData.set('dropoff_point', this.selectedAustriaCityId);
+  //     //formURlData.set('fixed_price', this.price);
+  //     //formURlData.set('start_location_lat_long', `${this.letLongUkrane.lat}, ${this.letLongUkrane.lng}`);
+  //     //formURlData.set('end_location_lat_long', `${this.letLongAustria.lat}, ${this.letLongAustria.lng}`);
+  //     this.service.postAPI('create-route', formURlData.toString()).subscribe({
+  //       next: (response) => {
+  //         if (response.success) {
+  //           //this.letLongUkrane = response.data;
+  //           this.closeModal.nativeElement.click();
+  //           this.toastr.success(response.message);
+  //           this.getRoutes();
+  //           this.loading = false;
+  //         } else {
+  //           this.toastr.warning(response.message);
+  //           this.loading = false;
+  //         }
+  //       },
+  //       error: (error) => {
+  //         this.loading = false;
+  //         if (error.error.message) {
+  //           this.toastr.error(error.error.message);
+  //         } else {
+  //           this.toastr.error('Something went wrong!');
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
-  changePageSize(newPageSize: number) {
-    this.pageSize = newPageSize;
-    this.currentPage = 1;
-    this.getRoutes();
-  }
+  // updateDet: any;
+  // updateId: any;
+  // updatePrice: any;
+
+  // patchUpdate(details: any) {
+  //   this.updateDet = details;
+  //   this.updatePrice = details.fixed_price;
+  //   this.updateId = details.route_id;
+  // }
+
+  // @ViewChild('closeModal21') closeModal21!: ElementRef;
+
+  // deleteRoute() {
+  //   const formURlData = new URLSearchParams();
+  //   formURlData.set('route_id', this.updateId);
+  //   //this.btnDelLoader = true;
+  //   this.service.postAPI(`delete-route`, formURlData.toString()).subscribe({
+  //     next: (resp) => {
+  //       if (resp.success) {
+  //         this.closeModal21.nativeElement.click();
+  //         this.toastr.success(resp.message)
+  //         this.getRoutes();
+  //         //this.btnDelLoader = false;
+  //       } else {
+  //         //this.btnDelLoader = false;
+  //         this.toastr.warning('Something went wrong!');
+  //         this.getRoutes();
+  //       }
+  //     },
+  //   });
+  // }
+
+  // goToSchedule(route_id: any, pickupId: any, dropoffId: any) {
+  //   this.router.navigateByUrl(`/home/bus-schedule/${route_id}/${pickupId}/${dropoffId}`)
+  // }
+
+  // changePage(page: number) {
+  //   if (page < 1 || page > this.totalPages) return;
+  //   this.currentPage = page;
+  //   this.getRoutes();
+  // }
+
+  // changePageSize(newPageSize: number) {
+  //   this.pageSize = newPageSize;
+  //   this.currentPage = 1;
+  //   this.getRoutes();
+  // }
 
 
 }

@@ -10,7 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-bus-list',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
   templateUrl: './bus-list.component.html',
   styleUrl: './bus-list.component.css'
 })
@@ -82,7 +82,7 @@ export class BusListComponent {
     this.service.getApi(`get-all-buses-by-limit-search?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
       next: resp => {
         this.data = resp.data.buses;
-        this.totalPages = resp.data.pagination?.totalPages
+        this.totalPages = resp.data.pagination?.totalPages;
       },
       error: error => {
         console.log(error.message);
@@ -215,7 +215,7 @@ export class BusListComponent {
         if (resp.success) {
           this.closeModal2.nativeElement.click();
           this.getBuses();
-          this.toastr.success(resp.message)
+          this.toastr.success(resp.message);
           this.btnDelLoader = false;
         } else {
           this.btnDelLoader = false;
@@ -262,7 +262,6 @@ export class BusListComponent {
   selectedBus: any;
 
   onToggleBusStatus(bus: any) {
-    //debugger
     this.selectedBus = bus;
     this.confirmationMessage = bus.is_active == true
       ? 'You want to deactivate this bus!'
@@ -293,8 +292,6 @@ export class BusListComponent {
       }
     });
   }
-
-
 
 
 }

@@ -1,0 +1,167 @@
+<div class="container">
+    <h2>Booking Details</h2>
+
+    <div class="form-group">
+        <label>Status</label>
+        <select>
+            <option>Pending</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" class="form-control ct_input" [(ngModel)]="date1" required>
+        </div>
+        <div class="form-group">
+            <label>From</label>
+            <select class="form-control w-auto" (change)="onFromChange($event)">
+                <option disabled selected value="">All</option>
+                <option *ngFor="let lan of allCityFrom" [value]="lan.city_id">{{lan.city_name}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>To</label>
+            <select class="form-control w-auto" (change)="onToChange($event)" [disabled]="selectedFromId == ''">
+                <option disabled selected value="">All</option>
+                <option *ngFor="let lan of allCityTo" [value]="lan.city_id">{{lan.city_name}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Bus</label>
+            <select class="form-control w-auto" (change)="onBusChange($event)">
+                <option disabled selected value="">All</option>
+                <option *ngFor="let lan of allBuses" [value]="lan.route.route_id">{{lan.route.title}}
+                </option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- <h3>Ticket Types</h3>
+    <div class="form-row">
+        <div class="form-group" *ngFor="let ticketType of ticketTypes; let i = index">
+            <label>{{ ticketType.label }}</label>
+            <select>
+                <option *ngFor="let num of number_of_seats">{{ num }}</option>
+            </select>
+            <span>x {{ ticketType.price }} €</span>
+        </div>
+    </div> -->
+
+
+    <h3>Ticket Types</h3>
+    <div class="form-row">
+        <div class="form-group" *ngFor="let ticketType of ticketTypes; let i = index">
+            <label>{{ ticketType.label }}</label>
+            <select [(ngModel)]="ticketQuantities[ticketType.label]" (change)="onTicketQuantityChange()">
+                <option *ngFor="let num of getSeatOptions(ticketType.label)" [value]="num">{{ num }}</option>
+            </select>
+            <span>x {{ ticketType.price }} €</span>
+        </div>
+    </div>
+
+    <p>Remaining Seats: {{ remaining_seats }}</p>
+
+
+    <h3>Seats</h3>
+    <div class="custom-dropdown" [class.open]="dropdownOpen">
+        <div class="dropdown-toggle" (click)="toggleDropdown()">
+            {{ selectedSeats.length ? selectedSeats.join(', ') : 'Select seats' }}
+        </div>
+        <div class="" *ngIf="dropdownOpen">
+            <div class="dropdown-item" *ngFor="let seat of seatOptions" (click)="toggleSeatSelection(seat)"
+                [class.selected]="selectedSeats.includes(seat)">
+                {{ seat }}
+            </div>
+        </div>
+    </div>
+
+    <p>Selected Seats: {{ selectedSeats.length }}</p>
+    <p>Remaining Seats: {{ number_of_seats - selectedSeats.length }}</p>
+
+
+    <!-- <a class="link">View seats list</a> -->
+
+    <!-- <h3>Price</h3>
+    <div class="form-group">
+        <label>Payment method</label>
+        <select>
+            <option>-- Choose --</option>
+        </select>
+    </div> -->
+
+
+    <h3>Price</h3>
+    <div class="form-group w-50">
+        <label>Payment method</label>
+        <select>
+            <option disabled selected>-- Choose --</option>
+            <option>Bank</option>
+            <option>Cash</option>
+            <option>PayPal</option>
+        </select>
+    </div>
+
+    <div class="price-details">
+        <div class="price-box">
+            <label>Subtotal</label>
+            <div class="input-wrapper">
+                <span>€</span>
+                <input type="text" [value]="subtotal" disabled>
+            </div>
+        </div>
+        <div class="price-box">
+            <label>Tax</label>
+            <div class="input-wrapper">
+                <span>€</span>
+                <input type="text" value="0" disabled>
+            </div>
+        </div>
+        <div class="price-box">
+            <label>Total</label>
+            <div class="input-wrapper">
+                <span>€</span>
+                <input type="text" [value]="subtotal" disabled>
+            </div>
+        </div>
+        <div class="price-box">
+            <label>Deposit</label>
+            <div class="input-wrapper">
+                <span>€</span>
+                <input type="text" [value]="subtotal" disabled>
+            </div>
+        </div>
+    </div>
+
+
+    <h3 class="mt-5">Ticket Details</h3>
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Ticket</th>
+                    <th>Seat</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ticket of expandedTicketList; let i = index">
+                    <td>{{ ticket.ticketType }} #{{ i + 1 }}</td>
+                    <td>
+                        <select id="seat-{{i}}" (change)="checkDuplicateSeats($event, i)">
+                            <option disabled selected value="">--Select a seat--</option>
+                            <option *ngFor="let seat of selectedSeats" [value]="seat">{{ seat }}</option>
+                        </select>
+                    </td>
+
+                    <td><input type="text" [(ngModel)]="ticket.passengerName" placeholder="Type a passenger name"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

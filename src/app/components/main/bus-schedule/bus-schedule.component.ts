@@ -72,6 +72,44 @@ export class BusScheduleComponent {
     this.toggleDateValidators(this.form.get('status')?.value);
   }
 
+
+  selectedDaysWithDates: { [key: string]: string[] } = {};
+
+  onDayChange(day: string, event: any) {
+    if (event.target.checked) {
+      this.selectedDaysWithDates[day] = this.getDatesForDay(day);
+    } else {
+      delete this.selectedDaysWithDates[day];
+    }
+  }
+
+  getDatesForDay(day: string): string[] {
+    const daysMap: { [key: string]: number } = {
+      'Sunday': 1, 'Monday': 2, 'Tuesday': 3, 'Wednesday': 4,
+      'Thursday': 5, 'Friday': 6, 'Saturday': 7
+    };
+
+    const selectedDayIndex = daysMap[day];
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const dates: string[] = [];
+
+    // Start from the 1st of the month
+    let date = new Date(currentYear, currentMonth, 1);
+
+    while (date.getMonth() === currentMonth) {
+      if (date.getDay() === selectedDayIndex) {
+        dates.push(date.toISOString().split('T')[0]); // Format: YYYY-MM-DD
+      }
+      date.setDate(date.getDate() + 1);
+    }
+    return dates;
+  }
+
+
+
+
   minDate: any;
 
   dateValidation() {
@@ -314,7 +352,6 @@ export class BusScheduleComponent {
   }
 
 
-
   updatedTickets: any[] = []; // Array to track updated ticket prices
 
   updateTicketPrice(stop: any, index: any, newValue: any) {
@@ -324,7 +361,6 @@ export class BusScheduleComponent {
     }
 
     this.updateDepartureTime(index)
-    //debugger
 
     // Update the `updatedTickets` array for the corresponding `stop_id`
     const ticketIndex = this.updatedTickets.findIndex(ticket => ticket.stop_id == stop.stop_id);
@@ -336,8 +372,10 @@ export class BusScheduleComponent {
       this.updatedTickets.push({
         stop_id: stop.stop_id,
         arrival_time: stop.arrival_time,
+        //arrival_date: stop.arrival_date,
         stop_time: stop.stop_time ? String(stop.stop_time) : null,
         departure_time: stop.departure_time,
+        //departure_date: stop.departure_date,
       });
     }
     console.log('updatedTickets:', this.updatedTickets);

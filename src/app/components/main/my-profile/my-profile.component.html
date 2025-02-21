@@ -47,25 +47,13 @@
 
 
 
-<div class="ct_right_dash_content">
-    <div class="ct_dash_header">
-        <div class="d-flex align-items-center gap-3">
-            <div class="ct_toggle_bar">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-            <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Edit Profile</h4>
-        </div>
-        <div class="ct_profile_drop">
-            <app-header />
-        </div>
-    </div>
-    <div class="ct_middle_content">
 
-        <div class="row">
-            <div class="col-md-7 mx-auto">
-                <div class="ct_edit_profile_main">
 
-                    <!-- <div class="ct_edit_img">
+<div class="row">
+    <div class="col-md-7 mx-auto">
+        <div class="ct_edit_profile_main">
+
+            <!-- <div class="ct_edit_img">
                         <img src="assets/img/user_img.jpg" alt="">
                         <div class="ct_edit_img_icon">
                             <label for="ct_edit_img_12" class="d-block">
@@ -78,47 +66,46 @@
 
                     </div> -->
 
-                    <div class="mt-5">
+            <div class="mt-5">
 
-                        <form [formGroup]="profileForm">
-                            <div class="form-group mb-4">
-                                <label for="" class="mb-2">Name</label>
-                                <input type="email" class="form-control ct_input ct_fs_18" formControlName="name"
-                                    placeholder="Enter name" value="Alex meian" maxlength="30">
-                                <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
-                                    class="err_msg">
-                                    <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
-                                        your name.</div>
-                                </div>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="" class="mb-2">Contact No</label>
-                                <input type="text" class="form-control ct_input ct_fs_18" formControlName="phone"
-                                    placeholder="Enter Contact No">
-
-                                <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"
-                                    class="err_msg">
-                                    <div *ngIf="profileForm.controls['phone'].errors?.['required']">Contact
-                                        number is required.</div>
-                                    <div *ngIf="profileForm.controls['phone'].errors?.['pattern']">Contact number must
-                                        be
-                                        between 8 and 15 digits.</div>
-                                </div>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label for="" class="mb-2">Email</label>
-                                <input type="email" class="form-control ct_input ct_fs_18" formControlName="email"
-                                    placeholder="Enter your email">
-                            </div>
-                            <a (click)="onSubmit()" class="ct_blue_btn mt-5 px-5 mx-auto d-flex"
-                                style="width: fit-content; cursor: pointer;">Edit Profile</a>
-                        </form>
+                <form [formGroup]="profileForm">
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-2">Name</label>
+                        <input type="email" class="form-control ct_input ct_fs_18" formControlName="name"
+                            placeholder="Enter name" value="Alex meian" maxlength="30">
+                        <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
+                            class="err_msg">
+                            <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
+                                your name.</div>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-2">Contact No</label>
+                        <input type="text" class="form-control ct_input ct_fs_18" formControlName="phone"
+                            placeholder="Enter Contact No">
+
+                        <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"
+                            class="err_msg">
+                            <div *ngIf="profileForm.controls['phone'].errors?.['required']">Contact
+                                number is required.</div>
+                            <div *ngIf="profileForm.controls['phone'].errors?.['pattern']">Contact number must
+                                be
+                                between 8 and 15 digits.</div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-2">Email</label>
+                        <input type="email" class="form-control ct_input ct_fs_18" formControlName="email"
+                            placeholder="Enter your email">
+                    </div>
+                    <a (click)="onSubmit()" class="ct_blue_btn mt-5 px-5 mx-auto d-flex"
+                        style="width: fit-content; cursor: pointer;">Edit Profile</a>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <div *ngIf="loading">
     <app-loader />

@@ -1,20 +1,15 @@
 <div class="">
-    <!-- <div class="ct_dash_header">
-        <div class="d-flex align-items-center gap-3">
-            <div class="ct_toggle_bar">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </div>
-        <div class="ct_profile_drop">
-            <app-header />
-        </div>
-    </div> -->
-    <div class="ct_middle_content">
 
+    <div *ngIf="isSingle" class="mb-4" routerLink="/home/price-management">
+        <a  class="ct_back_btn" style="width: fit-content;"><i
+                class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
+    </div>
+
+    <div class="ct_middle_content">
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
                 <!-- <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4> -->
-                <div class="d-flex gap-3 align-items-center  justify-content-between">
+                <div class="d-flex gap-3 align-items-center justify-content-between" *ngIf="route_id">
                     <select class="form-control w-auto" (change)="onStopChange($event)">
                         <!-- <option value="" disabled selected>-- Select --</option> -->
                         <option value="">All</option>
@@ -22,7 +17,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="d-flex gap-3 align-items-center  justify-content-between">
+                <div class="d-flex gap-3 align-items-center justify-content-between" *ngIf="route_id">
                     <!-- <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                         (ngModelChange)="getType()"> -->
                     <button
@@ -31,7 +26,6 @@
                         +
                         Add Ticket Type</button>
                 </div>
-
             </div>
             <div class="table-responsive">
                 <!-- <table class="table mb-0">
@@ -83,12 +77,18 @@
                                         (click)="patchUpdate(ticketType.COLUMN_NAME)" data-bs-target="#ct_delete_modal">
                                         <div class="ct_col_dlt_icon">
                                             <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
-                                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 
+                                                    6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 
+                                                    22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 
+                                                    21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669
+                                                    6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 
+                                                    6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169
+                                                    8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                                    stroke="#EF331E" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
                                         </div>
                                     </button>
                                 </span>
@@ -107,7 +107,6 @@
                                             <input type="checkbox" [(ngModel)]="route.is_active"
                                                 [ngModelOptions]="{ standalone: true }"
                                                 (click)="statusChange(route, route.is_active)" />
-
                                             <span class="slider"></span>
                                             <span class="text on mt-0">AVAILABLE</span>
                                             <span class="text off mt-0">NOT AVAILABLE</span>
@@ -144,9 +143,9 @@
                 </div>
             </div>
         </div>
-        <div class="actions mt-3 d-flex align-items-center justify-content-end">
+        <div class="actions mt-3 d-flex align-items-center justify-content-end" *ngIf="route_id">
             <button (click)="saveUpdatedTicketPrices()" class="ct_blue_btn" type="submit">Save</button>
-            <button (click)="cancel()" type="button" class="ct_blue_btn ct_cancle_btn_3">Cancel</button>
+            <!-- <button (click)="cancel()" type="button" class="ct_blue_btn ct_cancle_btn_3">Cancel</button> -->
         </div>
     </div>
 </div>

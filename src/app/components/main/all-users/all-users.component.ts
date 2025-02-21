@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ErrorMessageService } from '../../../services/error-message.service';
 import { SharedService } from '../../../services/shared.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-all-users',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './all-users.component.html',
   styleUrl: './all-users.component.css'
 })
@@ -24,7 +21,7 @@ export class AllUsersComponent {
   filterQuery: any = '';
   data: any;
 
-  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService) { }
 
   ngOnInit() {
     this.getUsers();
@@ -34,7 +31,7 @@ export class AllUsersComponent {
     this.service.getApi(`user-list?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}&filter=${this.filterQuery}`).subscribe({
       next: resp => {
         this.data = resp.data.users;
-        this.totalPages = resp.data.pagination?.totalPages
+        this.totalPages = resp.data.pagination?.totalPages;
       },
       error: error => {
         console.log(error.message);

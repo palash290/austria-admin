@@ -10,7 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'app-contact-us',
   standalone: true,
-  imports: [HeaderComponent, FormsModule, CommonModule, LoaderComponent],
+  imports: [FormsModule, CommonModule, LoaderComponent],
   templateUrl: './contact-us.component.html',
   styleUrl: './contact-us.component.css'
 })
@@ -27,7 +27,7 @@ export class ContactUsComponent {
   loading: boolean = false;
   @ViewChild('closeModal') closeModal!: ElementRef;
 
-  constructor(private service: SharedService, private toastr: NzMessageService, private errorMessageService: ErrorMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService) { }
 
   ngOnInit() {
     this.getContacts();
@@ -37,7 +37,7 @@ export class ContactUsComponent {
     this.service.getApi(`contact-us-search-with-limit?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}`).subscribe({
       next: resp => {
         this.data = resp.data.contactUs;
-        this.totalPages = resp.data.pagination?.totalPages
+        this.totalPages = resp.data.pagination?.totalPages;
       },
       error: error => {
         console.log(error.message);
@@ -58,11 +58,11 @@ export class ContactUsComponent {
   }
 
   reply(item: any) {
-    this.currentMsg = item
+    this.currentMsg = item;
   }
 
   viewMessage(item: any) {
-    this.currentMsg = item
+    this.currentMsg = item;
   }
 
   send() {
@@ -74,11 +74,11 @@ export class ContactUsComponent {
     this.loading = true;
     let formData = new URLSearchParams();
 
-    formData.set('contact_id', this.currentMsg.contact_id)
-    formData.set('email', this.currentMsg.email)
-    formData.set('query', this.currentMsg.query)
-    formData.set('response', this.replyMsg)
-    formData.set('name', this.currentMsg.name)
+    formData.set('contact_id', this.currentMsg.contact_id);
+    formData.set('email', this.currentMsg.email);
+    formData.set('query', this.currentMsg.query);
+    formData.set('response', this.replyMsg);
+    formData.set('name', this.currentMsg.name);
 
     this.service.postAPI('customer-query-responded', formData.toString()).subscribe({
       next: (response) => {

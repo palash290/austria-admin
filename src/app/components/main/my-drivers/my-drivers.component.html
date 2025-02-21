@@ -1,63 +1,62 @@
-<div class="ct_right_dash_content">
-    <div class="ct_dash_header">
+<!-- <div class="ct_dash_header">
         <div class="d-flex align-items-center gap-3">
             <div class="ct_toggle_bar">
                 <i class="fa-solid fa-bars"></i>
             </div>
-            <!-- <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Welcome Back, John!</h4> -->
+            <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Welcome Back, John!</h4>
         </div>
         <div class="ct_profile_drop">
             <app-header />
         </div>
-    </div>
-    <div class="ct_middle_content">
+    </div> -->
+<div class="ct_middle_content">
 
-        <div class="ct_bus_grey_table">
-            <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Driver Management</h4>
-                <div class="d-flex gap-3 align-items-center  justify-content-between">
-                    <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
-                        (ngModelChange)="getDrivers()">
-                    <button
-                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
-                        data-bs-toggle="modal" data-bs-target="#ct_add_driver">
-                        +
-                        Add Driver</button>
-                </div>
+    <div class="ct_bus_grey_table">
+        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Driver Management</h4>
+            <div class="d-flex gap-3 align-items-center  justify-content-between">
+                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    (ngModelChange)="getDrivers()">
+                <button
+                    class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
+                    data-bs-toggle="modal" data-bs-target="#ct_add_driver">
+                    +
+                    Add Driver</button>
             </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>S No.</th>
-                            <th>Driver Name</th>
-                            <th>Licence Number</th>
-                            <th>Contact Number</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>S No.</th>
+                        <th>Driver Name</th>
+                        <th>Licence Number</th>
+                        <th>Contact Number</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                        <tr *ngFor="let item of data; let i = index">
-                            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                    <tr *ngFor="let item of data; let i = index">
+                        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
 
-                            <td>{{item.driver_name}}</td>
-                            <td>{{item.driver_license_number}}</td>
-                            <td>{{item.driver_contact_number}}</td>
+                        <td>{{item.driver_name}}</td>
+                        <td>{{item.driver_license_number}}</td>
+                        <td>{{item.driver_contact_number}}</td>
 
-                            <td>
-                                <div class="ct_actions_btn">
-                                    <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
-                                        data-bs-target="#ct_edit_driver">
-                                        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
-                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round" />
-                                        </svg>
-                                    </button>
-                                    <!-- <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
+                        <td>
+                            <div class="ct_actions_btn">
+                                <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
+                                    data-bs-target="#ct_edit_driver">
+                                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
+                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                                <!-- <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
                                         data-bs-target="#ct_delete_modal">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -67,43 +66,43 @@
                                                 stroke-linejoin="round" />
                                         </svg>
                                     </button> -->
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
 
-                </table>
-                <div *ngIf="data?.length == 0 || !data" class="text-center">
-                    <p class="ct_fs_15 mt-3">No items found</p>
-                </div>
-            </div>
-            <!-- Pagination Controls -->
-            <div class="d-flex justify-content-between align-items-center pagination-section">
-                <div class="d-flex gap-2 align-items-center">
-                    <label for="pageSize">Items per page: </label>
-                    <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
-                        (change)="changePageSize(pageSize)">
-                        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
-                        </option>
-                    </select>
-                </div>
-
-                <!-- Pagination -->
-                <nav aria-label="Table pagination">
-                    <ul class="pagination">
-                        <li class="page-item" [class.disabled]="currentPage === 1">
-                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-                        </li>
-                        <li class="page-item" [class.disabled]="currentPage === totalPages">
-                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+            </table>
+            <div *ngIf="data?.length == 0 || !data" class="text-center">
+                <p class="ct_fs_15 mt-3">No items found</p>
             </div>
         </div>
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center pagination-section">
+            <div class="d-flex gap-2 align-items-center">
+                <label for="pageSize">Items per page: </label>
+                <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
+                    (change)="changePageSize(pageSize)">
+                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
+                    </option>
+                </select>
+            </div>
 
+            <!-- Pagination -->
+            <nav aria-label="Table pagination">
+                <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
+
 </div>
+
 
 
 
@@ -152,7 +151,7 @@
                             <p *ngIf="form.get('driver_name')?.touched && form.get('driver_name')?.errors"
                                 class="err_msg">
                                 {{ getErrorMessage('driver_name') }}
-                                
+
                             </p>
                         </div>
 
@@ -202,7 +201,7 @@
                                     empty</div>
                                 <div *ngIf="form.controls['contact_number'].errors?.['pattern']">Contact number must be
                                     between 8 and 15 digits.</div>
-                                
+
                             </div>
 
                         </div>
@@ -221,7 +220,7 @@
                             <p *ngIf="form.get('license_number')?.touched && form.get('license_number')?.errors"
                                 class="err_msg">
                                 {{ getErrorMessage('license_number') }}
-                                
+
                             </p>
 
                         </div>
@@ -311,7 +310,7 @@
                             <p *ngIf="editForm.get('driver_name')?.touched && editForm.get('driver_name')?.errors"
                                 class="err_msg">
                                 {{ getErrorMessage('driver_name') }}
-                               
+
                             </p>
                         </div>
 
@@ -328,9 +327,11 @@
 
                             <div *ngIf="editForm.controls['contact_number'].invalid && editForm.controls['contact_number'].touched"
                                 class="err_msg">
-                                <div *ngIf="editForm.controls['contact_number'].errors?.['required']">This field cannot be
+                                <div *ngIf="editForm.controls['contact_number'].errors?.['required']">This field cannot
+                                    be
                                     empty</div>
-                                <div *ngIf="editForm.controls['contact_number'].errors?.['pattern']">Contact number must be
+                                <div *ngIf="editForm.controls['contact_number'].errors?.['pattern']">Contact number must
+                                    be
                                     between 8 and 15 digits.</div>
                             </div>
 
@@ -350,7 +351,7 @@
                             <p *ngIf="editForm.get('license_number')?.touched && editForm.get('license_number')?.errors"
                                 class="err_msg">
                                 {{ getErrorMessage('license_number') }}
-                              
+
                             </p>
 
                         </div>

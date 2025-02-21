@@ -4,6 +4,7 @@
     display: flex;
     text-align: center;
   }
+
   .ct_scheduled_bus_list_item {
     grid-template-columns: 70px auto !important;
   }
@@ -16,18 +17,22 @@
     top: 0;
     z-index: 9999;
   }
+
   .ct_right_dash_content {
     width: 100%;
     margin-left: 0px;
     transition: 0.4s ease all;
   }
+
   .ct_toggle_bar {
     display: block;
     font-size: 20px;
   }
+
   .ct_dashboard_main.ct_side_show .ct_sidebar {
     left: 0px;
   }
+
   .ct_dashboard_main.ct_side_show .ct_right_dash_content .ct_toggle_bar {
     width: calc(100% - 320px);
     margin-left: 320px;
@@ -35,10 +40,12 @@
     left: 15px;
   }
 }
+
 @media screen and (max-width: 767px) {
   .ct_flex_direction_767 {
     flex-direction: column;
   }
+
   .ct_res_w_100 {
     width: 100%;
   }
@@ -46,9 +53,11 @@
   .ct_fs_38 {
     font-size: 28px;
   }
+
   .ct_pt_184 {
     padding-top: 40px;
   }
+
   .ct_login_form {
     padding: 15px;
   }
@@ -56,29 +65,80 @@
   .ct_fs_20 {
     font-size: 16px;
   }
+
   .ct_fs_26 {
     font-size: 18px;
   }
+
   .ct_fs_30 {
     font-size: 24px;
   }
+
   .ct_fs_22 {
     font-size: 18px;
   }
+
   .ct_fs_34 {
     font-size: 26px;
   }
+
   .ct_right_dash_content {
     padding-inline: 15px;
   }
+
 }
 
 @media screen and (max-width: 575px) {
   .ct_user_name_info {
     display: none;
   }
+
   .ct_grid_3 {
     gap: 10px;
     grid-template-columns: auto;
+  }
+}
+
+
+
+@media screen and (max-width:991px){
+  .ct_login_left_img{
+      display: none;
+  }
+  .ct_dash_card {
+      padding: 30px;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+  }
+  .ct_card_icon{
+      margin-inline: auto;
+  }
+  .ct_side_bar{
+      left: -100%;
+  }
+  .ct_right_panel{
+      margin-left: 0px;
+      width: 100%;
+  }
+  .ct_show .ct_side_bar{
+      left: 0px;
+  }
+  .ct_show .ct_side_bar{
+      left: 0px;
+  }
+  .ct_close_sidebar {
+      position: absolute;
+      display: block;
+      right: 15px;
+      top: 15px;
+      font-size: 22px;
+      transition: 0.4s ease all;
+  }
+  .ct_close_sidebar:hover{
+      transform: rotate(360deg);
+  }
+  .ct_menu_bar{
+      display: block !important;
   }
 }

@@ -1,4 +1,4 @@
-<div class="ct_user_img">
+<!-- <div class="ct_user_img">
     <img src="assets/img/avatar.png" alt="">
     <div class="ct_user_name_info">
         <h4 class="ct_fs_18 ct_fw_700 ct_text_black mb-0">{{name}}</h4>
@@ -30,6 +30,54 @@
             <li><a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
                     data-bs-target="#ct_logout_modal">LogOut</a></li>
         </ul>
+
+    </div>
+</div> -->
+
+<div class="ct_dash_header">
+    <div class="d-flex align-items-center gap-3">
+        <div class="ct_toggle_bar" (click)="toggleMenu()">
+            <i class="fa-solid fa-bars ct_menu_bar"></i>
+        </div>
+        <!-- <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Dashboard</h4> -->
+    </div>
+    <div class="ct_profile_drop">
+        <div class="ct_user_img">
+            <img src="assets/img/user_img.jpg" alt="">
+            <div class="ct_user_name_info">
+                <h4 class="ct_fs_18 ct_fw_700 ct_text_black mb-0">{{name}}</h4>
+                <p class="mb-0 ct_text_clr_757575">Admin</p>
+            </div>
+
+            <div class="dropdown ">
+                <div class="ct_user_dropdown_icon" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_62_4074)">
+                            <path
+                                d="M9.9974 18.3337C14.5999 18.3337 18.3307 14.6028 18.3307 10.0003C18.3307 5.39783 14.5999 1.66699 9.9974 1.66699C5.3949 1.66699 1.66406 5.39783 1.66406 10.0003C1.66406 14.6028 5.3949 18.3337 9.9974 18.3337Z"
+                                stroke="#757575" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7.05469 8.9502L9.99635 11.8835L12.938 8.9502" stroke="#757575"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_62_4074">
+                                <rect width="20" height="20" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" routerLink="/home/my-profile">Edit Profile</a></li>
+                    <li><a class="dropdown-item" routerLink="/home/change-password">Change Password</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                            data-bs-target="#ct_logout_modal">LogOut</a></li>
+                </ul>
+
+            </div>
+        </div>
 
     </div>
 </div>

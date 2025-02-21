@@ -1,0 +1,51 @@
+<!-- <div class="d-flex gap-3 align-items-center  justify-content-between">
+    <select class="form-control w-auto" (change)="onStopChange($event)">
+        <option disabled selected value="">--Select--</option>
+        <option *ngFor="let line of lines" [value]="line.route_id">{{ line.title }}
+        </option>
+    </select>
+</div> -->
+
+<div class="ct_middle_content">
+
+    <div class="ct_bus_grey_table">
+        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Price Management</h4>
+            <div class="d-flex gap-3 align-items-center  justify-content-between">
+                <!-- <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    (ngModelChange)="getDrivers()"> -->
+    
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>S No.</th>
+                        <th>Route Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of lines; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{item.title}}</td>
+                        <td>
+                            <div class="ct_actions_btn" routerLink="/home/category-management"
+                                [queryParams]="{'route_id':item.route_id, isSingle: 'true'}">
+                                <button class="ct_action_btn">
+                                    <i class="fa-regular fa-eye ct_hide_pass_wye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="lines?.length == 0 || !lines" class="text-center">
+                <p class="ct_fs_15 mt-3">No items found</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <app-category-management [routeId]="route_id"></app-category-management> -->

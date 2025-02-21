@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { SharedService } from '../../../services/shared.service';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -23,6 +23,12 @@ export class HeaderComponent {
       this.loadUserProfile();
     });
     this.loadUserProfile();
+  }
+
+  @Output() toggleEvent = new EventEmitter<boolean>();
+
+  toggleMenu() {
+    this.toggleEvent.emit(true);
   }
 
   loadUserProfile() {
