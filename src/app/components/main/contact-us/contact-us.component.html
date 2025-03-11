@@ -54,8 +54,8 @@
 
             <div class="ct_bus_grey_table">
                   <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                        <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Contact Us</h4>
-                        <!-- <div class="d-flex gap-3 align-items-center  justify-content-between"> -->
+                        <h4 class="ct_fs_20 ct_fw_600 mb-0">Contact Us</h4>
+                        <!-- <div class="d-flex gap-3 align-items-center justify-content-between"> -->
                         <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                               (ngModelChange)="getContacts()">
                         <!-- </div> -->
@@ -182,7 +182,7 @@
                                                 <input type="text" [(ngModel)]="currentMsg.email" disabled
                                                       [ngModelOptions]="{standalone: true}"
                                                       class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                                      placeholder="Enter driver name">
+                                                      >
                                                 <div class="ct_input_left_icon">
                                                       <i class="fa-regular fa-envelope"></i>
                                                 </div>
@@ -194,7 +194,7 @@
                                           <div class="position-relative">
                                                 <textarea type="text" class="form-control ct_fs_18" [(ngModel)]="currentMsg.query
                                                 " disabled [ngModelOptions]="{standalone: true}"
-                                                      placeholder="Enter driver name" rows="5"></textarea>
+                                                       rows="5"></textarea>
                                           </div>
                                     </div>
                                     <div class="form-group mb-4">
@@ -212,7 +212,7 @@
                                                 <div class="position-relative">
                                                       <input type="text"
                                                             class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                                            placeholder="Enter driver id">
+                                                            >
                                                       <div class="ct_input_left_icon">
                                                             <i class="fa-solid fa-id-card"></i>
                                                       </div>
@@ -281,7 +281,7 @@
                                                 <input type="text" [(ngModel)]="currentMsg.email" disabled
                                                       [ngModelOptions]="{standalone: true}"
                                                       class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                                      placeholder="Enter driver name">
+                                                      >
                                                 <div class="ct_input_left_icon">
                                                       <i class="fa-regular fa-envelope"></i>
                                                 </div>
@@ -293,7 +293,7 @@
                                           <div class="position-relative">
                                                 <textarea type="text" class="form-control ct_fs_18" [(ngModel)]="currentMsg.query
                                                 " disabled [ngModelOptions]="{standalone: true}"
-                                                      placeholder="Enter driver name" rows="5"></textarea>
+                                                      rows="5"></textarea>
                                           </div>
                                     </div>
                                     @if(currentMsg.response){
@@ -352,7 +352,7 @@
                         <button type="button" class="ct_btn_red bg-danger py-3 px-5"
                               data-bs-dismiss="modal">Cancel</button>
 
-                        <button type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
+                        <button type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
                   </div>
             </div>
       </div>

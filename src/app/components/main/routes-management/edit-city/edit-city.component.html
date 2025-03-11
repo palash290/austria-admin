@@ -67,7 +67,7 @@
                     <div class="ct_white_box_shadow">
                         <div class="form-group mb-4 position-relative">
                             <label for="" class=" ct_fw_500 mb-1">Address<span class="ct_text_red">*</span></label>
-                            <input type="text" class="form-control  ct_fs_18" placeholder="Enter address"
+                            <input type="text" class="form-control ct_fs_18" placeholder="Enter address"
                                 [(ngModel)]="terminalName" [ngModelOptions]="{standalone: true}"
                                 (keyup)="searchTerminal()" (blur)="onBlur()">
 
@@ -125,7 +125,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <!-- <div class="form-group">
@@ -133,14 +132,11 @@
                 <input type="text" id="address" class="form-control" formControlName="address">
               </div> -->
 
-
             <div class="d-flex align-item-center gap-3 mt-4">
                 <button type="submit" class="ct_blue_btn">Save</button>
                 <button (click)="cancel()" type="button" class="ct_blue_btn ct_outline_btn_blue">Cancel</button>
             </div>
         </form>
-
-
     </div>
 
 

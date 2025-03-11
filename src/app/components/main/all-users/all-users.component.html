@@ -1,5 +1,4 @@
-
-    <!-- <div class="ct_dash_header">
+<!-- <div class="ct_dash_header">
         <div class="d-flex align-items-center gap-3">
             <div class="ct_toggle_bar">
                 <i class="fa-solid fa-bars"></i>
@@ -10,76 +9,75 @@
             <app-header />
         </div>
     </div> -->
-    <div class="ct_middle_content">
-        <div class="ct_bus_grey_table">
-            <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">Users Management</h4>
-                <div class="d-flex gap-3 align-items-center  justify-content-between">
-                    <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route"
+<div class="ct_middle_content">
+    <div class="ct_bus_grey_table">
+        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0">Users Management</h4>
+            <div class="d-flex gap-3 align-items-center  justify-content-between">
+                <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route" (ngModelChange)="getUsers()">
+                    <option value="" selected>All</option>
+                    <option value="Guest User">Guest User</option>
+                    <option value="Verified User">Verified User</option>
+                </select>
+                <!-- <div class="d-flex gap-3 align-items-center  justify-content-between"> -->
+                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                     (ngModelChange)="getUsers()">
-                        <option value="" selected>All</option>
-                        <option value="Guest User">Guest User</option>
-                        <option value="Verified User">Verified User</option>
-                    </select>
-                    <!-- <div class="d-flex gap-3 align-items-center  justify-content-between"> -->
-                    <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
-                        (ngModelChange)="getUsers()">
-                </div>
+            </div>
 
-                <!-- </div> -->
-                <!-- <div class="ct_grid_2 gap-2"> -->
-                <!-- <button
+            <!-- </div> -->
+            <!-- <div class="ct_grid_2 gap-2"> -->
+            <!-- <button
                         class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
                         data-bs-toggle="modal" data-bs-target="#ct_add_booking">
                         +
                         Add Booking</button> -->
 
-                <!-- <select class="form-control ct_by_date_select">
+            <!-- <select class="form-control ct_by_date_select">
                         <option value="">By Date</option>
                         <option value="">12 Jun</option>
                         <option value="">13 Jun</option>
                         <option value="">14 Jun</option>
                     </select> -->
-                <!-- </div> -->
+            <!-- </div> -->
 
-            </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>S No.</th>
-                            <th>User Name</th>
-                            <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>User Type</th>
-                            <th>Registered On</th>
-                            <!-- <th>Total Bookings</th> -->
-                            <!-- <th>Actions</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>S No.</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>User Type</th>
+                        <th>Registered On</th>
+                        <!-- <th>Total Bookings</th> -->
+                        <!-- <th>Actions</th> -->
+                    </tr>
+                </thead>
+                <tbody>
 
-                        <tr *ngFor="let item of data; let i = index">
-                            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                            <td>
-                                @if(item.guest_user){
-                                Guest User
-                                } @else {
-                                {{item.first_name}} {{item.last_name}}
-                                }
+                    <tr *ngFor="let item of data; let i = index">
+                        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td>
+                            @if(item.guest_user){
+                            Guest User
+                            } @else {
+                            {{item.first_name}} {{item.last_name}}
+                            }
 
-                            </td>
-                            <td>{{item.email}}</td>
-                            <td>{{item.mobile_number ? item.mobile_number : '-'}}</td>
-                            <td>
-                                @if(item.guest_user != null){
-                                    Guest User
-                                } @else {
-                                    Verified User
-                                }
-                            </td>
-                            <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
-                            <!-- <td>
+                        </td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.mobile_number ? item.mobile_number : '-'}}</td>
+                        <td>
+                            @if(item.guest_user != null){
+                            Guest User
+                            } @else {
+                            Verified User
+                            }
+                        </td>
+                        <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
+                        <!-- <td>
                                 <div class="ct_actions_btn">
                                     <button class="ct_action_btn" data-bs-toggle="modal"
                                         data-bs-target="#ct_edit_user_management">
@@ -103,137 +101,43 @@
                                     </button>
                                 </div>
                             </td> -->
-                        </tr>
-                    </tbody>
-                </table>
-                <div *ngIf="data?.length == 0 || !data" class="text-center">
-                    <p class="ct_fs_15 mt-3">No items found</p>
-                </div>
-            </div>
-            <!-- Pagination Controls -->
-            <div class="d-flex justify-content-between align-items-center pagination-section w-100">
-                <div class="d-flex gap-2 align-items-center">
-                    <label for="pageSize">Items per page: </label>
-                    <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
-                        (change)="changePageSize(pageSize)">
-                        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
-                        </option>
-                    </select>
-                </div>
-                <!-- Pagination -->
-                <nav aria-label="Table pagination">
-                    <ul class="pagination">
-                        <li class="page-item" [class.disabled]="currentPage === 1">
-                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-                        </li>
-                        <li class="page-item" [class.disabled]="currentPage === totalPages">
-                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="data?.length == 0 || !data" class="text-center">
+                <p class="ct_fs_15 mt-3">No items found</p>
             </div>
         </div>
-    </div>
-
-
-
-<!-- Edit Modal S -->
-<div class="modal fade modal-lg" id="ct_edit_user_management" tabindex="-1"
-    aria-labelledby="ct_edit_user_managementLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content pb-4">
-            <!-- <div class="modal-header border-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> -->
-            <div class="modal-body border-0 pt-5">
-                <div class="ct_edit_modal_cnt">
-                    <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Edit User Management</h4>
-                    <form action="" class="pt-2">
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">User Name<span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter driver name">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-user"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Email Id<span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter driver id">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-id-card"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Contact Number <span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter contact number">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-phone"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Total booking made <span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="number" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter licence number">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-id-badge"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center pagination-section w-100">
+            <div class="d-flex gap-2 align-items-center">
+                <label for="pageSize">Items per page: </label>
+                <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
+                    (change)="changePageSize(pageSize)">
+                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
+                    </option>
+                </select>
             </div>
-            <div class="modal-footer border-0 justify-content-end">
-                <button type="button" class="ct_blue_btn ct_outline_btn_blue ct_fw_400"
-                    data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="ct_blue_btn py-2 ct_fw_400">Update</button>
-            </div>
+            <!-- Pagination -->
+            <nav aria-label="Table pagination">
+                <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
-<!-- Edit Modal E -->
 
-<!-- delete Modal S -->
-<div class="modal fade" id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content pb-4">
-            <div class="modal-header border-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body border-0 pt-0">
-                <div class="ct_delete_modal_cnt">
-                    <div class="text-center mb-4 ct_delete_icon">
-                        <svg width="40" height="40" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
-                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Confirm Delete</h4>
-                    <p class="mb-0 text-center ct_fs_18"> Are you sure? you want to delete it.</p>
-                </div>
-            </div>
-            <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- delete Modal E -->
+
+
+
+
+
 
 
 <!-- All Modal Section E -->

@@ -1,73 +1,7 @@
-<!-- <div class="ct_right_dash_content">
-
-    <div class="d-flex align-items-center justify-content-between">
-        <h4 class="mb-0 ct_fs_22">My Profile</h4>
-    </div>
-
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="ct_white_bg_1 py-5">
-                <h4 class="ct_fs_24 mb-4 ct_fw_600"> Profile Detail</h4>
-                <form [formGroup]="profileForm">
-                    <div class="form-group mb-4">
-                        <label for="" class="mb-2">Full Name</label>
-                        <input type="email" class="form-control ct_input" formControlName="name"
-                            placeholder="Enter full name" value="Alex meian" maxlength="30">
-                        <div *ngIf="profileForm.controls['name'].invalid && profileForm.controls['name'].touched"
-                            class="err_msg">
-                            <div *ngIf="profileForm.controls['name'].errors?.['required']">Please enter
-                                your full name.</div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="" class="mb-2">Contact No</label>
-                        <input type="number" class="form-control ct_input" formControlName="phone"
-                            placeholder="Enter Contact No">
-                   
-                        <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched"
-                            class="err_msg">
-                            <div *ngIf="profileForm.controls['phone'].errors?.['required']">Contact
-                                number is required.</div>
-                            <div *ngIf="profileForm.controls['phone'].errors?.['pattern']">Contact number must be
-                                between 8 and 15 digits.</div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4">
-                        <label for="" class="mb-2">Email</label>
-                        <input type="email" class="form-control ct_input" formControlName="email"
-                            placeholder="Enter your email">
-                    </div>
-                    <a (click)="onSubmit()" class="ct_blue_btn mt-5 px-5 mx-auto d-flex"
-                        style="width: fit-content; cursor: pointer;">Edit Profile</a>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
-
-
-
 <div class="row">
     <div class="col-md-7 mx-auto">
         <div class="ct_edit_profile_main">
-
-            <!-- <div class="ct_edit_img">
-                        <img src="assets/img/user_img.jpg" alt="">
-                        <div class="ct_edit_img_icon">
-                            <label for="ct_edit_img_12" class="d-block">
-                                <input type="file" class="d-none" id="ct_edit_img_12">
-                                <div class="ct_edit_img_icon_bg">
-                                    <i class="fa-solid fa-camera"></i>
-                                </div>
-                            </label>
-                        </div>
-
-                    </div> -->
-
             <div class="mt-5">
-
                 <form [formGroup]="profileForm">
                     <div class="form-group mb-4">
                         <label for="" class="mb-2">Name</label>

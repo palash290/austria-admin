@@ -85,6 +85,9 @@
   .ct_right_dash_content {
     padding-inline: 15px;
   }
+.ct_w_100_res_767,.form-control.ct_w_100_res_767,.ct_blue_btn.ct_w_100_res_767 {
+  width: 100% !important;
+}
 
 }
 

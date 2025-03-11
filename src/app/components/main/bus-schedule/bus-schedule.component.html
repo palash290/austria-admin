@@ -185,7 +185,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="busType" class="form-label  ct_fw_500 mb-1">Bus Name</label>
+                                            <label for="busType" class="form-label ct_fw_500 mb-1">Bus Name</label>
                                             <select class="form-control ct_input ct_fs_18 " formControlName="busName">
                                                 <option value="" disabled>Select</option>
                                                 <option *ngFor="let lan of busList" [value]="lan.bus_id">
@@ -208,8 +208,8 @@
 
 
                                 <!-- Driver Name -->
-                                <div class="mb-3">
-                                    <label for="driver" class="form-label  ct_fw_500 mb-1">Driver</label>
+                                <!-- <div class="mb-3">
+                                    <label for="driver" class="form-label ct_fw_500 mb-1">Driver</label>
                                     <select class="form-control ct_input ct_fs_18 " formControlName="driver">
                                         <option value="" disabled>Select</option>
                                         <option *ngFor="let lan of allDrivers" [value]="lan.driver_id">
@@ -221,11 +221,11 @@
                                         <div *ngIf="form.controls['driver'].errors?.['required']">Driver is required.
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Availability Toggle -->
                                 <div class="mb-3">
-                                    <label class="form-label  ct_fw_500 mb-1">Available</label>
+                                    <label class="form-label ct_fw_500 mb-1">Available</label>
                                     <div>
                                         <label class="switch ct_custom_switch1">
                                             <input type="checkbox" formControlName="status" />
@@ -241,7 +241,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label  ct_fw_500 mb-1">From</label>
+                                                <label class="form-label ct_fw_500 mb-1">From</label>
                                                 <input type="date" class="form-control" formControlName="fromDate"
                                                     [min]="minDate" />
                                                 <!-- <div class="err_msg"
@@ -262,7 +262,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label  ct_fw_500 mb-1">To</label>
+                                                <label class="form-label ct_fw_500 mb-1">To</label>
                                                 <input type="date" class="form-control" formControlName="toDate"
                                                     [min]="minDate" />
 
@@ -284,7 +284,7 @@
 
                                 <!-- Recurring Days -->
                                 <!-- <div class="mb-3">
-                                    <label class="form-label  ct_fw_500 mb-1">Recurrence</label>
+                                    <label class="form-label ct_fw_500 mb-1">Recurrence</label>
                                     <div class="ct_grid_2_flex1">
                                         <div *ngFor="let day of daysOfWeek">
                                             <div class="form-check">
@@ -313,16 +313,14 @@
                                 </div>
 
                                 <!-- Display Selected Days and Their Dates -->
-                                <div *ngFor="let day of daysOfWeek">
+                                <!-- <div *ngFor="let day of daysOfWeek">
                                     <div *ngIf="selectedDaysWithDates[day]">
                                         <strong>{{ day }} Dates:</strong>
                                         <ul>
                                             <li *ngFor="let date of selectedDaysWithDates[day]">{{ date }}</li>
                                         </ul>
                                     </div>
-                                </div>
-
-
+                                </div> -->
 
                                 
                                 <!-- Action Buttons -->
@@ -497,7 +495,7 @@
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
 
-                <button type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
+                <button type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
             </div>
         </div>
     </div>

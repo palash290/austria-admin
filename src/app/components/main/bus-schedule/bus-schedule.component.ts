@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HeaderComponent } from '../header/header.component';
 import { SharedService } from '../../../services/shared.service';
-import { ErrorMessageService } from '../../../services/error-message.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { CategoryManagementComponent } from '../category-management/category-management.component';
@@ -26,7 +24,7 @@ export class BusScheduleComponent {
   status: boolean = true;
   routeList: any;
   busList: any;
-  allDrivers: any;
+  //allDrivers: any;
   isEdit: any;
 
   constructor(private service: SharedService, private toastr: NzMessageService, private activRout: ActivatedRoute, private fb: FormBuilder, private router: Router) { }
@@ -41,7 +39,7 @@ export class BusScheduleComponent {
     this.addRouteById();
     this.getRoutes();
     this.getBuses();
-    this.getDrivers();
+    //this.getDrivers();
     this.initForm();
     // Listen to changes in 'status' to toggle required validators for 'fromDate' and 'toDate'
     this.form.get('status')?.valueChanges.subscribe((statusValue) => {
@@ -61,7 +59,7 @@ export class BusScheduleComponent {
     this.form = this.fb.group({
       line: [this.route_id, Validators.required],
       busName: ['', Validators.required],
-      driver: ['', Validators.required],
+      //driver: ['', Validators.required],
       status: [true],
       fromDate: [''],
       toDate: [''],
@@ -187,16 +185,16 @@ export class BusScheduleComponent {
     });
   }
 
-  getDrivers() {
-    this.service.getApi(`get-all-drivers-by-limit-search`).subscribe({
-      next: resp => {
-        this.allDrivers = resp.data.drivers;
-      },
-      error: error => {
-        console.log(error.message);
-      }
-    });
-  }
+  // getDrivers() {
+  //   this.service.getApi(`get-all-drivers-by-limit-search`).subscribe({
+  //     next: resp => {
+  //       this.allDrivers = resp.data.drivers;
+  //     },
+  //     error: error => {
+  //       console.log(error.message);
+  //     }
+  //   });
+  // }
 
   lines: any;
 
@@ -306,7 +304,7 @@ export class BusScheduleComponent {
       const formData = new URLSearchParams();
       formData.append('bus_id', this.form.value.busName);
       formData.append('route_id', this.route_id ? this.route_id : this.form.value.line);
-      formData.append('driver_id', this.form.value.driver);
+      //formData.append('driver_id', this.form.value.driver);
       formData.append('available', this.form.value.status ? 'true' : 'false');
       formData.append('from', this.form.value.status ? '' : this.form.value.fromDate);
       formData.append('to', this.form.value.status ? '' : this.form.value.toDate);
@@ -470,7 +468,7 @@ export class BusScheduleComponent {
             this.form.patchValue({
               line: resp.data[0].route?.route_id,
               busName: resp.data[0].bus?.bus_id,
-              driver: resp.data[0].driver?.driver_id,
+              //driver: resp.data[0].driver?.driver_id,
               status: resp.data[0].available,
               fromDate: resp.data[0].from,
               toDate: resp.data[0].to,

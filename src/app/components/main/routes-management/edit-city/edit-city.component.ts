@@ -53,7 +53,7 @@ export class EditCityComponent {
 
   initMap(): void {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB0V1g5YyGB_NE1Lw1QitZZGECA5-1Xnng`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC8X41J3doX7L5Xlb6MdlH5X50DrqdijY4`;
     script.onload = () => this.createMap();
     document.body.appendChild(script);
   }

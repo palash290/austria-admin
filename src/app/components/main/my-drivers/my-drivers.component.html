@@ -1,20 +1,9 @@
-<!-- <div class="ct_dash_header">
-        <div class="d-flex align-items-center gap-3">
-            <div class="ct_toggle_bar">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-            <h4 class="ct_fs_28 ct_fw_700 mb-0 ">Welcome Back, John!</h4>
-        </div>
-        <div class="ct_profile_drop">
-            <app-header />
-        </div>
-    </div> -->
 <div class="ct_middle_content">
 
     <div class="ct_bus_grey_table">
         <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-            <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Driver Management</h4>
-            <div class="d-flex gap-3 align-items-center  justify-content-between">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0">Driver Management</h4>
+            <div class="d-flex gap-3 align-items-center justify-content-between">
                 <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                     (ngModelChange)="getDrivers()">
                 <button
@@ -117,26 +106,10 @@
 
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content pb-4">
-            <!-- <div class="modal-header border-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div> -->
             <div class="modal-body border-0 pt-5">
                 <div class="ct_edit_driver_cnt">
                     <h4 class="ct_fs_24 ct_fw_600 pb-3 mb-4 ct_border_btm1">Add Driver Details</h4>
                     <form [formGroup]="form" class="pt-2">
-
-                        <!-- <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Driver Name<span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" placeholder="Enter Passanger Name" formControlName="driver_name"
-                                class="form-control ct_input ct_fs_18">
-
-                            <p *ngIf="form.get('driver_name')?.touched && form.get('driver_name')?.errors"
-                                class="err_msg">
-                                {{ getErrorMessage('driver_name') }}
-                               
-                            </p>
-                        </div> -->
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Driver Name<span
@@ -154,35 +127,6 @@
 
                             </p>
                         </div>
-
-                        <!-- <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Driver Id<span
-                                    class="ct_text_red">*</span></label>
-                            <div class="position-relative">
-                                <input type="text" class="form-control ct_input ct_fs_18 ct_text_indent_30"
-                                    placeholder="Enter driver id">
-                                <div class="ct_input_left_icon">
-                                    <i class="fa-solid fa-id-card"></i>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Contact Number <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" placeholder="Enter Passanger Name" formControlName="contact_number"
-                                class="form-control ct_input ct_fs_18">
-
-                            <div *ngIf="form.controls['contact_number'].invalid && form.controls['contact_number'].touched"
-                                class="err_msg">
-                                <div *ngIf="form.controls['contact_number'].errors?.['required']">This field cannot be
-                                    empty</div>
-                                <div *ngIf="form.controls['contact_number'].errors?.['pattern']">Contact number must be
-                                    between 8 and 15 digits.</div>
-                               
-                            </div>
-
-                        </div> -->
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Contact Number <span
@@ -216,33 +160,12 @@
                                     <i class="fa-solid fa-id-badge"></i>
                                 </div>
                             </div>
-
                             <p *ngIf="form.get('license_number')?.touched && form.get('license_number')?.errors"
                                 class="err_msg">
                                 {{ getErrorMessage('license_number') }}
-
                             </p>
-
                         </div>
-
-                        <!-- <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Licence Number <span
-                                    class="ct_text_red">*</span></label>
-                            <input type="text" placeholder="Enter Passanger Name" formControlName="license_number"
-                                class="form-control ct_input ct_fs_18">
-
-                            <p *ngIf="form.get('license_number')?.touched && form.get('license_number')?.errors"
-                                class="err_msg">
-                                {{ getErrorMessage('license_number') }}
-                                
-                                
-                            </p>
-
-                        </div> -->
-
-
                     </form>
-
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-end">
@@ -268,34 +191,6 @@
                 <div class="ct_edit_modal_cnt">
                     <h4 class="ct_fs_24 ct_fw_600 text-center">Edit Driver Details</h4>
                     <form [formGroup]="editForm" class="pt-2">
-
-                        <!-- <div class="ct_uploaded_cnt">
-                            <div id="ct_video" class="ct_audio_upload_first d-block" style="max-width: 100%;"><label
-                                    for="imgInp1">
-                                    <input accept="image/*" type="file" id="imgInp1" class="d-none"
-                                        formControlName="file" (change)="handleCommittedFileInputEdit($event)" />
-                                    <div *ngIf="!eventImage">
-                                        <p class="mb-2 text-white ct_fs_13">Click to upload image</p>
-                                        <p class="mb-0 text-white ct_text_op_5 ct_fs_13">Max upload file 5 MB</p>
-                                    </div>
-                                    <img *ngIf="eventImage" class="ct_img_h_200"
-                                        [src]="eventImage ? eventImage : '/assets/img/np_pro.png'"
-                                        alt="Uploaded Image" />
-                                </label>
-                            </div>
-                        </div> -->
-
-                        <!-- <div class="position-relative ct_uploaded_cnt ">
-                            <label for="imgInp1">
-                                <img [src]="eventImage ? eventImage : 'http://18.229.202.71:4000/images/1727186679509.png'"
-                                    alt="" class="ct_img_h_200 mx-auto d-block"
-                                    style="border: solid var(--dark_green);">
-
-                                <input accept="image/*" type="file" id="imgInp1" class="d-none" formControlName="file"
-                                    (change)="handleCommittedFileInputEdit($event)" />
-                            </label>
-                        </div> -->
-
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Driver Name<span
@@ -351,13 +246,9 @@
                             <p *ngIf="editForm.get('license_number')?.touched && editForm.get('license_number')?.errors"
                                 class="err_msg">
                                 {{ getErrorMessage('license_number') }}
-
                             </p>
-
                         </div>
-
                     </form>
-
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
@@ -388,13 +279,10 @@
                     </div>
                     <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Confirm Delete</h4>
                     <p class="mb-0 text-center ct_fs_18"> Are you sure? you want to delete it.</p>
-
-
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
-
                 <button (click)="deleteMember()" type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal2
                     data-bs-dismiss="modal">Close</button>

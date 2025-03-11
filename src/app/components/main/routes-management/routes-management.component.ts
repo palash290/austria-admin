@@ -1,9 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedService } from '../../../services/shared.service';
-import { ErrorMessageService } from '../../../services/error-message.service';
 import { Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -39,13 +37,25 @@ export class RoutesManagementComponent {
   @ViewChild('closeModal12') closeModal12!: ElementRef;
   @ViewChild('closeModalArchive') closeModalArchive!: ElementRef;
 
-
   showArchived = false;
 
   stopName: any;
   terminalName: any;
   allRoutes: any;
   lines: any;
+  singleLatLog: any;
+  isSingleLatLog: boolean = false;
+  isSearchActiveFrom = false;
+  allTerminalsList: any;
+  
+  singleLine: any;
+  reverseLine: any;
+  copyTitle: any;
+  copyDescription: any;
+  CopyRouteId: any;
+  archiveRouteId: any;
+
+
   showMessage(): void {
     this.toastr.create('success', 'This is a success message!', { nzDuration: 20000 }); // 20 seconds
   }
@@ -83,9 +93,6 @@ export class RoutesManagementComponent {
     });
   }
 
-  singleLatLog: any;
-  isSingleLatLog: boolean = false;
-
   getLatLog(latLog: any) {
     if (this.isSingleLatLog && JSON.stringify(this.singleLatLog) == JSON.stringify(latLog)) {
       this.isSingleLatLog = false;
@@ -100,7 +107,7 @@ export class RoutesManagementComponent {
 
   initMap(): void {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB0V1g5YyGB_NE1Lw1QitZZGECA5-1Xnng`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC8X41J3doX7L5Xlb6MdlH5X50DrqdijY4`;
     script.onload = () => this.createMap();
     document.body.appendChild(script);
   }
@@ -220,8 +227,6 @@ export class RoutesManagementComponent {
         }
       });
     }
-
-
     // Fit the map bounds to include all markers
     map.fitBounds(bounds);
   }
@@ -236,8 +241,7 @@ export class RoutesManagementComponent {
     //alert(`Deleting ${cityName}`);
   }
 
-  isSearchActiveFrom = false;
-  allTerminalsList: any;
+
 
   searchTerminal() {
     if (this.terminalName == '') {
@@ -265,12 +269,10 @@ export class RoutesManagementComponent {
     this.getLetLongUkrane();
   };
 
-
   isTouched: any = {
     stopName: false,
     terminalName: false
   };
-
 
   addTerminal() {
     const stopName = this.stopName?.trim();
@@ -305,13 +307,6 @@ export class RoutesManagementComponent {
     });
   }
 
-
-  singleLine: any;
-  reverseLine: any;
-  copyTitle: any;
-  copyDescription: any;
-
-
   addRouteById(id?: any) {
     //if(this.route_id || id){
     const formURlData = new URLSearchParams();
@@ -341,16 +336,11 @@ export class RoutesManagementComponent {
     // }
   }
 
-  CopyRouteId: any;
-
   getCopyRouteId(route_id: any) {
     this.CopyRouteId = route_id;
   }
 
-  archiveRouteId: any;
-
   getArchiveRouteId(route_id: any) {
-    //debugger
     this.archiveRouteId = route_id;
   }
 
@@ -431,7 +421,6 @@ export class RoutesManagementComponent {
         }
       });
   };
-
 
   // Triggered on blur to set the field as touched
   onBlur(fieldName: string): void {

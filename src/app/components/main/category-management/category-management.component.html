@@ -1,14 +1,14 @@
 <div class="">
 
     <div *ngIf="isSingle" class="mb-4" routerLink="/home/price-management">
-        <a  class="ct_back_btn" style="width: fit-content;"><i
+        <a class="ct_back_btn" style="width: fit-content;"><i
                 class="fa-solid fa-arrow-left-long me-1"></i>Back</a>
     </div>
 
     <div class="ct_middle_content">
         <div class="ct_bus_grey_table">
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <!-- <h4 class="ct_fs_20 ct_fw_600 mb-0  ">Passenger Types</h4> -->
+                <!-- <h4 class="ct_fs_20 ct_fw_600 mb-0">Passenger Types</h4> -->
                 <div class="d-flex gap-3 align-items-center justify-content-between" *ngIf="route_id">
                     <select class="form-control w-auto" (change)="onStopChange($event)">
                         <!-- <option value="" disabled selected>-- Select --</option> -->

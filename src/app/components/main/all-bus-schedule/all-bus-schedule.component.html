@@ -1,62 +1,60 @@
-
-  
-    <div class="ct_middle_content">
-        <div class="ct_bus_grey_table">
-            <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">Scheduled Buses</h4>
-                <div class="d-flex gap-3 align-items-center  justify-content-between">
-                    <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route"
-                        (ngModelChange)="getBuseSchedule()">
-                        <option value="" disabled selected>-- Select --</option>
-                        <option value="Austria To Ukraine">Austria To Ukraine</option>
-                        <option value="Ukraine To Austria">Ukraine To Austria</option>
-                    </select>
-                    <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
-                        (ngModelChange)="getBuseSchedule()">
-                </div>
-                <!-- <div class="ct_grid_2 gap-2"> -->
-                <!-- <button
+<div class="ct_middle_content">
+    <div class="ct_bus_grey_table">
+        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0">Scheduled Buses</h4>
+            <div class="d-flex gap-3 align-items-center  justify-content-between">
+                <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route"
+                    (ngModelChange)="getBuseSchedule()">
+                    <option value="" disabled selected>-- Select --</option>
+                    <option value="Austria To Ukraine">Austria To Ukraine</option>
+                    <option value="Ukraine To Austria">Ukraine To Austria</option>
+                </select>
+                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    (ngModelChange)="getBuseSchedule()">
+            </div>
+            <!-- <div class="ct_grid_2 gap-2"> -->
+            <!-- <button
                         class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
                         data-bs-toggle="modal" data-bs-target="#ct_add_newschedule">
                         +
                         Add New Schedule</button> -->
 
 
-                <!-- </div> -->
+            <!-- </div> -->
 
-            </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>S No.</th>
-                            <th>Bus Number </th>
-                            <th>Name/Type</th>
-                            <th>Capacity</th>
-                            <th>Title</th>
-                            <th>Recurrence Status</th>
-                            <th>Status</th>
-                            <!-- <th>Actions</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>S No.</th>
+                        <th>Bus Number </th>
+                        <th>Name/Type</th>
+                        <th>Capacity</th>
+                        <th>Title</th>
+                        <th>Recurrence Status</th>
+                        <th>Status</th>
+                        <!-- <th>Actions</th> -->
+                    </tr>
+                </thead>
+                <tbody>
 
-                        <tr *ngFor="let item of data; let i = index">
-                            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                            <td>{{item.bus.bus_number_plate}}</td>
-                            <td>{{item.bus.bus_name}}</td>
-                            <td>{{item.bus.number_of_seats}}</td>
-                            <td>{{item.route.title}}, {{item.route_stops?.length}}</td>
-                            <td>{{item.recurrence_pattern}}</td>
-                            <td>
-                                @if (item.route.is_active) {
-                                Active
-                                } @else {
-                                Inactive
-                                }
-                            </td>
+                    <tr *ngFor="let item of data; let i = index">
+                        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td>{{item.bus.bus_number_plate}}</td>
+                        <td>{{item.bus.bus_name}}</td>
+                        <td>{{item.bus.number_of_seats}}</td>
+                        <td>{{item.route.title}}, {{item.route_stops?.length}}</td>
+                        <td>{{item.recurrence_pattern}}</td>
+                        <td>
+                            @if (item.route.is_active) {
+                            Active
+                            } @else {
+                            Inactive
+                            }
+                        </td>
 
-                            <!-- <td>
+                        <!-- <td>
                                 <div class="ct_actions_btn" (click)="viewMessage(item)">
                                     <button class="ct_action_btn" data-bs-toggle="modal" data-bs-target="#view_model">
                                         <i class="fa-regular fa-eye ct_hide_pass_wye"></i>
@@ -64,7 +62,7 @@
                                 </div>
                             </td> -->
 
-                            <!-- <td>
+                        <!-- <td>
                                 <div class="ct_actions_btn">
                                     <button class="ct_action_btn" data-bs-toggle="modal"
                                         data-bs-target="#ct_edit_new_schedule">
@@ -89,38 +87,38 @@
                                     </button>
                                 </div>
                             </td> -->
-                        </tr>
-                    </tbody>
-                </table>
-                <div *ngIf="data?.length == 0 || !data" class="text-center">
-                    <p class="ct_fs_15 mt-3">No items found</p>
-                </div>
-            </div>
-            <!-- Pagination Controls -->
-            <div class="d-flex justify-content-between align-items-center pagination-section w-100">
-                <div class="d-flex gap-2 align-items-center">
-                    <label for="pageSize">Items per page: </label>
-                    <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
-                        (change)="changePageSize(pageSize)">
-                        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
-                        </option>
-                    </select>
-                </div>
-
-                <!-- Pagination -->
-                <nav aria-label="Table pagination">
-                    <ul class="pagination">
-                        <li class="page-item" [class.disabled]="currentPage === 1">
-                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
-                        </li>
-                        <li class="page-item" [class.disabled]="currentPage === totalPages">
-                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="data?.length == 0 || !data" class="text-center">
+                <p class="ct_fs_15 mt-3">No items found</p>
             </div>
         </div>
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center pagination-section w-100">
+            <div class="d-flex gap-2 align-items-center">
+                <label for="pageSize">Items per page: </label>
+                <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
+                    (change)="changePageSize(pageSize)">
+                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Table pagination">
+                <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
+</div>
 
 
 

@@ -49,7 +49,7 @@
             </ul>
         </li>
 
-        <li [ngClass]="{ 'active': isActive('/home/my-drivers')}" (click)="toggleMenu()">
+        <!-- <li [ngClass]="{ 'active': isActive('/home/my-drivers')}" (click)="toggleMenu()">
             <a routerLink="/home/my-drivers">
                 <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <mask id="mask0_40_1072" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0"
@@ -64,9 +64,9 @@
                 </svg>
                 Driver Management
             </a>
-        </li>
+        </li> -->
 
-        <li [ngClass]="{ 'active': isActive('/home/booking-management')}">
+        <li [ngClass]="{ 'active': isActive('/home/booking-management')}" (click)="toggleMenu()">
             <a routerLink="/home/booking-management">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
