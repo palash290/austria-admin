@@ -24,7 +24,7 @@ export class LoginComponent {
     if (this.apiService.isLogedIn()) {
       this.route.navigate(['/home/dashboard']);
     }
-    localStorage.removeItem('austriaAdminToken');
+    // localStorage.removeItem('austriaAdminToken');
   }
 
   ngOnInit(): void {
