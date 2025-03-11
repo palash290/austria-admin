@@ -1,29 +1,43 @@
 <div class="">
-
     <div class="row">
         <div [ngClass]="booking_id ? 'col-lg-8' : 'col-lg-12'">
             <div *ngIf="!showForm" class="ct_white_bg">
                 <h2 class="ct_fs_24 ct_fw_600">Booking Details</h2>
 
                 @if(booking_id){
-                    <h3 class="mt-2">Status</h3>
-                    <div class="form-group w-50">
-                        <select class="form-control ct_input mb-4" [(ngModel)]="booking_status">
-                            <option disabled selected value="">-- Choose --</option>
-                            <option value="Cancelled">Cancelled</option>
-                            <option value="Confirmed">Confirmed</option>
-                        </select>
-                    </div>
+                <h3 class="mt-2">Status</h3>
+                <div class="form-group w-50">
+                    @if(bookingData?.booking_status == 'Pending'){
+                    <select class="form-control ct_input mb-4" [(ngModel)]="booking_status">
+                        <option disabled selected value="">-- Choose --</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Confirmed">Confirmed</option>
+                    </select>
+                    }
+                    @if(bookingData?.booking_status == 'Confirmed'){
+                    <select class="form-control ct_input mb-4" [(ngModel)]="booking_status" disabled>
+                        <option disabled selected value="">-- Choose --</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Confirmed">Confirmed</option>
+                    </select>
+                    }
+                    @if(bookingData?.booking_status == 'Cancelled'){
+                    <select class="form-control ct_input mb-4" [(ngModel)]="booking_status" disabled>
+                        <option disabled selected value="">-- Choose --</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Confirmed">Confirmed</option>
+                    </select>
+                    }
+                </div>
                 }
-             
-                
-
 
                 <!-- *ngIf="!booking_id" -->
                 <div class="form-row ct_flex_direction_767 mb-4" *ngIf="!booking_id">
                     <div class="form-group">
                         <label>Date</label>
-                        <input type="date" class="form-control ct_input" [(ngModel)]="date1" (change)="onDateChange()" [min]="minDate" required>
+                        <input type="date" class="form-control ct_input" [(ngModel)]="date1" (change)="onDateChange()"
+                            [min]="minDate" required>
                     </div>
                     <div class="form-group">
                         <label>From</label>
@@ -243,8 +257,24 @@
                     <table class="table ct_booking_tble">
                         <thead>
                             <tr>
-                                <th><i class="fa-solid fa-triangle-exclamation"></i> Status</th>
-                                <th class="text-end">{{bookingData?.booking_status}}</th>
+                                @if(bookingData?.booking_status == 'Pending'){
+                                <th style="background-color: #fbc994;color: #ffffff;"><i
+                                        class="fa-solid fa-triangle-exclamation"></i> Status</th>
+                                <th class="text-end" style="background-color: #fbc994;color: #ffffff;">
+                                    {{bookingData?.booking_status}}</th>
+                                }
+                                @if(bookingData?.booking_status == 'Confirmed'){
+                                <th style="background-color: #29c074;color: #f3f3f3;"><i
+                                        class="fa-solid fa-triangle-exclamation"></i> Status</th>
+                                <th class="text-end" style="background-color: #29c074;color: #f3f3f3;">
+                                    {{bookingData?.booking_status}}</th>
+                                }
+                                @if(bookingData?.booking_status == 'Cancelled'){
+                                <th style="background-color: #fa0101;color: #f3f3f3;"><i
+                                        class="fa-solid fa-triangle-exclamation"></i> Status</th>
+                                <th class="text-end" style="background-color: #fa0101;color: #f3f3f3;">
+                                    {{bookingData?.booking_status}}</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>

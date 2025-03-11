@@ -76,6 +76,7 @@ export class AddBookingComponent {
             this.notes = data.notes;
 
             this.payment_method = data.payment_method;
+            this.booking_status = data.booking_status;
 
             this.date1 = data.travel_date;
             this.selectedFromId = data.from.city_id;
@@ -217,16 +218,15 @@ export class AddBookingComponent {
   }
 
   onDateChange(): void {
-    this.selectedFromId = '';
-    this.selectedToId = '';
-    this.selectedBusId = '';
+    // this.selectedFromId = '';
+    // this.selectedToId = '';
+    // this.selectedBusId = '';
 
-    this.allCityTo = []; // Clear destination cities
-    this.allBuses = [];  // Clear buses
-
-    this.departure_time = '';
-    this.arrival_time = '';
-
+    // this.allCityTo = [];
+    // this.allBuses = [];
+    // this.departure_time = '';
+    // this.arrival_time = '';
+    this.getBuses();
     console.log('Date changed, all selections reset.');
   }
 
@@ -278,7 +278,7 @@ export class AddBookingComponent {
     formData.append('travel_date', this.date1);
 
     this.apiService
-      .postAPIUser('http://13.61.168.187:4000/api/bus-search', formData.toString())
+      .postAPIUser('http://192.168.29.45:4200/api/bus-search', formData.toString())
       .subscribe((res: any) => {
         if (res.success == true) {
           //debugger
@@ -541,31 +541,29 @@ export class AddBookingComponent {
   booking_status: any = '';
 
   saveBooking() {
-    this.loading = true;
+
     // if (!this.selectedPaymentMethod) {
     //     this.toastr.warning("Please select a payment method");
     //     return;
     // }
 
-
-
-    if (!this.firstName) {
+    if (!this.firstName || this.firstName.trim() === '') {
       this.toastr.warning("Please enter first name");
       return;
     }
-    if (!this.lastName) {
+    if (!this.lastName || this.lastName.trim() === '') {
       this.toastr.warning("Please enter last name");
       return;
     }
-    if (!this.email) {
+    if (!this.email || this.email.trim() === '') {
       this.toastr.warning("Please enter email");
       return;
     }
-    if (!this.phone) {
+    if (!this.phone || this.phone.trim() === '') {
       this.toastr.warning("Please enter phone number");
       return;
     }
-    if (!this.notes) {
+    if (!this.notes || this.notes.trim() === '') {
       this.toastr.warning("Please enter notes");
       return;
     }
@@ -575,7 +573,7 @@ export class AddBookingComponent {
     // Object.keys(bookingDetails).forEach(key => {
     //   urlEncodedData.append(key, bookingDetails[key]);
     // });
-
+    this.loading = true;
     if (this.booking_id) {
       bookingDetails.append('booking_id', this.booking_id);
       bookingDetails.append('booking_status', this.booking_status);
@@ -696,7 +694,7 @@ export class AddBookingComponent {
         this.toastr.warning(`Please assign a seat for ${ticket.ticketType}`);
         return;
       }
-      if (!ticket.passengerName) {
+      if (!ticket.passengerName || ticket.passengerName.trim() === '') {
         this.toastr.warning(`Please enter passenger name for ${ticket.ticketType}`);
         return;
       }
