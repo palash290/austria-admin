@@ -26,6 +26,7 @@ p {
 .ct_dash_nav {
   margin-top: 40px;
   margin-bottom: 60px;
+  padding-left: 0px;
 }
 .ct_dash_nav li {
   transition: 0.4s ease all;
@@ -370,12 +371,12 @@ p {
   align-items: center;
   gap: 10px;
 }
-.ct_bus_grey_table tbody tr td:first-child {
+/* .ct_bus_grey_table tbody tr td:first-child {
   border-top-left-radius: 15px;
 }
 .ct_bus_grey_table tbody tr td:last-child {
   border-top-right-radius: 15px;
-}
+} */
 .btn-close:focus {
   box-shadow: none;
 }

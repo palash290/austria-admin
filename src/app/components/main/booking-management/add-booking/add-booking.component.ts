@@ -3,13 +3,13 @@ import { SharedService } from '../../../../services/shared.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../loader/loader.component';
 
 @Component({
   selector: 'app-add-booking',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoaderComponent, RouterLink],
   templateUrl: './add-booking.component.html',
   styleUrl: './add-booking.component.css'
 })
@@ -118,9 +118,21 @@ export class AddBookingComponent {
 
             // Prefill pricing details
             this.subtotal = data.subtotal;
+            // setTimeout(() => {
+            //   this.prefillTicketSelection()
+            // }, 1000);
             setTimeout(() => {
-              this.prefillTicketSelection()
+              this.prefillTicketSelection();
+
+              // Manually check for duplicates after prefill
+              this.selectedSeats.forEach((seat, index) => {
+                if (seat) {
+                  this.checkDuplicateSeats({ target: { value: seat } } as unknown as Event, index);
+                }
+              });
+
             }, 1000);
+
           }
         });
     }
@@ -173,7 +185,6 @@ export class AddBookingComponent {
     //this.onTicketQuantityChange();
     // console.log('Pre-filled ticket quantities:', this.ticketQuantities);
     // console.log('Pre-filled expanded ticket list:', this.expandedTicketList);
-
 
   }
 
@@ -231,35 +242,9 @@ export class AddBookingComponent {
   }
 
 
-  // number_of_seats: any;
 
-  // getBuses() {
-  //   this.allBuses = '';
-  //   const formData = new URLSearchParams();
-  //   formData.append('pickup_point', this.selectedFromId);
-  //   formData.append('dropoff_point', this.selectedToId);
-  //   formData.append('travel_date', this.date1);
-  //   this.apiService
-  //     .postAPIUser('http://13.61.168.187:4000/api/bus-search', formData.toString())
-  //     .subscribe((res: any) => {
-  //       if (res.success == true) {
-  //         this.allBuses = res.data;
-  //         // this.number_of_seats = res.data[0].bus.number_of_seats;
-  //         // this.number_of_seats = Array.from({ length: 60 }, (_, i) => i);
 
-  //         const numberOfSeats = res.data[0]?.bus?.number_of_seats;
-  //         //console.log('this.numberOfSeats ', numberOfSeats);
-  //         if (numberOfSeats) {
-  //           this.number_of_seats = Array.from({ length: numberOfSeats + 1 }, (_, i) => i);
-  //         } else {
-  //           this.number_of_seats = [];
-  //         }
-  //         //console.log('this.number_of_seats ', this.number_of_seats);
-  //       } else {
-  //         this.allBuses = [];
-  //       }
-  //     });
-  // }
+
 
   number_of_seats = 0;
   remaining_seats = 0;
@@ -278,7 +263,7 @@ export class AddBookingComponent {
     formData.append('travel_date', this.date1);
 
     this.apiService
-      .postAPIUser('http://192.168.29.45:4200/api/bus-search', formData.toString())
+      .postAPI('bus-search', formData.toString())
       .subscribe((res: any) => {
         if (res.success == true) {
           //debugger
@@ -294,7 +279,7 @@ export class AddBookingComponent {
             this.number_of_seats = numberOfSeats;
             this.remaining_seats = numberOfSeats;
 
-            //this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1);
+            this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1);
 
             setTimeout(() => {
               this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1)
@@ -333,66 +318,44 @@ export class AddBookingComponent {
     const maxAvailableSeats = this.number_of_seats - selectedTicketsForOtherTypes;
 
     // Ensure the dropdown doesn’t offer more seats than possible
-    //const seatOptions = Array.from({ length: maxAvailableSeats + 1 }, (_, i) => i);
+    const seatOptions = Array.from({ length: maxAvailableSeats + 1 }, (_, i) => i);
 
-    // Generate seat options and exclude already booked seats (preBookSeats)
-    const seatOptions = Array.from({ length: maxAvailableSeats + 1 }, (_, i) => i)
-      .filter(seat => !this.preBookSeats.includes(seat)); // Remove booked seats
+    // const seatOptions = Array.from({ length: maxAvailableSeats + 1 }, (_, i) => i)
+    //   .filter(seat => !this.preBookSeats.includes(seat)); // Remove booked seats
 
-    // Set the first option (index 1) as the default value if not already selected
     if (!this.ticketQuantities[ticketLabel] && seatOptions.length > 1) {
-      this.ticketQuantities[ticketLabel] = seatOptions[0]; // Default to first valid seat (not 0)
+      this.ticketQuantities[ticketLabel] = seatOptions[0];
     }
 
     return seatOptions;
   }
 
   // Remove seat without toggling dropdown
+  // removeSeat(event: Event, seat: number) {
+  //   event.stopPropagation(); // Prevents dropdown toggle
+  //   this.selectedSeats = this.selectedSeats.filter(s => s !== seat);
+  // }
+
   removeSeat(event: Event, seat: number) {
     event.stopPropagation(); // Prevents dropdown toggle
     this.selectedSeats = this.selectedSeats.filter(s => s !== seat);
+
+    // Check if the seat is already in seatOptions before pushing
+    if (!this.seatOptions.includes(seat)) {
+      this.seatOptions.push(seat);
+      this.seatOptions.sort((a, b) => a - b); // Optional: Sort if needed
+    }
   }
+
+
 
   selectedTickets: { ticketType: string; seats: number, price: any }[] = [];
 
   expandedTicketList: any[] = [];
   subtotal: any = 0;
 
-  // onTicketQuantityChange() {
 
-  //   this.expandedTicketList = [];
-
-  //   // Update the selectedTickets array
-  //   this.selectedTickets = Object.entries(this.ticketQuantities).map(([ticketType, seats]) => {
-  //     const ticket = this.ticketTypes.find(t => t.label === ticketType);
-  //     return {
-  //       ticketType,
-  //       seats: Number(seats) || 0,
-  //       price: ticket ? ticket.price : 0,  // Fetch the price
-  //     };
-  //   }).filter(ticket => ticket.seats > 0);
-
-  //   this.subtotal = this.selectedTickets.reduce((sum, ticket: any) => sum + (ticket.seats * ticket.price), 0);
-
-  //   // Create expanded ticket list based on seat count
-  //   this.expandedTicketList = [];
-  //   this.selectedTickets.forEach(ticket => {
-  //     for (let i = 0; i < ticket.seats; i++) {
-  //       this.expandedTicketList.push({
-  //         ticketType: ticket.ticketType,
-  //         selectedSeat: '',
-  //         passengerName: '',
-  //         price: ticket.price
-  //       });
-  //     }
-  //   });
-  //   console.log('this.selectedTickets', this.selectedTickets);
-  //   console.log('this.expandedTicketList', this.expandedTicketList);
-
-  //   // Create seat options from 1 to number_of_seats
-  //   this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1);
-  // }
-  onTicketQuantityChange() {
+  onTicketQuantityChangeEdit() {
     const previousData = new Map();
 
     // Store previous seat and passenger data
@@ -443,6 +406,42 @@ export class AddBookingComponent {
     console.log('Updated expandedTicketList:', this.expandedTicketList);
   }
 
+  onTicketQuantityChange() {
+
+    this.expandedTicketList = [];
+
+    // Update the selectedTickets array
+    this.selectedTickets = Object.entries(this.ticketQuantities).map(([ticketType, seats]) => {
+      const ticket = this.ticketTypes.find(t => t.label === ticketType);
+      return {
+        ticketType,
+        seats: Number(seats) || 0,
+        price: ticket ? ticket.price : 0,  // Fetch the price
+      };
+    }).filter(ticket => ticket.seats > 0);
+
+    // Calculate the Subtotal (Sum of all ticket prices)
+    this.subtotal = this.selectedTickets.reduce((sum, ticket: any) => sum + (ticket.seats * ticket.price), 0);
+
+    // Create expanded ticket list based on seat count
+    this.expandedTicketList = [];
+    this.selectedTickets.forEach(ticket => {
+      for (let i = 0; i < ticket.seats; i++) {
+        this.expandedTicketList.push({
+          ticketType: ticket.ticketType,
+          selectedSeat: '',
+          passengerName: '',
+          price: ticket.price
+        });
+      }
+    });
+    console.log('this.selectedTickets', this.selectedTickets);
+    console.log('this.expandedTicketList', this.expandedTicketList);
+
+    // Create seat options from 1 to number_of_seats
+    this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1);
+  }
+
 
 
 
@@ -453,6 +452,8 @@ export class AddBookingComponent {
   getTicketTypeById(route_id?: any) {
     const formURlData = new URLSearchParams();
     formURlData.set('route_id', route_id);
+    formURlData.set('pickup_point', this.selectedFromId);
+    formURlData.set('dropoff_point', this.selectedToId);
 
     this.apiService.postAPI('get-ticket-type-by-routeid', formURlData.toString()).subscribe({
       next: (response) => {
@@ -490,6 +491,16 @@ export class AddBookingComponent {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
+  // toggleSeatSelection(seat: number) {
+  //   if (this.selectedSeats.includes(seat)) {
+  //     // Remove the seat if it's already selected
+  //     this.selectedSeats = this.selectedSeats.filter(s => s !== seat);
+  //   } else if (this.selectedSeats.length < this.number_of_seats) {
+  //     // Add the seat if it's not already selected and there's room
+  //     this.selectedSeats.push(seat);
+  //   }
+  // }
+
   toggleSeatSelection(seat: number) {
     if (this.selectedSeats.includes(seat)) {
       // Remove the seat if it's already selected
@@ -497,9 +508,12 @@ export class AddBookingComponent {
     } else if (this.selectedSeats.length < this.number_of_seats) {
       // Add the seat if it's not already selected and there's room
       this.selectedSeats.push(seat);
+
+      // Sort in ascending order
+      this.selectedSeats.sort((a, b) => a - b);
     }
-    console.log('Selected Seats:', this.selectedSeats);
   }
+
 
   chosenSeats: any[] = [];
 
@@ -508,7 +522,6 @@ export class AddBookingComponent {
 
     // Check if the seat is already selected elsewhere
     const duplicate = this.chosenSeats.some((seat, i) => seat === selectedSeat && i !== index);
-    console.log(duplicate);
 
     if (duplicate) {
       this.toastr.warning(`Seat ${selectedSeat} is already selected. Please choose a different seat.`);
@@ -530,7 +543,7 @@ export class AddBookingComponent {
   }
 
 
-  selectedPaymentMethod: string = 'Cash';
+
 
 
   firstName: any;
@@ -563,10 +576,15 @@ export class AddBookingComponent {
       this.toastr.warning("Please enter phone number");
       return;
     }
-    if (!this.notes || this.notes.trim() === '') {
-      this.toastr.warning("Please enter notes");
-      return;
-    }
+    // if (!this.notes || this.notes.trim() === '') {
+    //   this.toastr.warning("Please enter notes");
+    //   return;
+    // }
+
+
+
+
+
 
     // Convert to URL-encoded format
     const bookingDetails = new URLSearchParams();
@@ -577,7 +595,7 @@ export class AddBookingComponent {
     if (this.booking_id) {
       bookingDetails.append('booking_id', this.booking_id);
       bookingDetails.append('booking_status', this.booking_status);
-      bookingDetails.append('payment_method', this.selectedPaymentMethod);
+      bookingDetails.append('payment_method', this.payment_method);
       bookingDetails.append('subtotal', this.subtotal.toFixed(2));
       bookingDetails.append('tax', '0');
       bookingDetails.append('total', this.subtotal.toFixed(2));
@@ -605,7 +623,7 @@ export class AddBookingComponent {
       bookingDetails.append('travel_date', this.date1);
       bookingDetails.append('departure_time', this.departure_time);
       bookingDetails.append('arrival_time', this.arrival_time);
-      bookingDetails.append('payment_method', this.selectedPaymentMethod);
+      bookingDetails.append('payment_method', this.payment_method);
       bookingDetails.append('subtotal', this.subtotal.toFixed(2));
       bookingDetails.append('tax', '0');
       bookingDetails.append('total', this.subtotal.toFixed(2));
@@ -627,7 +645,6 @@ export class AddBookingComponent {
         )
       );
     }
-
 
 
     const url = this.booking_id ? 'update-booking-byid' : 'create-booking'
@@ -712,12 +729,43 @@ export class AddBookingComponent {
       return;
     }
 
+
+    // Check for duplicate seat selection
+    const selectedSeats = this.expandedTicketList.map(ticket => ticket.selectedSeat);
+    const duplicateSeat = selectedSeats.find((seat, index) => selectedSeats.indexOf(seat) !== index);
+
+    if (duplicateSeat) {
+      this.toastr.warning(`Seat ${duplicateSeat} is already selected!`);
+      return;
+    }
+
     this.showForm = true; // Show form when clicking Next
   }
 
   previousStep() {
     this.showForm = false; // Show form when clicking Next
   }
+
+  openBookingDetails() {
+    const url = this.route.serializeUrl(
+      this.route.createUrlTree(['/admin/booking-details'], { queryParams: { booking_id: this.booking_id } })
+    );
+    window.open(url, '_blank');
+  }
+  // openBookingDetails() {
+  //   const url = this.route.serializeUrl(
+  //     this.route.createUrlTree(['/booking-details'], { queryParams: { booking_id: this.booking_id } })
+  //   );
+  //   const newTab = window.open(url, '_blank');
+
+  //   // Wait for the new tab to load, then trigger print
+  //   if (newTab) {
+  //     newTab.onload = () => {
+  //       newTab.print();
+  //     };
+  //   }
+  // }
+
 
 
 }

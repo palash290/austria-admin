@@ -30,7 +30,7 @@ export class DashboardComponent {
       next: resp => {
         this.userCount = resp.data.userCount;
         this.busCount = resp.data.busCount;
-        this.driverCount = resp.data.driverCount;
+        this.driverCount = resp.data.bookingCount;
         this.routeCount = resp.data.routeCount;
         if (resp.success && resp.data.userList) {
           this.buses = resp.data.userList

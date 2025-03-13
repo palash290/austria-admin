@@ -46,7 +46,7 @@ export class BookingManagementComponent {
     if (this.selectedLineId) {
       formData.append('route_id', this.selectedLineId);
     }
-    
+
     this.apiService
       .postAPI(`get-all-booking`, formData.toString())
       .subscribe((res: any) => {
@@ -120,6 +120,14 @@ export class BookingManagementComponent {
     if (this.selectedBusId == '' && this.selectedLineId == '') {
       return
     }
+    this.getAllRoutesFrom();
+  }
+
+  resetFilters() {
+    this.fromDate = '';
+    this.toDate = '';
+    this.selectedLineId = '';
+    this.getRoutes();
     this.getAllRoutesFrom();
   }
 

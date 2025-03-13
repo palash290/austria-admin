@@ -194,6 +194,34 @@ select {
     height: auto;
     max-height: 254px;
     overflow-y: auto;
+    background-color: #fff;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #e6e6e6;
+}
+
+.ct_multi_drop_custom_scroll .dropdown-item{
+    border-radius: 5px;
+}
+.ct_multi_drop_custom_scroll .dropdown-item + .dropdown-item {
+    margin-top: 5px;
+}
+.ct_multi_drop_custom_scroll .dropdown-item:hover{
+    background-color: #3b82f6;
+    color: #fff;
+}
+.ct_total_price_bg {
+    margin-bottom: 0PX;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex
+;
+    align-items: center;
+    justify-content: end;
+    gap: 15px;
 }
 
 .ct_multi_drop_custom_main .dropdown-toggle:after {
@@ -205,4 +233,22 @@ select {
 
 .ct_verticle_middle {
     vertical-align: middle;
+}
+
+.ct_multi_drop_custom_main .dropdown-toggle{
+    padding: 13.27px 10px;
+}
+
+span.selected-seat {
+    background: #3b82f6;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+.ct_multi_drop_custom_main .dropdown-toggle span {
+    display: flex
+;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }

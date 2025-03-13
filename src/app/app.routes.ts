@@ -7,7 +7,7 @@ export const routes: Routes = [
     { path: 'forgot-password', loadComponent: () => import('./components/core/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent) },
     // { path: 'dashboard', loadComponent: () => import('./components/main/dashboard/dashboard.component').then(m => m.DashboardComponent) },
     { path: 'data-filling', loadComponent: () => import('./components/main/bus-list/bus-list.component').then(m => m.BusListComponent) },
-
+    { path: 'booking-details', loadComponent: () => import('./components/main/booking-details/booking-details.component').then(m => m.BookingDetailsComponent), canActivate: [AuthGuard] },
     {
         path: 'home',
         component: RootComponent,
@@ -34,7 +34,7 @@ export const routes: Routes = [
             { path: 'edit-city', loadComponent: () => import('./components/main/routes-management/edit-city/edit-city.component').then(m => m.EditCityComponent), canActivate: [AuthGuard] },
             { path: 'price-management', loadComponent: () => import('./components/main/price-management/price-management.component').then(m => m.PriceManagementComponent), canActivate: [AuthGuard] },
             { path: 'add-booking', loadComponent: () => import('./components/main/booking-management/add-booking/add-booking.component').then(m => m.AddBookingComponent), canActivate: [AuthGuard] },
-            { path: 'booking-details', loadComponent: () => import('./components/main/booking-details/booking-details.component').then(m => m.BookingDetailsComponent), canActivate: [AuthGuard] },
+            //{ path: 'booking-details', loadComponent: () => import('./components/main/booking-details/booking-details.component').then(m => m.BookingDetailsComponent), canActivate: [AuthGuard] },
             //category-management
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'user-profile/:id', loadComponent: () => import('./components/user/user-profile/user-profile.component').then(m => m.UserProfileComponent) },

@@ -16,10 +16,10 @@
             <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
                 <h4 class="ct_fs_20 ct_fw_600 mb-0">Bus List</h4>
                 <div class="d-flex gap-3 align-items-center justify-content-between">
-                    <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    <input type="text" placeholder="Search..." class="form-control w-auto ct_h_40" [(ngModel)]="searchQuery"
                         (ngModelChange)="getBuses()">
                     <button
-                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
+                        class="ct_blue_btn ct_outline_btn_blue py-2 h-auto ct_fs_16 ct_h_40 ct_fw_500 ct_white_nowrap w-auto ms-sm-auto"
                         data-bs-toggle="modal" data-bs-target="#ct_add_bus">
                         +
                         Add Bus</button>
@@ -232,7 +232,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_blue_btn py-3" (click)="addBus()">Add Bus</button>
+                <button type="button" class="ct_blue_btn py-2" (click)="addBus()">Add Bus</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal
                     data-bs-dismiss="modal">Close</button>
             </div>
@@ -322,7 +322,7 @@
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button (click)="editBus()" type="button" class="ct_blue_btn py-3">Save Changes</button>
+                <button (click)="editBus()" type="button" class="ct_blue_btn py-2">Save Changes</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal1
                     data-bs-dismiss="modal">Close</button>
             </div>
@@ -354,9 +354,9 @@
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="ct_btn_red bg-danger py-2 px-5" data-bs-dismiss="modal">Cancel</button>
 
-                <button (click)="deleteMember()" type="button" class="ct_blue_btn py-3 px-5">Confirm</button>
+                <button (click)="deleteMember()" type="button" class="ct_blue_btn py-2 px-5">Confirm</button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal2
                     data-bs-dismiss="modal">Close</button>
             </div>
@@ -392,11 +392,11 @@
                 </div>
             </div>
             <div class="modal-footer border-0 justify-content-center">
-                <button (click)="getBuses()" type="button" class="ct_btn_red bg-danger py-3 px-5"
+                <button (click)="getBuses()" type="button" class="ct_btn_red bg-danger py-2 px-5"
                     data-bs-dismiss="modal">
                     Cancel
                 </button>
-                <button type="button" class="ct_blue_btn py-3 px-5" (click)="confirmChange()">
+                <button type="button" class="ct_blue_btn py-2 px-5" (click)="confirmChange()">
                     Confirm
                 </button>
                 <button hidden type="button" class="btn btn-secondary" #closeModal3

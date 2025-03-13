@@ -385,7 +385,7 @@ export class BusScheduleComponent {
         res => {
           // console.log('Ticket data successfully updated', res);
           if (res.success == true) {
-            this.toastr.success('Tickets updated successfully!');
+            this.toastr.success(res.message);
             this.updatedTickets = []; // Clear the updated tickets array
             //this.router.navigate(['/home/routes-management'])
           } else {
@@ -393,8 +393,13 @@ export class BusScheduleComponent {
           }
         },
         error => {
-          console.error('Error updating ticket data', error);
-          this.toastr.error('Error updating ticket data');
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+          // console.error('Error updating ticket data', error);
+          // this.toastr.error('Error updating ticket data');
         }
       );
     } else {

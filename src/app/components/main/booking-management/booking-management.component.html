@@ -3,7 +3,7 @@
         <div
             class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 ct_flex_direction_767 flex-wrap ">
             <h4 class="ct_fs_20 ct_fw_600 mb-0">Booking Management</h4>
-            <div class="d-flex align-items-center gap-2 ct_flex_direction_767 ct_grid_flex_2_767 ct_w_100_res_767">
+            <div class="d-flex align-items-center gap-2 ct_flex_direction_767  ct_grid_flex_2_767 ct_w_100_res_767">
                 <div class="ct_w_100_res_767">
                     <select class="form-control w-auto ct_w_100_res_767" [(ngModel)]="filterQuery" name="route"
                         (ngModelChange)="getAllRoutesFrom()">
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="collapse" id="collapseExample">
-            <div class="d-flex align-items-end justify-content-between gap-3 ct_pb_20 ct_px_20 ct_flex_direction_767 ">
+            <div class="d-flex align-items-end justify-content-between gap-3 ct_pb_20 ct_px_20 ct_fitered_box_567 ct_flex_direction_767 ">
                 <div class="form-group ct_w_100_res_767">
                     <label for="" class="ct_fs_18 ct_fw_500 mb-2">From<span class="ct_text_red">*</span></label>
                     <div class="position-relative">
@@ -59,13 +59,18 @@
                     <label for="" class="ct_fs_18 ct_fw_500 mb-2">Lines</label>
                     <select class="form-control w-auto ct_w_100_res_767 ct_input ct_fs_18"
                         (change)="onLineChange($event)">
-                        <option disabled selected value="">All</option>
+                        <option selected value="">All</option>
                         <option *ngFor="let lan of allLines" [value]="lan.route_id">{{lan.title}}
                         </option>
                     </select>
                 </div>
 
-                <button (click)="applyFilters()" class="ct_blue_btn">Apply</button>
+                <div class="d-flex gap-3">
+                    <button (click)="applyFilters()" class="ct_blue_btn">Apply</button>
+
+                    <button (click)="resetFilters()" class="ct_blue_btn">Reset</button>
+                </div>
+
 
             </div>
         </div>
@@ -77,9 +82,9 @@
                     <tr>
                         <th>S No.</th>
                         <th>Client</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Price</th>
+                        <th>From/Time</th>
+                        <th>To/Time</th>
+                        <th>Tickets/Price</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -111,13 +116,15 @@
                                 </p>
                             </div>
                         </td>
-                        <td>{{item.subtotal}}</td>
+                        <td><p class="mb-0">{{item.passengers.length}} Ticket</p>
+                            <p class="mb-0">{{item.subtotal}}</p>
+                        </td>
                         <td>
                             @if(item.booking_status == 'Pending'){
                             <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
-                                style="background-color: #fbc994;color: #ffffff; cursor: pointer;"
+                                style="background-color: #f08c32;color: #ffffff; cursor: pointer;"
                                 [routerLink]="item.booking_status === 'Pending' ? '/home/add-booking' : null"
-                                [queryParams]="{'booking_id':item.booking_id}">
+                                [queryParams]="{'booking_id':item.id}">
                                 {{item.booking_status}}
                             </span>
                             }
@@ -125,7 +132,7 @@
                             <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
                                 style="background-color: #29c074;color: #f3f3f3;"
                                 [routerLink]="item.booking_status === 'Confirmed' ? '/home/add-booking' : null"
-                                [queryParams]="{'booking_id':item.booking_id}">
+                                [queryParams]="{'booking_id':item.id}">
                                 {{item.booking_status}}
                             </span>
                             }
@@ -133,7 +140,7 @@
                             <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
                                 style="background-color: #fa0101;color: #f3f3f3;"
                                 [routerLink]="item.booking_status === 'Cancelled' ? '/home/add-booking' : null"
-                                [queryParams]="{'booking_id':item.booking_id}">
+                                [queryParams]="{'booking_id':item.id}">
                                 {{item.booking_status}}
                             </span>
                             }
@@ -141,7 +148,7 @@
                         <td>
                             <div class="ct_actions_btn">
                                 <button class="ct_action_btn" routerLink="/home/add-booking"
-                                    [queryParams]="{'booking_id':item.booking_id}">
+                                    [queryParams]="{'booking_id':item.id}">
                                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -152,7 +159,7 @@
                                 </button>
                                 <!-- <button class="ct_action_btn"
                                     [routerLink]="item.booking_status === 'Pending' ? '/home/add-booking' : null"
-                                    [queryParams]="{'booking_id':item.booking_id}">
+                                    [queryParams]="{'booking_id':item.id}">
                                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -162,7 +169,7 @@
                                     </svg>
                                 </button> -->
                                 <button class="ct_action_btn" data-bs-toggle="modal" data-bs-target="#ct_delete_modal"
-                                    (click)="patchUpdate(item.booking_id)">
+                                    (click)="patchUpdate(item.id)">
                                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path

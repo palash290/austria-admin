@@ -81,7 +81,9 @@ export class CategoryManagementComponent {
     }
     const formURlData = new URLSearchParams();
     formURlData.set('route_id', this.route_id);
-    formURlData.set('stop_id', filterId ? filterId : "");
+    //formURlData.set('stop_id', filterId ? filterId : "");
+    // formURlData.set('pickup_point', this.fromId);
+    // formURlData.set('dropoff_point', this.toId);
     this.service.postAPI('get-ticket-type-by-routeid', formURlData.toString()).subscribe({
       next: (response) => {
         if (response.success) {
@@ -207,22 +209,22 @@ export class CategoryManagementComponent {
       return
     }
     //if (parseFloat(newValue) >= 0) {
-      // Update the ticket object locally
-      ticket[field] = newValue;
+    // Update the ticket object locally
+    ticket[field] = newValue;
 
-      // Add to updatedTickets array if not already present
-      const existingTicket = this.updatedTickets.find(t => t.ticket_type_id === ticket.ticket_type_id);
-      if (existingTicket) {
-        existingTicket[field] = newValue;
-      } else {
-        this.updatedTickets.push({
-          ticket_type_id: ticket.ticket_type_id,
-          is_active: ticket.is_active,
-          Adult: ticket.Adult,
-          Child: ticket.Child,
-          Baseprice: ticket.Baseprice,
-        });
-      }
+    // Add to updatedTickets array if not already present
+    const existingTicket = this.updatedTickets.find(t => t.ticket_type_id === ticket.ticket_type_id);
+    if (existingTicket) {
+      existingTicket[field] = newValue;
+    } else {
+      this.updatedTickets.push({
+        ticket_type_id: ticket.ticket_type_id,
+        is_active: ticket.is_active,
+        Adult: ticket.Adult,
+        Child: ticket.Child,
+        Baseprice: ticket.Baseprice,
+      });
+    }
     // } else {
     //   this.toastr.error('Negative value not allowed!');
     // }
@@ -233,7 +235,7 @@ export class CategoryManagementComponent {
       this.service.postData('update-ticket-price', this.updatedTickets).subscribe(
         res => {
           if (res.success == true) {
-            this.toastr.success('Tickets updated successfully!');
+            this.toastr.success(res.message);
             this.updatedTickets = []; // Clear the updated tickets array
             this.router.navigate(['/home/routes-management'])
           } else {
@@ -241,8 +243,13 @@ export class CategoryManagementComponent {
           }
         },
         error => {
-          console.error('Error updating ticket data', error);
-          this.toastr.error('Error updating ticket data');
+          // console.error('Error updating ticket data', error);
+          // this.toastr.error('Error updating ticket data');
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
         }
       );
     } else {

@@ -502,7 +502,9 @@ a:hover {
   padding-bottom: 20px;
 }
 /* Hero Banner section E */
-
+.ct_h_40{
+  height: 40px;
+}
 section.ct_login_main_bg {
   min-height: 100vh;
   display: flex;
