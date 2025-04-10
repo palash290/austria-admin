@@ -1,0 +1,25 @@
+.ct_white_bg {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.ct_p_30 {
+  padding: 30px !important;
+}
+
+.ct_flex_2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ct_fs_24 {
+  font-size: 24px;
+}
+
+.ct_mt_40 {
+  margin-top: 40px;
+}

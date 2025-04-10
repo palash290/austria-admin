@@ -2,14 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { SharedService } from '../../../services/shared.service';
-import { HeaderComponent } from '../header/header.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, LoaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
 })
@@ -106,4 +105,6 @@ export function passwordMatchValidator(): ValidatorFn {
 
     return password.value !== confirmPassword.value ? { 'passwordMismatch': true } : null;
   };
+
+  
 }

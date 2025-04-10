@@ -1,7 +1,24 @@
-<div class="row">
-    <div class="col-xxl-12">
-        <div class="ct_middle_content">
-            <!-- <div class="row">
+<div class="ct_custom_tab_2">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#booking" type="button"
+                role="tab" aria-controls="home" aria-selected="true">Booking Reports</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="earning-tab" data-bs-toggle="tab" data-bs-target="#earning" type="button"
+                role="tab" aria-controls="earning" aria-selected="false">Earning Reports</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab"
+                aria-controls="user" aria-selected="false">User Reports</button>
+        </li>
+    </ul>
+
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="booking" role="tabpanel" aria-labelledby="home-tab">
+
+            <div class="row mt-5">
                 <div class="col-xxl-3 col-xl-6 mb-4">
                     <div class="ct_white_bg_card">
                         <div class="ct_card_icon" style="background-color: #E7F4D6;">
@@ -19,12 +36,13 @@
                             </svg>
                         </div>
                         <div class="ct_card_title">
-                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_400">Active Users</h4>
-                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{userCount}}
+                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_400">Total Bookings</h4>
+                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{boxData?.totalBookings}}
                             </h2>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xxl-3 col-xl-6 mb-4">
                     <div class="ct_white_bg_card">
                         <div class="ct_card_icon" style="background-color: #D7F7FF;">
@@ -42,12 +60,10 @@
                             </svg>
                         </div>
                         <div class="ct_card_title">
-                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_400">Total Buses</h4>
-                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{busCount}}</h2>
+                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_400">Confirm Bookings</h4>
+                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{boxData?.confirmedBookings}}</h2>
                         </div>
-                        <div class="ct_small_graph_img">
-                            <img src="assets/img/small_graph_2.png" alt="">
-                        </div>
+
                     </div>
                 </div>
                 <div class="col-xxl-3 col-xl-6 mb-4">
@@ -67,12 +83,10 @@
                             </svg>
                         </div>
                         <div class="ct_card_title">
-                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_500">Total Bookings</h4>
-                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{driverCount}}</h2>
+                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_500">Pending Bookings</h4>
+                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{boxData?.pendingBookings}}</h2>
                         </div>
-                        <div class="ct_small_graph_img">
-                            <img src="assets/img/small_graph_3.png" alt="">
-                        </div>
+
                     </div>
                 </div>
                 <div class="col-xxl-3 col-xl-6 mb-4">
@@ -92,78 +106,70 @@
                             </svg>
                         </div>
                         <div class="ct_card_title">
-                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_500">Total Routes</h4>
-                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{routeCount}}</h2>
-                        </div>
-                        <div class="ct_small_graph_img">
-                            <img src="assets/img/small_graph_4.png" alt="">
+                            <h4 class="ct_fs_18 ct_text_clr_757575 ct_fw_500">Cancelled Bookings</h4>
+                            <h2 class="mb-0 ct_text_black ct_fw_600 ct_fs_24">{{boxData?.cancelledBookings}}</h2>
                         </div>
 
                     </div>
                 </div>
-            </div> -->
+            </div>
 
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-md-6 mb-4">
                     <div class="ct_white_bg ct_p_30">
-                        <div class="ct_flex_2">
-                            <h2 class="ct_fs_24  ct_fw_600">Total Bookings per Month</h2>
+                        <div class="d-flex gap-3 align-items-center  justify-content-between">
+                            <div class="ct_flex_2">
+                                <h2 class="ct_fs_24  ct_fw_600">Type Of Tickets</h2>
+                            </div>
+                            <select class="form-control w-auto" [(ngModel)]="filterQueryTicket"
+                                (ngModelChange)="ticketGraph()">
+                                <!-- <option value="" disabled selected>-- Select --</option> -->
+                                <option value="day">Today</option>
+                                <option value="week">Week</option>
+                                <option value="year">Year</option>
+                            </select>
                         </div>
-                        <div class="ct_mt_40">
+
+                        <div class="ct_mt_40" *ngIf="statusLength > 0">
+                            <apx-chart [series]="statusChart.series" [chart]="statusChart.chart"
+                                [labels]="statusChart.labels" [fill]="statusChart.fill"
+                                [dataLabels]="statusChart.dataLabels" [responsive]="statusChart.responsive"></apx-chart>
+                        </div>
+
+                        <div *ngIf="statusLength == 0">
+                            No Data Found
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="ct_white_bg ct_p_30">
+                        <div class="d-flex gap-3 align-items-center  justify-content-between">
+                            <div class="ct_flex_2">
+                                <h2 class="ct_fs_24  ct_fw_600">Booking Overview</h2>
+                            </div>
+                            <select class="form-control w-auto" [(ngModel)]="filterQuery"
+                                (ngModelChange)="getReportData()">
+                                <!-- <option value="" disabled selected>-- Select --</option> -->
+                                <option value="Day">Today</option>
+                                <option value="Week">Week</option>
+                                <option value="Year">Year</option>
+                            </select>
+                        </div>
+                        
+                        <div class="ct_mt_40" >
                             <apx-chart [series]="bookingChart.series" [chart]="bookingChart.chart"
                                 [xaxis]="bookingChart.xaxis" [dataLabels]="bookingChart.dataLabels"
-                                [grid]="bookingChart.grid" [stroke]="bookingChart.stroke"></apx-chart>
+                                [grid]="bookingChart.grid" [stroke]="bookingChart.stroke" [labels]="bookingChart.labels"
+                                [colors]="bookingChart.colors" [title]="bookingChart.title">
+                            </apx-chart>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-md-6 mb-4">
-                    <div class="ct_white_bg ct_p_30">
-                        <div class="ct_flex_2">
-                            <h2 class="ct_fs_24 ct_fw_600">All Bookings</h2>
-                            <h2 class="ct_fs_24 ct_fw_600">This Month</h2>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Bookings</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.bookingCount}}</h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Earnings</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.totalEarnings ?
-                                        allBookings.totalEarnings : 0}} €</h3>
-                                </div>
-                            </div>
-
-                            <div class="ct_flex_2 mt-2">
-                                <h2 class="ct_fs_24 ct_fw_600">New Bookings</h2>
-                                <h2 class="ct_fs_24 ct_fw_600">Next 7 Days</h2>
-                            </div>
-
-                            <div class="col-lg-6 mb-4 mb-lg-0 mt-3">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Users</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.bookingCount}}</h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4 mb-lg-0 mt-3">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Active Lines</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.totalEarnings ?
-                                        allBookings.totalEarnings : 0}} €</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="ct_mt_40">
-                            <apx-chart [series]="eraningChart.series" [chart]="eraningChart.chart"
-                                [plotOptions]="eraningChart.plotOptions" [dataLabels]="eraningChart.dataLabels"
-                                [xaxis]="eraningChart.xaxis" [yaxis]="eraningChart.yaxis"
-                                [tooltip]="eraningChart.tooltip" [fill]="eraningChart.fill"
-                                [grid]="eraningChart.grid"></apx-chart>
+                        <!-- <div *ngIf="bookingVal == 0">
+                            No Booking Data Found
                         </div> -->
+
                     </div>
                 </div>
             </div>
@@ -176,6 +182,7 @@
                     <table class="table mb-0">
                         <thead>
                             <tr>
+                                <th>S No.</th>
                                 <th>Date/Time</th>
                                 <th>Client</th>
                                 <th>Bus/Route</th>
@@ -185,6 +192,9 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of latestBooking; let i = index">
+                                <td>
+                                    {{i+1}}
+                                </td>
                                 <td>
                                     <div>
                                         <p class="m-0">
@@ -206,9 +216,18 @@
                                     </div>
                                 </td>
                                 <!-- <td class="px-0">{{item.total}}</td> -->
-                                <td class="px-0">{{item.route.title}} {{item.departure_time | date:'HH:mm'}} -
-                                    {{item.arrival_time | date:'HH:mm'}}</td>
-                                <td>{{item.created_at | date:'dd-mm-yyyy'}}</td>
+                                <td class="px-0">
+                                    <div>
+                                        <p class="m-0">
+                                            {{item.route.title}}
+                                        </p>
+                                        <p>
+                                            {{item.departure_time | date:'HH:mm'}} -
+                                            {{item.arrival_time | date:'HH:mm'}}
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
                                 <td>
                                     @if(item.booking_status == 'Pending'){
                                     <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
@@ -238,59 +257,25 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div *ngIf="todayBuses?.length == 0 || !todayBuses" class="text-center">
+                    <div *ngIf="latestBooking?.length == 0 || !latestBooking" class="text-center">
                         <p class="ct_fs_15 mt-3">No items found</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="tab-pane fade" id="earning" role="tabpanel" aria-labelledby="earning-tab">
+            <app-earning-report></app-earning-report>
+        </div>
+
+        <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+            <app-user-report></app-user-report>
+        </div>
+
     </div>
+
 </div>
 
-<div class="row mt-5">
-    <div class="col-xl-6 mb-4 mb-xl-0">
-        <div class="ct_bus_grey_table ct_white_table ct_p_40">
-            <div class="ct_pb_20 d-flex align-items-center gap-2 justify-content-between">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">Upcoming Departures</h4>
-            </div>
-            <div class="table-responsive">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>Route</th>
-                            <th class="px-0">Departure</th>
-                            <th class="px-0">Arrival</th>
-                            <th class="px-0">Bookings</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr *ngFor="let item of todayBuses; let i = index">
-                            <td>
-                                {{item.route.title}}
-                            </td>
-                            <!-- <td>45:88</td>
-                            <td>88:99</td> -->
-                            <td>{{item.bus.number_of_seats - item.booking_count}}/{{item.bus.number_of_seats}}</td>
-
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-6 mb-4 mb-xl-0">
-        <div class="ct_bus_grey_table ct_white_table ct_p_40">
-            <div class="ct_pb_40 d-flex align-items-center gap-2 justify-content-between">
-                <!-- <h4 class="ct_fs_20 ct_fw_600 mb-0">Today's Overview</h4> -->
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">Total Bookings: {{totalBookings}}</h4>
-            </div>
-            <div class="row">
-                <apx-chart [series]="statusChart.series" [chart]="statusChart.chart" [labels]="statusChart.labels"
-                    [fill]="statusChart.fill" [dataLabels]="statusChart.dataLabels"
-                    [responsive]="statusChart.responsive"></apx-chart>
-            </div>
-        </div>
-    </div>
+<div *ngIf="loading">
+    <app-loader />
 </div>

@@ -1,0 +1,192 @@
+<div class="row mt-5">
+    <div class="col-md-6 mb-4">
+        <div class="ct_white_bg ct_p_30">
+            <div class="ct_flex_2">
+                <h2 class="ct_fs_24  ct_fw_600">Total Users</h2>
+            </div>
+            @if(loader){
+            <div class="ct_mt_40">
+                <apx-chart [series]="statusChart.series" [chart]="statusChart.chart" [labels]="statusChart.labels"
+                    [fill]="statusChart.fill" [dataLabels]="statusChart.dataLabels"
+                    [responsive]="statusChart.responsive"></apx-chart>
+            </div>
+            }
+
+        </div>
+    </div>
+
+    <div class="col-xl-6 mb-4 mb-xl-0">
+        <div class="ct_bus_grey_table ct_white_table ct_p_40">
+            <div class="ct_pb_20 d-flex align-items-center gap-2 justify-content-between">
+                <h4 class="ct_fs_20 ct_fw_600 mb-0">Frequent Travelers</h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <!-- <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th class="px-0">Departure</th>
+                            <th class="px-0">Arrival</th>
+                            <th class="px-0">Bookings</th>
+                        </tr>
+                    </thead> -->
+
+                    <tbody>
+                        <tr *ngFor="let item of recentTravel; let i = index">
+                            <td>
+                                {{item.first_name}}
+                            </td>
+
+                            <td>
+                                <div>
+                                    <p class="m-0">
+                                        Total Trips: {{item.total_bookings}}
+                                    </p>
+                                    <p>
+                                        Last Trip on: {{item.last_trip_date | date:'dd-MMM-yyyy'}}
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="ct_middle_content mt-5">
+    <div class="ct_bus_grey_table">
+        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0">Users Management</h4>
+            <!-- <div class="d-flex gap-3 align-items-center  justify-content-between">
+
+                <div class="form-group ct_w_100_res_767">
+                    <label for="" class="ct_fs_18 ct_fw_500 mb-2">From<span class="ct_text_red">*</span></label>
+                    <div class="position-relative">
+                        <input type="date" class="form-control ct_input ct_fs_18" [(ngModel)]="startDate">
+                    </div>
+                </div>
+                <div class="form-group ct_w_100_res_767">
+                    <label for="" class="ct_fs_18 ct_fw_500 mb-2">To<span class="ct_text_red">*</span></label>
+                    <div class="position-relative">
+                        <input type="date" class="form-control ct_input ct_fs_18" [(ngModel)]="endDate">
+                    </div>
+                </div>
+
+
+                <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route" (ngModelChange)="getUsers()">
+                    <option value="" selected>All</option>
+                    <option value="Guest User">Guest User</option>
+                    <option value="Verified User">Verified User</option>
+                </select>
+                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    (ngModelChange)="getUsers()">
+            </div> -->
+
+            <div class="d-flex gap-3 align-items-center justify-content-between flex-wrap">
+
+                <!-- From Date -->
+                <div class="form-group ct_w_100_res_767">
+                    <label class="ct_fs_18 ct_fw_500 mb-2">From<span class="ct_text_red">*</span></label>
+                    <div class="position-relative">
+                        <input type="date" class="form-control ct_input ct_fs_18" [(ngModel)]="startDate">
+                    </div>
+                </div>
+
+                <!-- To Date -->
+                <div class="form-group ct_w_100_res_767">
+                    <label class="ct_fs_18 ct_fw_500 mb-2">To<span class="ct_text_red">*</span></label>
+                    <div class="position-relative">
+                        <input type="date" class="form-control ct_input ct_fs_18" [(ngModel)]="endDate"
+                            [disabled]="!startDate">
+                    </div>
+                </div>
+
+                <!-- Filter Dropdown -->
+                <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route">
+                    <option value="" selected>All</option>
+                    <option value="Guest User">Guest User</option>
+                    <option value="Verified User">Verified User</option>
+                </select>
+
+                <!-- Apply Button -->
+                <button class="btn btn-primary" (click)="getUsers()">Apply</button>
+
+                <!-- Search Input (Triggers search on change only) -->
+                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                    (ngModelChange)="getUsers()">
+            </div>
+
+
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>S No.</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>User Type</th>
+                        <th>Registered On</th>
+                        <!-- <th>Total Bookings</th> -->
+                        <!-- <th>Actions</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of userData; let i = index">
+                        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td>
+                            @if(item.guest_user){
+                            Guest User
+                            } @else {
+                            {{item.first_name}} {{item.last_name}}
+                            }
+
+                        </td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.mobile_number ? item.mobile_number : '-'}}</td>
+                        <td>
+                            @if(item.guest_user != null){
+                            Guest User
+                            } @else {
+                            Verified User
+                            }
+                        </td>
+                        <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="userData?.length == 0 || !userData" class="text-center">
+                <p class="ct_fs_15 mt-3">No users found</p>
+            </div>
+        </div>
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center pagination-section w-100">
+            <div class="d-flex gap-2 align-items-center">
+                <label for="pageSize">Items per page: </label>
+                <select id="pageSize" class="form-control w-auto" [(ngModel)]="pageSize"
+                    (change)="changePageSize(pageSize)">
+                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}
+                    </option>
+                </select>
+            </div>
+            <!-- Pagination -->
+            <nav aria-label="Table pagination">
+                <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

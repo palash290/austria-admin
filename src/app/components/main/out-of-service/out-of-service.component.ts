@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { HeaderComponent } from "../header/header.component";
 import { SharedService } from '../../../services/shared.service';
 import { ErrorMessageService } from '../../../services/error-message.service';
 import { CommonModule } from '@angular/common';

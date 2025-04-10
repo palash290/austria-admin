@@ -1,174 +1,202 @@
-<div class="ct_pdf_main_bg">
-    <div class="ct_pdf_head">
-        <div class="ct_pdf_logo">
-            <img src="assets/img/logo_white_2.svg" alt="">
-        </div>
-        <div class="d-flex align-items-center gap-3 justify-content-between">
-            <div>
-                <p class="mb-1 text-white ct_fw_600">BOOKING NUMBER
-                </p>
-                <p class="mb-0 text-white">{{ticketData.booking_number}}</p>
-            </div>
-            <div>
-                <p class="mb-1 text-white ct_fw_600">TICKET</p>
-                <p class="mb-0 text-white">Valid in both printed and digital form
-                </p>
-                <p class="mb-0 text-white">{{ticketData.travel_date}}
-                </p>
-            </div>
+<div class="position-relative et_pdf_main_section">
+    <button (click)="downloadPDF()" class="et_downdload_pdf"><i class="fa-solid fa-download"></i></button>
 
-        </div>
-
-    </div>
-    <div class="ct_pdf_body_section">
-        <h4 class="ct_fs_24 mb-3">{{ ticketData.created_at | date:'EEEE, MMMM d, y' }}
-        </h4>
-        <div class="ct_left_location_line">
-            <div class="ct_grid_2 ">
-                <div class="d-grid">
-                    <h4 class="mb-0">{{ticketData.departure_time | date:'HH:mm'}}</h4>
+    <div class="ct_pdf_main_bg" id="pdfContent">
+        <div class="ct_pdf_head">
+            <div class="ct_pdf_logo">
+                <img src="assets/img/logo_white_2.svg" alt="">
+            </div>
+            <div class="d-flex align-items-center gap-3 justify-content-between">
+                <div>
+                    <p class="mb-1 text-white ct_fw_600">BOOKING NUMBER
+                    </p>
+                    <p class="mb-0 text-white">{{ticketData.booking_number}}</p>
                 </div>
-                <div class="">
-                    <div class="ct_location_title">
-                        <h5>{{ticketData.from.city_name}}
-                        </h5>
-                        <p class="mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ticketData.from.city_address}}
-                        </p>
+                <div>
+                    <p class="mb-1 text-white ct_fw_600">TICKET</p>
+                    <p class="mb-0 text-white">Valid in both printed and digital form
+                    </p>
+                    <p class="mb-0 text-white">{{ticketData.travel_date}}
+                    </p>
+                </div>
+    
+            </div>
+    
+        </div>
+        <div class="ct_pdf_body_section">
+            <h4 class="ct_fs_24 mb-3">{{ ticketData.created_at | date:'EEEE, MMMM d, y' }}
+            </h4>
+            <div class="ct_left_location_line">
+                <div class="ct_grid_2 ">
+                    <div class="d-grid">
+                        <h4 class="mb-0">{{ticketData.departure_time | date:'HH:mm'}}</h4>
                     </div>
-
-                </div>
-
-
-            </div>
-            <div class="ct_grid_2 mt-4">
-                <div class="d-grid">
-                    <h4 class="mb-0">{{ticketData.arrival_time | date:'HH:mm'}}</h4>
-                </div>
-                <div class="">
-                    <div class="ct_location_title">
-                        <h5>{{ticketData.to.city_name}}
-                        </h5>
-                        <p class="mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ticketData.to.city_address}}</p>
+                    <div class="">
+                        <div class="ct_location_title">
+                            <h5>{{ticketData.from.city_name}}
+                            </h5>
+                            <p class="mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ticketData.from.city_address}}
+                            </p>
+                        </div>
+    
                     </div>
+    
+    
                 </div>
-            </div>
-
-        </div>
-
-
-
-        <div class="ct_bust_outline_box ct_bust_outline_red my-4">
-            <i class="fa-solid fa-ticket"></i>
-            <div>
-                <p class="mb-0">When travelling internationally, you must always carry valid identification (passport/ID
-                    card, visa if required) to cross the border. Without identification, you will be refused entry.</p>
-            </div>
-        </div>
-
-        <div class="row" *ngFor="let passenger of passengersDetails">
-            <div class="col-md-4 mb-4">
-                <div class="d-flex align-items-center gap-3">
-                    <i class="fa-solid fa-user ct_fs_20"></i>
-                    <div>
-                        <p class="mb-0 ct_fw_600 ct_fs_20 ">{{passenger.ticket_type}}</p>
-                        <p class="mb-0 ct_fw_400  ">{{passenger.passenger_name}}</p>
-
+                <div class="ct_grid_2 mt-4">
+                    <div class="d-grid">
+                        <h4 class="mb-0">{{ticketData.arrival_time | date:'HH:mm'}}</h4>
+                    </div>
+                    <div class="">
+                        <div class="ct_location_title">
+                            <h5>{{ticketData.to.city_name}}
+                            </h5>
+                            <p class="mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ticketData.to.city_address}}</p>
+                        </div>
                     </div>
                 </div>
+    
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="ps-4">
-                    <h6 class="mb-0 ct_fw_600 ct_fs_20">Price</h6>
-                    <h6 class="mb-0 ct_fw_400">{{passenger.price}}</h6>
+    
+    
+    
+            <div class="ct_bust_outline_box ct_bust_outline_red my-4">
+                <i class="fa-solid fa-ticket"></i>
+                <div>
+                    <p class="mb-0">When travelling internationally, you must always carry valid identification (passport/ID
+                        card, visa if required) to cross the border. Without identification, you will be refused entry.</p>
                 </div>
             </div>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table ct_custom_table ct_blue_table_th">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone No.</th>
-                        <th>Payment Method</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-3">{{ticketData.first_name}}</td>
-                        <td class="py-3">{{ticketData.email}}</td>
-                        <td class="py-3">{{ticketData.phone}}</td>
-                        <td class="py-3">{{ticketData.payment_method}}</td>
-                        <td class="py-3">{{ticketData.total}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="ct_grey_bg_123">
-                    <h4 class="ct_fs_20 ct_fw_600 mb-3">More information
-                    </h4>
-
-                    <ul class="ct_information_list_1">
-                        <li><i class="bi bi-ticket-detailed-fill"></i>Total price: {{ticketData.total}}</li>
-                        <!-- <li><i class="bi bi-ticket-perforated-fill"></i>Manage my booking: <a
-                                href="#">shop.flixbus.de/rebooking</a></li> -->
-                        <!-- <li><i class="bi bi-geo-alt-fill"></i>
-                            <div>
-                                Track your journey: <a href="#">www.flixbus.de/track/order/3125152312</a>
-                            </div>
-                        </li>
-                        <li><i class="bi bi-question-circle-fill"></i>
-                            <div>
-                                FAQ: <a href="#">help.flixbus.com/s/?language=de</a>
-                            </div>
-                        </li> -->
-                    </ul>
+    
+            <div class="row" *ngFor="let passenger of passengersDetails">
+                <div class="col-md-4 mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fa-solid fa-user ct_fs_20"></i>
+                        <div>
+                            <p class="mb-0 ct_fw_600 ct_fs_20 ">{{passenger.ticket_type}}</p>
+                            <p class="mb-0 ct_fw_400  ">{{passenger.passenger_name}}</p>
+    
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <div class="ct_grey_bg_123">
-                    <h4 class="ct_fs_20 ct_fw_600 mb-3">Your checklist for your trip
-
-                    </h4>
-
-                    <ul class="ct_information_list_1">
-                        <li>
-                            <div class="form-check">
-                                <label class="form-check-label">Sei bei
-                                    For bus trips, arrive 15 minutes before departure</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    Make sure your luggage complies with the regulations.
-                                    <!-- More information: <a href="#">flixbus.de/service/gepaeck</a> -->
-                                </label>
-                            </div>
-                        </li>
-
-                    </ul>
+                <div class="col-md-4 mb-4">
+                    <div class="ps-4">
+                        <h6 class="mb-0 ct_fw_600 ct_fs_20">Price</h6>
+                        <h6 class="mb-0 ct_fw_400">
+                            @if(isUkrane){
+                            <span>₴</span>
+                            } @else {
+                            <span>€</span>
+                            }
+                            {{passenger.price}}
+                        </h6>
+                    </div>
                 </div>
             </div>
+    
+            <div class="table-responsive">
+                <table class="table ct_custom_table ct_blue_table_th">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone No.</th>
+                            <th>Payment Method</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-3">{{ticketData.first_name}}</td>
+                            <td class="py-3">{{ticketData.email}}</td>
+                            <td class="py-3">{{ticketData.phone}}</td>
+                            <td class="py-3">{{ticketData.payment_method}}</td>
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-2 justify-content-end">
+                                    @if(isUkrane){
+                                    <span>₴</span>
+                                    } @else {
+                                    <span>€</span>
+                                    }
+                                    <p class="mb-0">{{ticketData.total}}
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+    
+    
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="ct_grey_bg_123">
+                        <h4 class="ct_fs_20 ct_fw_600 mb-3">More information
+                        </h4>
+    
+                        <ul class="ct_information_list_1">
+                            <li><i class="bi bi-ticket-detailed-fill"></i>Total price:
+                                @if(isUkrane){
+                                <span>₴</span>
+                                } @else {
+                                <span>€</span>
+                                }
+                                {{ticketData.total}}
+                            </li>
+                            <!-- <li><i class="bi bi-ticket-perforated-fill"></i>Manage my booking: <a
+                                    href="#">shop.flixbus.de/rebooking</a></li> -->
+                            <!-- <li><i class="bi bi-geo-alt-fill"></i>
+                                <div>
+                                    Track your journey: <a href="#">www.flixbus.de/track/order/3125152312</a>
+                                </div>
+                            </li>
+                            <li><i class="bi bi-question-circle-fill"></i>
+                                <div>
+                                    FAQ: <a href="#">help.flixbus.com/s/?language=de</a>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+    
+                </div>
+    
+                <div class="col-md-6 mb-4">
+                    <div class="ct_grey_bg_123">
+                        <h4 class="ct_fs_20 ct_fw_600 mb-3">Your checklist for your trip
+    
+                        </h4>
+    
+                        <ul class="ct_information_list_1">
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">Sei bei
+                                        For bus trips, arrive 15 minutes before departure</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        Make sure your luggage complies with the regulations.
+                                        <!-- More information: <a href="#">flixbus.de/service/gepaeck</a> -->
+                                    </label>
+                                </div>
+                            </li>
+    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    
+    
+            <p>The general terms and conditions of booking of Austria SE apply to booking tickets. You can find these at: <a
+                    href="#">flixbus.de/agb.</a> The general terms and conditions of carriage of the respective carrier
+                apply to transport. You
+                can find these at: <a href="#">flixbus.de/abb-auswahl.</a>
+                You can find the carrier/concession holder of your connection on the
+                invoice. Skin colour, belief, religion, gender, origin and physical abilities are not important when
+                travelling on our buses.
+            </p>
         </div>
-
-
-        <p>The general terms and conditions of booking of Austria SE apply to booking tickets. You can find these at: <a
-                href="#">flixbus.de/agb.</a> The general terms and conditions of carriage of the respective carrier
-            apply to transport. You
-            can find these at: <a href="#">flixbus.de/abb-auswahl.</a>
-            You can find the carrier/concession holder of your connection on the
-            invoice. Skin colour, belief, religion, gender, origin and physical abilities are not important when
-            travelling on our buses.
-        </p>
     </div>
 </div>

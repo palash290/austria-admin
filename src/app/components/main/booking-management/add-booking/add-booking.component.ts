@@ -101,7 +101,7 @@ export class AddBookingComponent {
             this.passengers = data.passengers;
             this.number_of_seats = data.passengers?.length;
 
-            //this.getBookedSeats();
+            //this.getBookedSeats(data.route.route_id);
 
             //this.selectedSeats = this.passengers.map((p: { selected_seat: any; }) => p.selected_seat); // Pre-fill selected seats
 
@@ -254,6 +254,9 @@ export class AddBookingComponent {
   arrival_time: any;
   route_id: any;
 
+  totalNoOfBooking: any;
+  isUkrane!: boolean;
+
   getBuses() {
 
     this.allBuses = '';
@@ -269,10 +272,15 @@ export class AddBookingComponent {
           //debugger
           this.getBookedSeats(res.data[0]?.route.route_id);
 
+          this.isUkrane = res.data[0].route_stops[0].stop_city.from_ukraine;
+
           this.allBuses = res.data;
           this.departure_time = res.data[0]?.departure_time;
           this.arrival_time = res.data[0]?.arrival_time;
           this.route_id = res.data[0]?.route.route_id;
+
+          this.totalNoOfBooking = res.data[0].total_booked_seats;
+
           const numberOfSeats = res.data[0]?.bus?.number_of_seats;
           if (numberOfSeats) {
 
@@ -317,8 +325,10 @@ export class AddBookingComponent {
     // Remaining seats minus what’s already selected for other ticket types
     const maxAvailableSeats = this.number_of_seats - selectedTicketsForOtherTypes;
 
+    const maxAvailableSeats1 = maxAvailableSeats - this.totalNoOfBooking;
+
     // Ensure the dropdown doesn’t offer more seats than possible
-    const seatOptions = Array.from({ length: maxAvailableSeats + 1 }, (_, i) => i);
+    const seatOptions = Array.from({ length: maxAvailableSeats1 + 1 }, (_, i) => i);
 
     // const seatOptions = Array.from({ length: maxAvailableSeats + 1 }, (_, i) => i)
     //   .filter(seat => !this.preBookSeats.includes(seat)); // Remove booked seats
@@ -480,6 +490,20 @@ export class AddBookingComponent {
     });
   }
 
+  updateTicketPrice(ticket: any) {
+    const selectedType = this.ticketTypes.find(t => t.label === ticket.ticketType);
+    ticket.price = selectedType ? selectedType.price : '0.00';
+  
+    // Recalculate subtotal
+    this.calculateSubtotal();
+  }
+  
+  calculateSubtotal() {
+    this.subtotal = this.expandedTicketList.reduce((sum, ticket) => sum + Number(ticket.price), 0);
+  }
+  
+
+  
 
 
 
@@ -746,12 +770,14 @@ export class AddBookingComponent {
     this.showForm = false; // Show form when clicking Next
   }
 
-  openBookingDetails() {
-    const url = this.route.serializeUrl(
-      this.route.createUrlTree(['/admin/booking-details'], { queryParams: { booking_id: this.booking_id } })
-    );
-    window.open(url, '_blank');
-  }
+  // openBookingDetails() {
+  //   const url = this.route.serializeUrl(
+  //     this.route.createUrlTree(['/admin/booking-details'], { queryParams: { booking_id: this.booking_id } })
+  //   );
+  //   window.open(url, '_blank');
+  // }
+
+  //for print ticket
   // openBookingDetails() {
   //   const url = this.route.serializeUrl(
   //     this.route.createUrlTree(['/booking-details'], { queryParams: { booking_id: this.booking_id } })
@@ -765,6 +791,13 @@ export class AddBookingComponent {
   //     };
   //   }
   // }
+  openBookingDetails() {
+    const url = this.route.serializeUrl(
+      this.route.createUrlTree(['/booking-details'], { queryParams: { booking_id: this.booking_id, autoPrint: true } })
+    );
+    window.open(url, '_blank'); // Remove `onload`
+  }
+  
 
 
 

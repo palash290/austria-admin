@@ -121,7 +121,7 @@
                         </td>
                         <td>
                             @if(item.booking_status == 'Pending'){
-                            <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
+                            <span class="badge py-2 ct_fs_18 ct_fw_600 px-4 ct_border_radius_100"
                                 style="background-color: #f08c32;color: #ffffff; cursor: pointer;"
                                 [routerLink]="item.booking_status === 'Pending' ? '/home/add-booking' : null"
                                 [queryParams]="{'booking_id':item.id}">
@@ -129,7 +129,7 @@
                             </span>
                             }
                             @if(item.booking_status == 'Confirmed'){
-                            <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
+                            <span class="badge py-2 ct_fs_18 ct_fw_600 px-4 ct_border_radius_100"
                                 style="background-color: #29c074;color: #f3f3f3;"
                                 [routerLink]="item.booking_status === 'Confirmed' ? '/home/add-booking' : null"
                                 [queryParams]="{'booking_id':item.id}">
@@ -137,7 +137,7 @@
                             </span>
                             }
                             @if(item.booking_status == 'Cancelled'){
-                            <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
+                            <span class="badge py-2 ct_fs_18 ct_fw_600 px-4 ct_border_radius_100"
                                 style="background-color: #fa0101;color: #f3f3f3;"
                                 [routerLink]="item.booking_status === 'Cancelled' ? '/home/add-booking' : null"
                                 [queryParams]="{'booking_id':item.id}">

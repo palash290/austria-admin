@@ -34,8 +34,9 @@ export const routes: Routes = [
             { path: 'edit-city', loadComponent: () => import('./components/main/routes-management/edit-city/edit-city.component').then(m => m.EditCityComponent), canActivate: [AuthGuard] },
             { path: 'price-management', loadComponent: () => import('./components/main/price-management/price-management.component').then(m => m.PriceManagementComponent), canActivate: [AuthGuard] },
             { path: 'add-booking', loadComponent: () => import('./components/main/booking-management/add-booking/add-booking.component').then(m => m.AddBookingComponent), canActivate: [AuthGuard] },
-            //{ path: 'booking-details', loadComponent: () => import('./components/main/booking-details/booking-details.component').then(m => m.BookingDetailsComponent), canActivate: [AuthGuard] },
-            //category-management
+            { path: 'discount-management', loadComponent: () => import('./components/main/discount-management/discount-management.component').then(m => m.DiscountManagementComponent), canActivate: [AuthGuard] },
+            { path: 'reports', loadComponent: () => import('./components/main/reports/reports.component').then(m => m.ReportsComponent), canActivate: [AuthGuard] },
+            // { path: 'edit-city', loadComponent: () => import('./components/main/reports/earning-report/earning-report.component').then(m => m.EditCityComponent), canActivate: [AuthGuard] },
             // { path: 'sellerShipment/:offerId/:sellerId/:buyerId', loadComponent: () => import('./components/user/seller-shipment-status/seller-shipment-status.component').then(m => m.SellerShipmentStatusComponent), canActivate: [AuthGuard] },
             // { path: 'user-profile/:id', loadComponent: () => import('./components/user/user-profile/user-profile.component').then(m => m.UserProfileComponent) },
             // { path: 'terms', loadComponent: () => import('./components/help/terms-conditions/terms-conditions.component').then(m => m.TermsConditionsComponent) },

@@ -192,52 +192,77 @@
                 </div>
 
 
-@if(expandedTicketList.length >0){
-    <h3 class="mt-5">Ticket Details</h3>
-    <div class="table-responsive">
-        <table class="table mb-0">
-            <thead>
-                <tr>
-                    <th class="ct_verticle_middle ct_white_nowrap">Ticket</th>
-                    <th class="ct_verticle_middle ct_white_nowrap">Seat</th>
-                    <th class="ct_verticle_middle ct_white_nowrap">Name</th>
-                    <th class="ct_verticle_middle ct_white_nowrap">Price</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let ticket of expandedTicketList; let i = index">
-                    <td class="ct_verticle_middle ct_white_nowrap">{{ ticket.ticketType }} #{{ i + 1 }}</td>
-                    <td class="ct_verticle_middle ct_white_nowrap">
-                        <select class="form-control ct_input" id="seat-{{i}}"
-                            [(ngModel)]="ticket.selectedSeat" (change)="checkDuplicateSeats($event, i)">
-                            <option disabled selected value="">--Select a seat--</option>
-                            <option *ngFor="let seat of selectedSeats" [value]="seat">{{ seat }}</option>
-                        </select>
-                    </td>
+                @if(expandedTicketList.length >0){
+                <h3 class="mt-5">Ticket Details</h3>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ct_verticle_middle ct_white_nowrap">Ticket</th>
+                                <th class="ct_verticle_middle ct_white_nowrap">Seat</th>
+                                <th class="ct_verticle_middle ct_white_nowrap">Name</th>
+                                <th class="ct_verticle_middle ct_white_nowrap">Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ticket of expandedTicketList; let i = index">
+                                <td class="ct_verticle_middle ct_white_nowrap">{{ ticket.ticketType }} #{{ i + 1 }}</td>
+                                <!-- <td class="ct_verticle_middle ct_white_nowrap">
+                                    <select [(ngModel)]="ticket.ticketType" class="form-select"
+                                        (change)="updateTicketPrice(ticket)">
+                                        <option *ngFor="let type of ticketTypes" [value]="type.label">{{ type.label }}
+                                        </option>
+                                    </select>
+                                    #{{ i + 1 }}
+                                </td> -->
 
-                    <td class="ct_verticle_middle ct_white_nowrap"><input class="form-control ct_input"
-                            type="text" [(ngModel)]="ticket.passengerName"
-                            placeholder="Type a passenger name">
-                    </td>
-                    <td class="ct_white_nowrap ct_verticle_middle">
-                        {{ticket.price}}
-                    </td>
-                    @if(booking_id){
-                    <td class="ct_white_nowrap ct_verticle_middle">
-                        <button class="ct_blue_btn" (click)="openBookingDetails()">View Ticket</button>
-                    </td>
-                    }
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                                <td class="ct_white_nowrap ct_verticle_middle">
+                                    {{ ticket.price }}
+                                </td>
 
-    <div class="mt-3">
-        <p class="ct_fs_20 text-end ct_total_price_bg"><span class="ct_fw_600">Total :</span> {{subtotal}}
-        </p>
-    </div>
-}
+
+                                <td class="ct_verticle_middle ct_white_nowrap">
+                                    <select class="form-control ct_input" id="seat-{{i}}"
+                                        [(ngModel)]="ticket.selectedSeat" (change)="checkDuplicateSeats($event, i)">
+                                        <option disabled selected value="">--Select a seat--</option>
+                                        <option *ngFor="let seat of selectedSeats" [value]="seat">{{ seat }}</option>
+                                    </select>
+                                </td>
+
+                                <td class="ct_verticle_middle ct_white_nowrap"><input class="form-control ct_input"
+                                        type="text" [(ngModel)]="ticket.passengerName"
+                                        placeholder="Type a passenger name">
+                                </td>
+                                <td class="ct_white_nowrap ct_verticle_middle">
+                                    <!-- {{ticket.price}} -->
+                                    <div class="d-flex align-items-center gap-2 justify-content-end">
+                                        @if(isUkrane){
+                                        <span>₴</span>
+                                        } @else {
+                                        <span>€</span>
+                                        }
+                                        <p class="mb-0">{{ticket.price}}</p>
+                                    </div>
+                                </td>
+                                @if(booking_id){
+                                <td class="ct_white_nowrap ct_verticle_middle">
+                                    <button class="ct_blue_btn" (click)="openBookingDetails()">Print Ticket</button>
+                                </td>
+                                <td class="ct_white_nowrap ct_verticle_middle">
+                                    <button class="ct_blue_btn">Send Ticket</button>
+                                </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-3">
+                    <p class="ct_fs_20 text-end ct_total_price_bg"><span class="ct_fw_600">Total :</span> {{subtotal}}
+                    </p>
+                </div>
+                }
 
             </div>
 

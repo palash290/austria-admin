@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { SharedService } from '../../../services/shared.service';
-import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 

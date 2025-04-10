@@ -1,0 +1,51 @@
+.ct_white_bg {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.ct_p_30 {
+  padding: 30px !important;
+}
+
+.ct_flex_2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ct_fs_24 {
+  font-size: 24px;
+}
+
+.ct_mt_40 {
+  margin-top: 40px;
+}
+
+.ct_custom_tab_2 ul#myTab {
+  border: 0px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #e6e6e67a;
+  padding: 10px;
+  gap: 5px;
+}
+
+.ct_custom_tab_2 .nav-tabs .nav-link {
+  border-radius: 0px;
+  background-color: #fff;
+  color: #000;
+  font-size: 18px;
+  padding-block: 12px;
+  border-radius: 5px;
+
+}
+
+.ct_custom_tab_2 .nav-tabs .nav-item.show .nav-link,
+.ct_custom_tab_2 .nav-tabs .nav-link.active {
+  background-color: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}

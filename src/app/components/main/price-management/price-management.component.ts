@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CategoryManagementComponent } from '../category-management/category-management.component';
+
 import { SharedService } from '../../../services/shared.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router, RouterLink } from '@angular/router';
@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-price-management',
   standalone: true,
-  imports: [CategoryManagementComponent, CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './price-management.component.html',
   styleUrl: './price-management.component.css'
 })

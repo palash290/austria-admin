@@ -59,7 +59,7 @@
   width: 16px;
   height: 16px;
   border-radius: 100px;
-background-color: #fff;
+  background-color: #fff;
   border: 2px solid #3b82f6;
 }
 
@@ -104,7 +104,8 @@ background-color: #fff;
   word-wrap: break-word;
 
 }
-.ct_information_list_1 li a{
+
+.ct_information_list_1 li a {
   word-wrap: break-word;
 }
 
@@ -119,46 +120,76 @@ background-color: #fff;
   border-radius: 10px;
 }
 
-.ct_blue_table_th th{
+.ct_blue_table_th th {
   background-color: #3b82f6;
   color: #fff;
   text-align: center;
 }
-.ct_blue_table_th{
+
+.ct_blue_table_th {
   border-collapse: separate !important;
-    border-spacing: 0px 0px !important;
-    border: 1px solid #e6e6e6;
-    border-radius: 10px;
+  border-spacing: 0px 0px !important;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
 }
-.ct_blue_table_th th:first-child{
+
+.ct_blue_table_th th:first-child {
   border-radius: 10px 0px 0px 0px;
 }
-.ct_blue_table_th th:last-child{
+
+.ct_blue_table_th th:last-child {
   border-radius: 0px 10px 0px 0px;
 
 }
-.ct_blue_table_th tr td:last-child{
+
+.ct_blue_table_th tr td:last-child {
   border: 0px !important;
 }
-.ct_blue_table_th td{
+
+.ct_blue_table_th td {
   text-align: center;
 }
 
 
 
-@media screen and (max-width:575px){
-  .ct_grid_2{
+@media screen and (max-width:575px) {
+  .ct_grid_2 {
     grid-template-columns: 130px auto;
   }
 
   .ct_left_location_line:before {
-   
+
     height: calc(100% - 70px);
     right: calc(100% - 104px);
+  }
+
+  .ct_information_list_1 li {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
 }
-.ct_information_list_1 li{
-  flex-direction: column;
-  align-items: start;
-  gap: 5px  ;
+
+#pdfContent,
+.et_pdf_main_section {
+  width: 794px;
+  margin-inline: auto;
+  padding: 10px;
 }
+
+button.et_downdload_pdf {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  border: 1px solid #fff;
+  background-color: #fff;
+  color: #000;
+  padding: 4px 10px;
+  width: 40px;
+  font-weight: 600;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
 }
