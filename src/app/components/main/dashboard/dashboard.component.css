@@ -19,3 +19,10 @@
   .ct_mt_40 {
     margin-top: 40px;
   }
+  .ct_badge_btn1 {
+    background-color: #3b82f6;
+    padding: 6px 10px;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 12px;
+}

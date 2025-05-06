@@ -11,7 +11,9 @@
                     </div>
 
                     <div class="header mb-4" (click)="toggleArchive()">
-                        <button class="ct_white_nowrap p-15" [ngClass]="showArchived ? 'ct_blue_btn' : 'ct_blue_btn1'">{{ showArchived ? 'Active Lines' : 'Archived Lines'}}
+                        <button class="ct_white_nowrap p-15"
+                            [ngClass]="showArchived ? 'ct_blue_btn' : 'ct_blue_btn1'">{{ showArchived ? 'Active Lines' :
+                            'Archived Lines'}}
                             <i class="fa-solid" [ngClass]="showArchived ? '' : 'fa-trash'"></i>
                         </button>
                     </div>
@@ -39,7 +41,8 @@
                                         routerLink="/home/new-route">+ Add New
                                         Line</button>
                                 </div>
-                                <p class="mb-0" *ngIf="!showArchived">View and manage lines. Click on a line to view and edit details,
+                                <p class="mb-0" *ngIf="!showArchived">View and manage lines. Click on a line to view and
+                                    edit details,
                                     manage departure
                                     times.
                                 </p>
@@ -261,7 +264,24 @@
                             </div>
                         </div>
 
-                        <div class="form-group mb-4">
+                        <!-- Radio Buttons -->
+                        <div class="form-group mb-3">
+                            <label class="ct_fs_18 ct_fw_500 mb-2">Choose Address Type</label>
+                            <div class="d-flex gap-3">
+                                <label>
+                                    <input type="radio" name="addressType" value="address" [(ngModel)]="selectedType"
+                                        [ngModelOptions]="{standalone: true}">
+                                    Address
+                                </label>
+                                <label>
+                                    <input type="radio" name="addressType" value="latlong" [(ngModel)]="selectedType"
+                                        [ngModelOptions]="{standalone: true}">
+                                    Lat/Long
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Address<span
                                     class="ct_text_red">*</span></label>
                             <div class="form-group position-relative">
@@ -291,7 +311,81 @@
                             </div>
                             }
 
+                        </div> -->
+
+                        <!-- Address Field -->
+                        <div *ngIf="selectedType === 'address'" class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Address<span
+                                    class="ct_text_red">*</span></label>
+                            <div class="form-group position-relative">
+                                <input type="text" class="form-control ct_input ct_fs_18" placeholder="Enter address"
+                                    [(ngModel)]="terminalName" [ngModelOptions]="{standalone: true}"
+                                    (keyup)="searchTerminal()" (blur)="onBlur('terminalName')">
+                                <p *ngIf="!terminalName && isTouched.terminalName" class="err_msg">
+                                    This field cannot be empty
+                                </p>
+                            </div>
+
+                            @if(isSearchActiveFrom){
+                            <div class="ct_suggstion_search">
+                                <ul class="ps-0 mb-0">
+                                    @if(allTerminalsList?.length > 0){
+                                    @for (item of allTerminalsList; track $index) {
+                                    <li (click)="searchByFromCity(item)" style="cursor: pointer;">
+                                        <h6 class="mb-1 mt-1 ct_fw_600">{{item.description}}</h6>
+                                    </li>
+                                    }
+                                    } @else {
+                                    <li><img src="assets/img/Search_icon.svg" alt="">Not found</li>
+                                    }
+                                </ul>
+                            </div>
+                            }
                         </div>
+
+                        <!-- Latitude and Longitude Fields -->
+                        <div *ngIf="selectedType === 'latlong'" class="form-group mb-4">
+                            <label class="ct_fs_18 ct_fw_500 mb-2">Latitude & Longitude<span
+                                    class="ct_text_red">*</span></label>
+                            <div class="form-group d-flex gap-3">
+                                <div class="w-100 position-relative">
+                                    <input type="text" class="form-control ct_input ct_fs_18" placeholder="Latitude"
+                                        [(ngModel)]="latitude" [ngModelOptions]="{standalone: true}"
+                                        (blur)="onBlur('latitude')">
+                                    <p *ngIf="!latitude && isTouched.latitude" class="err_msg">Latitude is required</p>
+                                </div>
+                                <div class="w-100 position-relative">
+                                    <input type="text" class="form-control ct_input ct_fs_18" placeholder="Longitude"
+                                        [(ngModel)]="longitude" [ngModelOptions]="{standalone: true}"
+                                        (blur)="onBlur('longitude')">
+                                    <p *ngIf="!longitude && isTouched.longitude" class="err_msg">Longitude is required
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Find Button -->
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-primary px-4 py-2 d-flex align-items-center gap-2"
+                                    [disabled]="btnLoader" (click)="onFindAddress()">
+
+                                    <ng-container *ngIf="btnLoader; else findText">
+                                        <div class="spinner-border text-light spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #findText>Find</ng-template>
+                                </button>
+                            </div>
+
+
+                            <!-- Show fetched address -->
+                            <div *ngIf="latLngAddress" class="mt-2">
+                                <label class="ct_fs_16 ct_fw_500">Fetched Address:</label>
+                                <p class="ct_fs_16 mb-0">{{ latLngAddress }}</p>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>

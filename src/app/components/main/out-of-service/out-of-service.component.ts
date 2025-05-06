@@ -172,17 +172,18 @@ export class OutOfServiceComponent {
   }
 
   update() {
-    if (this.Form.invalid) {
+
+    if (this.editForm.invalid) {
       return
     }
 
-    const closure_reason = this.Form.value.closure_reason?.trim();
+    const closure_reason = this.editForm.value.closure_reason?.trim();
 
     if (!closure_reason) {
       return;
     }
     this.loading = true;
-    let formData = { ...this.Form.value, closure_id: this.updateId };
+    let formData = { ...this.editForm.value, closure_id: this.updateId };
 
     this.service.postData(`update-closure`, formData).subscribe({
       next: resp => {
@@ -252,7 +253,7 @@ export class OutOfServiceComponent {
   viewMessage(item: any) {
     this.viewDetails = item;
     console.log(this.viewDetails);
-    
+
   }
 
   // hasError(controlName: string, errorName: string): boolean {

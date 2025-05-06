@@ -1,0 +1,107 @@
+<div class="ct_middle_content">
+    <div class="ct_bus_grey_table">
+        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-0">Currency Management</h4>
+        </div>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>S No.</th>
+                        <th>Austria(€)</th>
+                        <th>Ukraine(₴)</th>
+                        <th>Rate</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of data; let i = index">
+                        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td>{{item.from_currency}}</td>
+                        <td>{{item.to_currency}}</td>
+                        <td>{{item.rate}}</td>
+                        <td>
+                            <div class="ct_actions_btn">
+                                <button class="ct_action_btn" data-bs-toggle="modal" (click)="patchUpdate(item)"
+                                    data-bs-target="#ct_edit_modal">
+                                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M17.1667 5.35639L18.8537 3.66839C19.2054 3.31671 19.6823 3.11914 20.1797 3.11914C20.677 3.11914 21.154 3.31671 21.5057 3.66839C21.8574 4.02006 22.0549 4.49704 22.0549 4.99439C22.0549 5.49173 21.8574 5.96871 21.5057 6.32039L10.8867 16.9394C10.358 17.4678 9.70605 17.8561 8.98969 18.0694L6.30469 18.8694L7.10469 16.1844C7.31797 15.468 7.70632 14.8161 8.23469 14.2874L17.1667 5.35639ZM17.1667 5.35639L19.8047 7.99439M18.3047 14.8694V19.6194C18.3047 20.2161 18.0676 20.7884 17.6457 21.2104C17.2237 21.6323 16.6514 21.8694 16.0547 21.8694H5.55469C4.95795 21.8694 4.38565 21.6323 3.9637 21.2104C3.54174 20.7884 3.30469 20.2161 3.30469 19.6194V9.11939C3.30469 8.52265 3.54174 7.95035 3.9637 7.5284C4.38565 7.10644 4.95795 6.86939 5.55469 6.86939H10.3047"
+                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="data?.length == 0 || !data" class="text-center">
+                <p class="ct_fs_15 mt-3">No items found</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Edit Modal S -->
+<div class="modal fade " id="ct_edit_modal" tabindex="-1" aria-labelledby="ct_edit_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_edit_modal_cnt">
+                    <h4 class="ct_fs_24 ct_fw_600 text-center">Update Prices</h4>
+                    <form [formGroup]="editForm" class="pt-2">
+                        
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Austria(€)</label>
+                            <input type="text" formControlName="from_currency" class="form-control ct_input ct_fs_18">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Ukraine(₴)</label>
+                            <input type="text" formControlName="to_currency" class="form-control ct_input ct_fs_18">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Rate</label>
+                            <input type="text" placeholder="Enter Bus Number" formControlName="rate"
+                                class="form-control ct_input ct_fs_18" [maxlength]="10">
+
+                            <div *ngIf="editForm.controls['rate']?.invalid && editForm.controls['rate'].touched"
+                                class="err_msg">
+                                <div *ngIf="editForm.controls['rate'].errors?.['required']">Exchange rate is required.
+                                </div>
+                                <div *ngIf="editForm.controls['rate'].errors?.['min']">Negative values are not allowed.
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button (click)="editBus()" type="button" class="ct_blue_btn py-2">Save Changes</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal1
+                    data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal E -->
+
+<!-- All Modal Section E -->
+
+<div *ngIf="loading">
+    <app-loader />
+</div>

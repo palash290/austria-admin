@@ -1,6 +1,6 @@
 <div class="row mt-5">
-    <div class="col-md-6 mb-4">
-        <div class="ct_white_bg ct_p_30">
+    <div class="col-md-6 mb-4 mb-xl-0">
+        <div class="ct_white_bg ct_p_30" style="height: 100%;">
             <div class="ct_flex_2">
                 <h2 class="ct_fs_24  ct_fw_600">Total Users</h2>
             </div>
@@ -15,8 +15,8 @@
         </div>
     </div>
 
-    <div class="col-xl-6 mb-4 mb-xl-0">
-        <div class="ct_bus_grey_table ct_white_table ct_p_40">
+    <div class="col-xl-6 mb-4  mb-xl-0">
+        <div class="ct_bus_grey_table ct_white_table ct_p_40" style="height: 100%;">
             <div class="ct_pb_20 d-flex align-items-center gap-2 justify-content-between">
                 <h4 class="ct_fs_20 ct_fw_600 mb-0">Frequent Travelers</h4>
             </div>
@@ -33,16 +33,16 @@
 
                     <tbody>
                         <tr *ngFor="let item of recentTravel; let i = index">
-                            <td>
+                            <td class="py-2">
                                 {{item.first_name}}
                             </td>
 
-                            <td>
+                            <td class="py-2">
                                 <div>
                                     <p class="m-0">
                                         Total Trips: {{item.total_bookings}}
                                     </p>
-                                    <p>
+                                    <p class="mb-0">
                                         Last Trip on: {{item.last_trip_date | date:'dd-MMM-yyyy'}}
                                     </p>
                                 </div>
@@ -87,7 +87,7 @@
                     (ngModelChange)="getUsers()">
             </div> -->
 
-            <div class="d-flex gap-3 align-items-center justify-content-between flex-wrap">
+            <div class="d-flex gap-3 align-items-end justify-content-between flex-wrap">
 
                 <!-- From Date -->
                 <div class="form-group ct_w_100_res_767">
@@ -107,17 +107,17 @@
                 </div>
 
                 <!-- Filter Dropdown -->
-                <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route">
+                <!-- <select class="form-control ct_input ct_fs_18 w-auto" [(ngModel)]="filterQuery" name="route">
                     <option value="" selected>All</option>
                     <option value="Guest User">Guest User</option>
                     <option value="Verified User">Verified User</option>
-                </select>
+                </select> -->
 
                 <!-- Apply Button -->
-                <button class="btn btn-primary" (click)="getUsers()">Apply</button>
+                <button class="ct_blue_btn" style="height:50px" (click)="getUsers()">Apply</button>
 
                 <!-- Search Input (Triggers search on change only) -->
-                <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
+                <input type="text" placeholder="Search..." class="form-control ct_input ct_fs_18 w-auto" [(ngModel)]="searchQuery"
                     (ngModelChange)="getUsers()">
             </div>
 

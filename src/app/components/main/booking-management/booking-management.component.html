@@ -34,7 +34,8 @@
             </div>
         </div>
         <div class="collapse" id="collapseExample">
-            <div class="d-flex align-items-end justify-content-between gap-3 ct_pb_20 ct_px_20 ct_fitered_box_567 ct_flex_direction_767 ">
+            <div
+                class="d-flex align-items-end justify-content-between gap-3 ct_pb_20 ct_px_20 ct_fitered_box_567 ct_flex_direction_767 ">
                 <div class="form-group ct_w_100_res_767">
                     <label for="" class="ct_fs_18 ct_fw_500 mb-2">From<span class="ct_text_red">*</span></label>
                     <div class="position-relative">
@@ -116,31 +117,35 @@
                                 </p>
                             </div>
                         </td>
-                        <td><p class="mb-0">{{item.passengers.length}} Ticket</p>
-                            <p class="mb-0">{{item.subtotal}}</p>
+                        <td>
+                            <p class="mb-0">
+                                {{ item.passengers.length }} {{ item.passengers.length > 1 ? 'Tickets' : 'Ticket' }}
+                            </p>
+
+                            <p class="mb-0">{{item.subtotal}}
+                                @if(item.from.from_ukraine){
+                                ₴
+                                } @else {
+                                €
+                                }
+                            </p>
                         </td>
                         <td>
                             @if(item.booking_status == 'Pending'){
                             <span class="badge py-2 ct_fs_18 ct_fw_600 px-4 ct_border_radius_100"
-                                style="background-color: #f08c32;color: #ffffff; cursor: pointer;"
-                                [routerLink]="item.booking_status === 'Pending' ? '/home/add-booking' : null"
-                                [queryParams]="{'booking_id':item.id}">
+                                style="background-color: #f08c32;color: #ffffff;">
                                 {{item.booking_status}}
                             </span>
                             }
                             @if(item.booking_status == 'Confirmed'){
                             <span class="badge py-2 ct_fs_18 ct_fw_600 px-4 ct_border_radius_100"
-                                style="background-color: #29c074;color: #f3f3f3;"
-                                [routerLink]="item.booking_status === 'Confirmed' ? '/home/add-booking' : null"
-                                [queryParams]="{'booking_id':item.id}">
+                                style="background-color: #29c074;color: #f3f3f3;">
                                 {{item.booking_status}}
                             </span>
                             }
                             @if(item.booking_status == 'Cancelled'){
                             <span class="badge py-2 ct_fs_18 ct_fw_600 px-4 ct_border_radius_100"
-                                style="background-color: #fa0101;color: #f3f3f3;"
-                                [routerLink]="item.booking_status === 'Cancelled' ? '/home/add-booking' : null"
-                                [queryParams]="{'booking_id':item.id}">
+                                style="background-color: #fa0101;color: #f3f3f3;">
                                 {{item.booking_status}}
                             </span>
                             }

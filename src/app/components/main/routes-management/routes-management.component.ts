@@ -38,6 +38,9 @@ export class RoutesManagementComponent {
   @ViewChild('closeModalArchive') closeModalArchive!: ElementRef;
 
   showArchived = false;
+  selectedType: string = 'address';
+  latitude: string = '';
+  longitude: string = '';
 
   stopName: any;
   terminalName: any;
@@ -47,7 +50,7 @@ export class RoutesManagementComponent {
   isSingleLatLog: boolean = false;
   isSearchActiveFrom = false;
   allTerminalsList: any;
-  
+
   singleLine: any;
   reverseLine: any;
   copyTitle: any;
@@ -68,6 +71,49 @@ export class RoutesManagementComponent {
     // this.getUkraneCityName();
     this.getAllCity();
   }
+
+
+  latLngAddress: string = '';
+
+  // onBlur(field: string): void {
+  //   this.isTouched[field] = true;
+  // }
+
+  btnLoader = false;
+
+  onFindAddress(): void {
+    this.onBlur('latitude');
+    this.onBlur('longitude');
+
+    if (this.latitude && this.longitude) {
+      this.btnLoader = true;
+      this.getAddressFromLatLng(this.latitude, this.longitude);
+    }
+  }
+
+  getAddressFromLatLng(lat: string, lng: string): void {
+    const formData = new URLSearchParams();
+    formData.set('lat', lat);
+    formData.set('lng', lng);
+
+    this.service.postAPI('get-address-latlong', formData.toString())
+      .subscribe(
+        (res: any) => {
+          this.btnLoader = false;
+          if (res.success === true) {
+            this.latLngAddress = res.data?.address || 'Address not found';
+          } else {
+            this.latLngAddress = 'Address not found';
+          }
+        },
+        (error) => {
+          this.btnLoader = false;
+          console.error('API error:', error);
+          this.latLngAddress = 'Error fetching address';
+        }
+      );
+  }
+
 
   getAllCity() {
     this.service.getApi('get-all-city').subscribe({
@@ -277,14 +323,45 @@ export class RoutesManagementComponent {
   addTerminal() {
     const stopName = this.stopName?.trim();
     const terminalName = this.terminalName?.trim();
+    const latitude = this.latitude?.trim();
+    const longitude = this.longitude?.trim();
 
-    if (!stopName || !terminalName) {
+    if (!stopName) {
       return;
     }
 
+    if (!this.latLngAddress) {
+      return;
+    }
+
+    // If terminalName is provided but only spaces
+    if (terminalName && terminalName.trim() === '') {
+      this.toastr.warning('Address cannot be empty spaces.');
+      return;
+    }
+
+    // If terminalName is not given, validate lat/long
+    if (!terminalName) {
+      if (!latitude || latitude.trim() === '') {
+        this.toastr.warning('Latitude cannot be empty or spaces.');
+        return;
+      }
+
+      if (!longitude || longitude.trim() === '') {
+        this.toastr.warning('Longitude cannot be empty or spaces.');
+        return;
+      }
+    }
+
+
     const formURlData = new URLSearchParams();
     formURlData.set('city_name', this.stopName);
-    formURlData.set('city_address', this.terminalName);
+    if (this.terminalName) {
+      formURlData.set('city_address', this.terminalName);
+    } else {
+      formURlData.set('city_address', this.latLngAddress);
+    }
+    this.loading = true;
     this.service.postAPI('create-city', formURlData.toString()).subscribe({
       next: (response) => {
         if (response.success) {
@@ -292,12 +369,18 @@ export class RoutesManagementComponent {
           this.closeModal.nativeElement.click();
           this.toastr.success(response.message);
           //this.getAllTerminals();
-          this.getAllCity()
+          this.getAllCity();
+          this.loading = false;
+          this.stopName = '';
+          this.terminalName = '';
+          this.latLngAddress = '';
         } else {
           this.toastr.warning(response.message);
+          this.loading = false;
         }
       },
       error: (error) => {
+        this.loading = false;
         if (error.error.message) {
           this.toastr.error(error.error.message);
         } else {

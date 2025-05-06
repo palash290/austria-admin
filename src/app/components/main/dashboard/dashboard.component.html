@@ -105,7 +105,7 @@
 
             <div class="row">
                 <div class="col-md-6 mb-4">
-                    <div class="ct_white_bg ct_p_30">
+                    <div class="ct_white_bg ct_p_30" style="height: 100%;">
                         <div class="ct_flex_2">
                             <h2 class="ct_fs_24  ct_fw_600">Total Bookings per Month</h2>
                         </div>
@@ -118,45 +118,47 @@
                 </div>
 
                 <div class="col-md-6 mb-4">
-                    <div class="ct_white_bg ct_p_30">
-                        <div class="ct_flex_2">
-                            <h2 class="ct_fs_24 ct_fw_600">All Bookings</h2>
-                            <h2 class="ct_fs_24 ct_fw_600">This Month</h2>
+                    <div class="ct_white_bg ct_p_30"  style="height: 100%;">
+
+                        <div class="ct_flex_2 mb-2">
+                            <h2 class="ct_fs_24 mb-0 ct_fw_600">All Bookings</h2>
+                            <h2 class="mb-0 ct_badge_btn1">This Month</h2>
                         </div>
+
                         <div class="row">
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Bookings</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.bookingCount}}</h3>
+                            <div class="col-lg-6 mt-3 mt-lg-0">
+                                <div class="ct_today_overview_grey py-4 ">
+                                    <p class="ct_fs_18 mb-2">Total Bookings</p>
+                                    <h3 class="ct_fs_28 ct_fw_600 mb-0">{{allBookings.bookingCount}}</h3>
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Earnings</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.totalEarnings ?
+                            <div class="col-lg-6 mt-3 mt-lg-0">
+                                <div class="ct_today_overview_grey py-4">
+                                    <p class="ct_fs_18 mb-2">Total Earnings</p>
+                                    <h3 class="ct_fs_28 ct_fw_600 mb-0">{{allBookings.totalEarnings ?
                                         allBookings.totalEarnings : 0}} €</h3>
                                 </div>
                             </div>
 
-                            <div class="ct_flex_2 mt-2">
-                                <h2 class="ct_fs_24 ct_fw_600">New Bookings</h2>
-                                <h2 class="ct_fs_24 ct_fw_600">Next 7 Days</h2>
+                            <div class="ct_flex_2 mt-4 mb-2">
+                                <h2 class="ct_fs_24 mb-0 ct_fw_600">New Bookings</h2>
+                                <h2 class="mb-0 ct_badge_btn1">Next 7 Days</h2>
                             </div>
 
-                            <div class="col-lg-6 mb-4 mb-lg-0 mt-3">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Users</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.bookingCount}}</h3>
+                            <div class="col-lg-6 mt-3 mt-lg-0">
+                                <div class="ct_today_overview_grey py-4">
+                                    <p class="ct_fs_18 mb-2">Confirmed</p>
+                                    <h3 class="ct_fs_28 ct_fw_600 mb-0">{{allBookings.confirmedCount}}</h3>
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-4 mb-lg-0 mt-3">
-                                <div class="ct_today_overview_grey">
-                                    <p class="ct_fs_18">Total Active Lines</p>
-                                    <h3 class="ct_fs_28 ct_fw_600">{{allBookings.totalEarnings ?
-                                        allBookings.totalEarnings : 0}} €</h3>
+                            <div class="col-lg-6 mt-3 mt-lg-0">
+                                <div class="ct_today_overview_grey py-4">
+                                    <p class="ct_fs_18 mb-2">Pending</p>
+                                    <h3 class="ct_fs_28 ct_fw_600 mb-0">{{allBookings.pendingCount}}</h3>
                                 </div>
                             </div>
                         </div>
+
                         <!-- <div class="ct_mt_40">
                             <apx-chart [series]="eraningChart.series" [chart]="eraningChart.chart"
                                 [plotOptions]="eraningChart.plotOptions" [dataLabels]="eraningChart.dataLabels"
@@ -164,6 +166,7 @@
                                 [tooltip]="eraningChart.tooltip" [fill]="eraningChart.fill"
                                 [grid]="eraningChart.grid"></apx-chart>
                         </div> -->
+
                     </div>
                 </div>
             </div>
@@ -195,7 +198,7 @@
                                         </p>
                                     </div>
                                 </td>
-                                <td class="px-0">
+                                <td class="">
                                     <div>
                                         <p class="m-0">
                                             {{item.first_name}}
@@ -206,9 +209,9 @@
                                     </div>
                                 </td>
                                 <!-- <td class="px-0">{{item.total}}</td> -->
-                                <td class="px-0">{{item.route.title}} {{item.departure_time | date:'HH:mm'}} -
+                                <td class="">{{item.route.title}} {{item.departure_time | date:'HH:mm'}} -
                                     {{item.arrival_time | date:'HH:mm'}}</td>
-                                <td>{{item.created_at | date:'dd-mm-yyyy'}}</td>
+                                <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
                                 <td>
                                     @if(item.booking_status == 'Pending'){
                                     <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"
@@ -250,8 +253,9 @@
 <div class="row mt-5">
     <div class="col-xl-6 mb-4 mb-xl-0">
         <div class="ct_bus_grey_table ct_white_table ct_p_40">
-            <div class="ct_pb_20 d-flex align-items-center gap-2 justify-content-between">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">Upcoming Departures</h4>
+            <div class="ct_pb_20 ">
+                <h4 class="ct_fs_20 ct_fw_600 mb-0">Today's Buses</h4>
+                <span>There are <span class="ct_fw_600">{{todayBuses.length}}</span> buses today</span>
             </div>
             <div class="table-responsive">
                 <table class="table mb-0">
@@ -269,10 +273,9 @@
                             <td>
                                 {{item.route.title}}
                             </td>
-                            <!-- <td>45:88</td>
-                            <td>88:99</td> -->
-                            <td>{{item.bus.number_of_seats - item.booking_count}}/{{item.bus.number_of_seats}}</td>
-
+                            <td>{{item.first_departure_time}}</td>
+                            <td>{{item.last_arrival_time}}</td>
+                            <td>{{item.booking_count}}/{{item.bus.number_of_seats}}</td>
                         </tr>
                     </tbody>
                 </table>

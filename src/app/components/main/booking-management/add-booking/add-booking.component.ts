@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { SharedService } from '../../../../services/shared.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -200,8 +200,8 @@ export class AddBookingComponent {
   }
 
   selectedFromId: any = '';
-  selectedToId: any;
-  selectedBusId: any;
+  selectedToId: any = '';
+  selectedBusId: any = '';
 
   onFromChange(event: any): void {
     const selectedId = event.target.value;
@@ -229,16 +229,23 @@ export class AddBookingComponent {
   }
 
   onDateChange(): void {
-    // this.selectedFromId = '';
-    // this.selectedToId = '';
-    // this.selectedBusId = '';
-
-    // this.allCityTo = [];
-    // this.allBuses = [];
-    // this.departure_time = '';
-    // this.arrival_time = '';
-    this.getBuses();
     console.log('Date changed, all selections reset.');
+
+    // Reset dropdowns
+    this.selectedFromId = '';
+    this.selectedToId = '';
+    this.selectedBusId = '';
+
+    // Reset any related times or values
+    this.departure_time = '';
+    this.arrival_time = '';
+
+    // Clear the filtered lists if necessary
+    this.allCityTo = [];
+    this.allBuses = [];
+
+    this.ticketTypes = []
+
   }
 
 
@@ -356,8 +363,6 @@ export class AddBookingComponent {
       this.seatOptions.sort((a, b) => a - b); // Optional: Sort if needed
     }
   }
-
-
 
   selectedTickets: { ticketType: string; seats: number, price: any }[] = [];
 
@@ -493,17 +498,17 @@ export class AddBookingComponent {
   updateTicketPrice(ticket: any) {
     const selectedType = this.ticketTypes.find(t => t.label === ticket.ticketType);
     ticket.price = selectedType ? selectedType.price : '0.00';
-  
+
     // Recalculate subtotal
     this.calculateSubtotal();
   }
-  
+
   calculateSubtotal() {
     this.subtotal = this.expandedTicketList.reduce((sum, ticket) => sum + Number(ticket.price), 0);
   }
-  
 
-  
+
+
 
 
 
@@ -514,6 +519,7 @@ export class AddBookingComponent {
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
+
 
   // toggleSeatSelection(seat: number) {
   //   if (this.selectedSeats.includes(seat)) {
@@ -574,7 +580,7 @@ export class AddBookingComponent {
   lastName: any;
   phone: any;
   email: any;
-  notes: any;
+  notes: any = '';
   booking_status: any = '';
 
   saveBooking() {
@@ -605,6 +611,23 @@ export class AddBookingComponent {
     //   return;
     // }
 
+        // Check if at least one ticket is selected
+        if (!Object.values(this.ticketQuantities).some((qty: any) => qty > 0)) {
+          this.toastr.warning("Please select at least one ticket type");
+          return;
+        }
+
+            // Validate each ticket has a seat and passenger name
+    for (const ticket of this.expandedTicketList) {
+      if (!ticket.selectedSeat) {
+        this.toastr.warning(`Please assign a seat for ${ticket.ticketType}`);
+        return;
+      }
+      if (!ticket.passengerName || ticket.passengerName.trim() === '') {
+        this.toastr.warning(`Please enter passenger name for ${ticket.ticketType}`);
+        return;
+      }
+    }
 
 
 
@@ -647,7 +670,7 @@ export class AddBookingComponent {
       bookingDetails.append('travel_date', this.date1);
       bookingDetails.append('departure_time', this.departure_time);
       bookingDetails.append('arrival_time', this.arrival_time);
-      bookingDetails.append('payment_method', this.payment_method);
+      bookingDetails.append('payment_method', 'Cash');
       bookingDetails.append('subtotal', this.subtotal.toFixed(2));
       bookingDetails.append('tax', '0');
       bookingDetails.append('total', this.subtotal.toFixed(2));
@@ -709,12 +732,12 @@ export class AddBookingComponent {
     }
 
     if (!this.selectedFromId) {
-      this.toastr.warning("Please select a departure city (From)");
+      this.toastr.warning("Please select a pick-up city (From)");
       return;
     }
 
     if (!this.selectedToId) {
-      this.toastr.warning("Please select a destination city (To)");
+      this.toastr.warning("Please select a drop-off city (To)");
       return;
     }
 
@@ -791,14 +814,29 @@ export class AddBookingComponent {
   //     };
   //   }
   // }
+  
   openBookingDetails() {
     const url = this.route.serializeUrl(
-      this.route.createUrlTree(['/booking-details'], { queryParams: { booking_id: this.booking_id, autoPrint: true } })
+      this.route.createUrlTree(['/admin/booking-details'], { queryParams: { booking_id: this.booking_id, autoPrint: true } })
     );
     window.open(url, '_blank'); // Remove `onload`
   }
-  
 
+  sendTicket() {
+    this.toastr.warning('Coming Soon!')
+  }
+
+  // for close seat dropdown
+  @ViewChild('dropdown') dropdownRef!: ElementRef;
+
+  @HostListener('document:click', ['$event'])
+
+  handleClickOutside(event: MouseEvent) {
+    if (this.dropdownRef && !this.dropdownRef.nativeElement.contains(event.target)) {
+      this.dropdownOpen = false;
+    }
+  }
+  // end //
 
 
 }

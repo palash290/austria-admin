@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { EarningReportComponent } from './earning-report/earning-report.component';
 import { UserReportComponent } from './user-report/user-report.component';
@@ -31,15 +31,29 @@ export class ReportsComponent {
 
   ngOnInit() {
 
-    this.bookingChart = {
-      series: [],
-      chart: { type: "line", height: 350 },
-      xaxis: { categories: [] },
-      colors: ["#008FFB"]
-    };
+    // this.bookingChart = {
+    //   series: [],
+    //   chart: { type: "line", height: 350 },
+    //   xaxis: { categories: [] },
+    //   colors: ["#008FFB"]
+    // };
 
     this.getReportData();
     this.ticketGraph();
+  }
+
+  @Input() set earningTabActivated(value: boolean) { }
+
+  ngAfterViewInit() {
+    const tabTrigger = document.querySelector('#home-tab');
+    if (tabTrigger) {
+      tabTrigger.addEventListener('shown.bs.tab', () => {
+        // Dispatch an event or call a method to re-render the chart
+        this.earningTabActivated = true; // use an @Input() or Subject to notify child
+        this.getReportData();
+        this.ticketGraph();
+      });
+    }
   }
 
 

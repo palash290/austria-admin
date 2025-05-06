@@ -145,7 +145,7 @@ export class DashboardComponent {
             }
           ],
           chart: {
-            height: 350,
+            height: 280,
             type: "line",
             zoom: {
               enabled: false
@@ -177,7 +177,7 @@ export class DashboardComponent {
 
         this.bookingStatusInAGraph = resp.data.bookingStatusInAGraph;
 
-        this.totalBookings = this.bookingStatusInAGraph.confirmed + this.bookingStatusInAGraph.pending + this.bookingStatusInAGraph.cancelled;
+        this.totalBookings = this.bookingStatusInAGraph.Confirmed + this.bookingStatusInAGraph.Pending + this.bookingStatusInAGraph.Cancelled;
 
         const labels = Object.keys(this.bookingStatusInAGraph);
         const series = Object.values(this.bookingStatusInAGraph);
