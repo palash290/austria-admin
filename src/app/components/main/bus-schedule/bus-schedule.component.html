@@ -73,7 +73,7 @@
                                             <select class="form-control ct_input ct_fs_18 " formControlName="busName">
                                                 <option value="" disabled>Select</option>
                                                 <option *ngFor="let lan of busList" [value]="lan.bus_id">
-                                                    {{ lan.bus_name }}
+                                                    {{ lan.bus_name }}, {{ lan.number_of_seats }} Seats
                                                 </option>
                                             </select>
                                             <div class="err_msg"

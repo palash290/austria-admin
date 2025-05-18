@@ -1,4 +1,4 @@
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-md-6 mb-4 mb-xl-0">
         <div class="ct_white_bg ct_p_30" style="height: 100%;">
             <div class="ct_flex_2">
@@ -16,9 +16,9 @@
     </div>
 
     <div class="col-xl-6 mb-4  mb-xl-0">
-        <div class="ct_bus_grey_table ct_white_table ct_p_40" style="height: 100%;">
+        <div class="ct_bus_grey_table ct_white_table ct_p_30" style="height: 100%;">
             <div class="ct_pb_20 d-flex align-items-center gap-2 justify-content-between">
-                <h4 class="ct_fs_20 ct_fw_600 mb-0">Frequent Travelers</h4>
+                <h4 class="ct_fs_24 ct_fw_600 ">Frequent Travelers</h4>
             </div>
             <div class="table-responsive">
                 <table class="table mb-0">
@@ -42,7 +42,7 @@
                                     <p class="m-0">
                                         Total Trips: {{item.total_bookings}}
                                     </p>
-                                    <p class="mb-0">
+                                    <p class="mb-0 ct_fw_400">
                                         Last Trip on: {{item.last_trip_date | date:'dd-MMM-yyyy'}}
                                     </p>
                                 </div>
@@ -50,6 +50,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="recentTravel?.length == 0 || !recentTravel" class="text-center">
+                    <p class="ct_fs_15 mt-3">No users found</p>
+                </div>
             </div>
         </div>
     </div>
@@ -58,10 +61,10 @@
 
 
 
-<div class="ct_middle_content mt-5">
+<div class="ct_middle_content mt-4">
     <div class="ct_bus_grey_table">
-        <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
-            <h4 class="ct_fs_20 ct_fw_600 mb-0">Users Management</h4>
+        <div class=" gap-3 ct_pb_20 ct_px_20 flex-wrap">
+            <h4 class="ct_fs_20 ct_fw_600 mb-4">Users Management</h4>
             <!-- <div class="d-flex gap-3 align-items-center  justify-content-between">
 
                 <div class="form-group ct_w_100_res_767">
@@ -87,7 +90,7 @@
                     (ngModelChange)="getUsers()">
             </div> -->
 
-            <div class="d-flex gap-3 align-items-end justify-content-between flex-wrap">
+            <div class="d-flex gap-3 align-items-end  flex-wrap">
 
                 <!-- From Date -->
                 <div class="form-group ct_w_100_res_767">
@@ -116,6 +119,8 @@
                 <!-- Apply Button -->
                 <button class="ct_blue_btn" style="height:50px" (click)="getUsers()">Apply</button>
 
+                <button class="ct_blue_btn" style="height:50px" (click)="reset()">Reset</button>
+
                 <!-- Search Input (Triggers search on change only) -->
                 <input type="text" placeholder="Search..." class="form-control ct_input ct_fs_18 w-auto" [(ngModel)]="searchQuery"
                     (ngModelChange)="getUsers()">
@@ -123,7 +128,7 @@
 
 
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive ct_px_20">
             <table class="table mb-0">
                 <thead>
                     <tr>

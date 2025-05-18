@@ -117,12 +117,15 @@
                             <!-- Dynamic Ticket Types -->
                             <td *ngFor="let ticketType of ticketTypes">
                                 @if(route.is_active){
-                                <input type="number" class="form-control" style="width: 122px;" [placeholder]="ticketType.COLUMN_NAME === 'Baseprice' 
+                              <div class="position-relative">
+                                <input type="number" class="form-control" style="width: 135px; padding-left: 30px;" [placeholder]="ticketType.COLUMN_NAME === 'Baseprice' 
                                 ? 'Base' + ' Price'
                                 : ticketType.COLUMN_NAME + ' Price'" [(ngModel)]="route[ticketType.COLUMN_NAME]"
                                     [ngClass]="{ 'border-danger': ticketType.COLUMN_NAME[ticketType.COLUMN_NAME] < 0 }"
                                     (ngModelChange)="updateTicketPrice(route, ticketType.COLUMN_NAME, $event)"
                                     [min]="0" />
+                                    <span class="ct_currency_sign">€</span>
+                              </div>
                                 } @else {
                                 <!-- Show disabled state or message when unavailable -->
                                 <span class="text-muted">

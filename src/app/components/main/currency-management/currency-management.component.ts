@@ -81,12 +81,12 @@ export class CurrencyManagementComponent {
         this.btnEditLoader = true;
         this.loading = true;
         const formURlData = new URLSearchParams();
-        formURlData.set('from_currency', this.editForm.value.from_currency);
-        formURlData.set('to_currency', this.editForm.value.to_currency);
+        formURlData.set('from_currency', 'EUR');
+        formURlData.set('to_currency', 'UAH');
         formURlData.set('rate', this.editForm.value.rate);
         formURlData.set('id', this.updateId);
   
-        this.service.postAPI('update-bus', formURlData.toString()).subscribe({
+        this.service.postAPI('update-exchange-by-id', formURlData.toString()).subscribe({
           next: (resp) => {
             if (resp.success == true) {
               this.toastr.success(resp.message);

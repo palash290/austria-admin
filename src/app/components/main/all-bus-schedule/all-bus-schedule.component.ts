@@ -30,11 +30,13 @@ export class AllBusScheduleComponent {
 
   getBuseSchedule() {
 
-    this.service.getApi(`get-all-busschedule?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}&filter=${this.filterQuery}`).subscribe({
+    const filter = this.filterQuery ? decodeURIComponent(this.filterQuery) : '';
+    const apiUrl = `get-all-busschedule?page=${this.currentPage}&limit=${this.pageSize}&search=${this.searchQuery}&filter=${filter}`;
+
+    this.service.getApi(apiUrl).subscribe({
       next: resp => {
-        //debugger
         this.data = resp.data.schedulesWithStops;
-        
+
         this.noOfStops = resp.data.schedulesWithStops[0].route_stops?.length;
         this.totalPages = resp.data.pagination?.totalPages
       },

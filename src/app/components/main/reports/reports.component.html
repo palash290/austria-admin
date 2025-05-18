@@ -18,7 +18,7 @@
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="booking" role="tabpanel" aria-labelledby="home-tab">
 
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <div class="col-xxl-3 col-xl-6 mb-4">
                     <div class="ct_white_bg_card">
                         <div class="ct_card_icon" style="background-color: #E7F4D6;">
@@ -66,6 +66,7 @@
 
                     </div>
                 </div>
+
                 <div class="col-xxl-3 col-xl-6 mb-4">
                     <div class="ct_white_bg_card">
                         <div class="ct_card_icon" style="background-color: #FFF3C2;">
@@ -89,6 +90,7 @@
 
                     </div>
                 </div>
+
                 <div class="col-xxl-3 col-xl-6 mb-4">
                     <div class="ct_white_bg_card">
                         <div class="ct_card_icon" style="background-color: #FCDFE0;">
@@ -114,7 +116,7 @@
                 </div>
             </div>
 
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <div class="col-md-6 mb-4">
                     <div class="ct_white_bg ct_p_30" style="height:100%">
                         <div class="d-flex gap-3 align-items-center  justify-content-between">
@@ -131,7 +133,7 @@
                         </div>
 
                         <div class="ct_mt_40" *ngIf="statusLength > 0">
-                            <apx-chart [series]="statusChart.series" [chart]="statusChart.chart"
+                            <apx-chart class="et_mx_auto_12" [series]="statusChart.series" [chart]="statusChart.chart"
                                 [labels]="statusChart.labels" [fill]="statusChart.fill"
                                 [dataLabels]="statusChart.dataLabels" [responsive]="statusChart.responsive"></apx-chart>
                         </div>
@@ -144,7 +146,7 @@
                 </div>
 
                 <div class="col-md-6 mb-4">
-                    <div class="ct_white_bg ct_p_30"  style="height:100%">
+                    <div class="ct_white_bg ct_p_30" style="height:100%">
                         <div class="d-flex gap-3 align-items-center  justify-content-between">
                             <div class="ct_flex_2">
                                 <h2 class="ct_fs_24  ct_fw_600">Booking Overview</h2>
@@ -157,8 +159,8 @@
                                 <option value="Year">Year</option>
                             </select>
                         </div>
-                        
-                        <div class="ct_mt_40" >
+
+                        <div class="ct_mt_40">
                             <apx-chart [series]="bookingChart.series" [chart]="bookingChart.chart"
                                 [xaxis]="bookingChart.xaxis" [dataLabels]="bookingChart.dataLabels"
                                 [grid]="bookingChart.grid" [stroke]="bookingChart.stroke" [labels]="bookingChart.labels"
@@ -174,12 +176,110 @@
                 </div>
             </div>
 
-            <div class="ct_bus_grey_table ct_p_40 mt-4 border-0">
-                <div class="ct_pb_20 d-flex align-items-center gap-2 justify-content-between">
-                    <h4 class="ct_fs_20 ct_fw_600 mb-0">Latest Bookings </h4>
-                </div>
-                <div class="table-responsive">
-                    <table class="table mb-0">
+            <!-- sdssd -->
+            <div class="ct_custom_tab_2">
+
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                            type="button" role="tab" aria-controls="home" aria-selected="true">Upcoming Buses</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                            type="button" role="tab" aria-controls="profile" aria-selected="false">Route Report</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                        <div class="ct_bus_grey_table ct_white_table ct_p_40">
+                            <div class="ct_pb_20 ">
+                                <h4 class="ct_fs_20 ct_fw_600 mb-0">Upcoming Buses</h4>
+                                <!-- <span>There are <span class="ct_fw_600">{{upcomingBuses.length}}</span> buses today</span> -->
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Route</th>
+                                            <th class="px-0">Travel Date</th>
+                                            <th class="px-0">Departure</th>
+                                            <th class="px-0">Arrival</th>
+                                            <th class="px-0">Bookings</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let item of getLimitedBuses(); let i = index">
+                                            <td>
+                                                {{item.route.title}}
+                                            </td>
+                                            <td>{{item.travel_date}}</td>
+                                            <td>{{item.first_departure_time}}</td>
+                                            <td>{{item.last_arrival_time}}</td>
+                                            <td>{{item.booking_count}}/{{item.bus.number_of_seats}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                        <div class="ct_bus_grey_table ct_p_40 mt-4 border-0">
+                            <div class="ct_pb_20 ">
+                                <h4 class="ct_fs_20 ct_fw_600 mb-4">Route Report </h4>
+
+                                <div class="d-flex gap-3 align-items-end  flex-wrap">
+
+                                    <div class="form-group ct_w_100_res_767">
+                                        <label class="ct_fs_18 ct_fw_500 mb-2">Line<span
+                                                class="ct_text_red">*</span></label>
+                                        <select class="form-control w-auto ct_w_100_res_767 ct_input ct_fs_18"
+                                            (change)="onLineChange($event)" [(ngModel)]="selectedLineId">
+                                            <option selected value="">Select</option>
+                                            <option *ngFor="let lan of allLines" [value]="lan.route_id">{{lan.title}}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- From Date -->
+                                    <div class="form-group ct_w_100_res_767">
+                                        <label class="ct_fs_18 ct_fw_500 mb-2">From<span
+                                                class="ct_text_red">*</span></label>
+                                        <div class="position-relative">
+                                            <input type="date" class="form-control ct_input ct_fs_18"
+                                                [(ngModel)]="startDate">
+                                        </div>
+                                    </div>
+
+                                    <!-- To Date -->
+                                    <div class="form-group ct_w_100_res_767">
+                                        <label class="ct_fs_18 ct_fw_500 mb-2">To<span
+                                                class="ct_text_red">*</span></label>
+                                        <div class="position-relative">
+                                            <input type="date" class="form-control ct_input ct_fs_18"
+                                                [(ngModel)]="endDate" [disabled]="!startDate">
+                                        </div>
+                                    </div>
+
+                                    <button class="ct_blue_btn" style="height:50px"
+                                        (click)="getBookedSeats()">Apply</button>
+
+                                    <button class="ct_blue_btn" style="height:50px" (click)="reset()">Reset</button>
+
+                                </div>
+
+                            </div>
+                            <!-- Download Button -->
+                            <div class="mt-3 mb-3 text-end" *ngIf="reportData.header?.length > 0">
+                                <button class="btn btn-primary" (click)="downloadCSV()">Download CSV</button>
+                            </div>
+                            <div class="table-responsive">
+                                <!-- <table class="table mb-0">
                         <thead>
                             <tr>
                                 <th>S No.</th>
@@ -215,7 +315,7 @@
                                         </p>
                                     </div>
                                 </td>
-                                <!-- <td class="px-0">{{item.total}}</td> -->
+                        
                                 <td class="">
                                     <div>
                                         <p class="m-0">
@@ -256,12 +356,44 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                    <div *ngIf="latestBooking?.length == 0 || !latestBooking" class="text-center">
-                        <p class="ct_fs_15 mt-3">No items found</p>
+                    </table> -->
+
+
+
+                                <table class="table" *ngIf="reportData.header?.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th>From/To</th>
+                                            <th *ngFor="let head of getFilteredHeaders()">{{ head.name }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let row of getFilteredRows()">
+                                            <td>{{ row.stopName }}</td>
+                                            <td *ngFor="let cell of getFilteredRowData(row.rowData)">{{ cell }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+
+
+
+
+
+                                <div *ngIf="latestBooking?.length == 0 || !latestBooking" class="text-center">
+                                    <p class="ct_fs_15 mt-3">No items found</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
+
+            <!-- dfdf -->
+
+
+
         </div>
 
         <div class="tab-pane fade" id="earning" role="tabpanel" aria-labelledby="earning-tab">

@@ -19,3 +19,7 @@
   .ct_mt_40 {
     margin-top: 40px;
   }
+.ct_bus_grey_table td{
+  border: 0px;
+  border-bottom: 1px solid #e6e6e6;
+}

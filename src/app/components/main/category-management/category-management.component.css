@@ -111,3 +111,9 @@
   top: 2px;
 }
 
+.ct_currency_sign{
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+}

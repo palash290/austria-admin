@@ -22,12 +22,15 @@ export class ReportsComponent {
   public bookingChart!: any;
   public statusChart!: any;
   latestBooking: any;
-
-  filterQuery: any = 'Day';
-  filterQueryTicket: any = 'day';
+  allLines: any;
+  filterQuery: any = 'Year';
+  filterQueryTicket: any = 'year';
   loading: boolean = false;
+  selectedLineId: any = '';
+  startDate: any = '';
+  endDate: any = '';
 
-  constructor(private service: SharedService, private test: EarningReportComponent, private toastr: NzMessageService) { }
+  constructor(private service: SharedService, private toastr: NzMessageService) { }
 
   ngOnInit() {
 
@@ -38,9 +41,89 @@ export class ReportsComponent {
     //   colors: ["#008FFB"]
     // };
 
+    this.getRoutes();
     this.getReportData();
     this.ticketGraph();
+    this.getUpcomingBuses();
   }
+
+  getRoutes() {
+    this.service.getApi(`get-all-routes`).subscribe({
+      next: resp => {
+        this.allLines = resp.data;
+      },
+      error: error => {
+        console.log(error.message);
+      }
+    });
+  }
+
+  reportData: any = {
+    header: [],
+    rows: []
+  };
+
+  getBookedSeats() {
+    // if(!this.selectedLineId){
+    //   this.toastr.warning('Please select line first');
+    //   return
+    // }
+    const formData = new URLSearchParams();
+    formData.append('route_id', this.selectedLineId);
+    formData.append('from_date', this.startDate);
+    formData.append('to_date', this.endDate);
+    this.loading = true;
+    this.service
+      .postAPI('get-all-booking-by-route-id', formData.toString())
+      .subscribe({
+        next: (res: any) => {
+          this.loading = false;
+          this.reportData = {
+            header: res.header,
+            rows: res.rows
+          };
+        },
+        error: (error) => {
+          this.loading = false;
+          if (error.error.message) {
+            this.toastr.error(error.error.message);
+          } else {
+            this.toastr.error('Something went wrong!');
+          }
+        }
+      });
+  }
+
+  reset() {
+    this.startDate = '';
+    this.endDate = '';
+    this.selectedLineId = '';
+    this.reportData.header = []
+    this.reportData.rows = []
+  }
+
+
+  // Exclude the first column (index 0) from header
+  getFilteredHeaders() {
+    return this.reportData.header.slice(1);
+  }
+
+  // Exclude the last row from rows array
+  getFilteredRows() {
+    return this.reportData.rows.slice(0, -1);
+  }
+
+  // Exclude the first cell (index 0) from rowData array
+  getFilteredRowData(rowData: string[]) {
+    return rowData.slice(1);
+  }
+
+  onLineChange(event: any): void {
+    const selectedId = event.target.value;
+    this.selectedLineId = selectedId;
+    //this.getBookedSeats(this.selectedLineId);
+  }
+
 
   @Input() set earningTabActivated(value: boolean) { }
 
@@ -81,9 +164,9 @@ export class ReportsComponent {
           //this.ticketGraph(resp.data.ticketCounts)
 
           if (this.filterQuery === 'Year') {
-            this.totalBookingsPerMonth = Object.entries(resp.data.bookingOverview).map(([month, value]) => ({
-              month,
-              bookings: value
+            this.totalBookingsPerMonth = resp.data.bookingOverview.map((item: { month: string; totalBookings: number }) => ({
+              month: item.month,
+              bookings: item.totalBookings
             }));
 
             this.bookingChart = {
@@ -247,6 +330,25 @@ export class ReportsComponent {
 
 
 
+
+  downloadCSV() {
+    let csvContent = 'From/To,' + this.getFilteredHeaders().map((header: { name: any; }) => header.name).join(',') + '\n';
+
+    this.getFilteredRows().forEach((row: { stopName: any; rowData: string[]; }) => {
+      const rowData = [row.stopName, ...this.getFilteredRowData(row.rowData)];
+      csvContent += rowData.join(',') + '\n';
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'table_data.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+
   // getReportData() {
   //   const formURlData = new URLSearchParams();
   //   formURlData.set('report_date', 'week');
@@ -306,6 +408,23 @@ export class ReportsComponent {
   //     }
   //   });
   // }
+
+  upcomingBuses: any;
+
+  getUpcomingBuses() {
+    this.service.getApi('upcoming-buses-report').subscribe({
+      next: resp => {
+        this.upcomingBuses = resp.data;
+      },
+      error: error => {
+        console.log(error.message);
+      }
+    });
+  }
+
+  getLimitedBuses() {
+    return this.upcomingBuses.slice(0, 5);
+  }  
 
 
 }

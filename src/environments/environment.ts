@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiUrl: '',
 
-  baseUrl: 'http://13.61.168.187:4000/'
+  baseUrl: 'https://13.61.168.187:4000/'
   //baseUrl: 'http://192.168.29.44:4000/'
 }
 /*

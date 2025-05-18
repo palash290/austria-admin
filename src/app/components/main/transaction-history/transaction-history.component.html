@@ -33,11 +33,9 @@
                         <td>{{item.booking.email}}</td>
                         <td>
                             {{item.amount}}
-                            @if(item.booking.from.from_ukraine){
-                            ₴
-                            } @else {
+    
                             €
-                            }
+                       
                         </td>
                         <td>
                             @if(item.payment_method == 'card'){

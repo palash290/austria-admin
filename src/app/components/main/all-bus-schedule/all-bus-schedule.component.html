@@ -2,12 +2,12 @@
     <div class="ct_bus_grey_table">
         <div class="d-flex align-items-center justify-content-between gap-3 ct_pb_20 ct_px_20 flex-wrap">
             <h4 class="ct_fs_20 ct_fw_600 mb-0">Scheduled Buses</h4>
-            <div class="d-flex gap-3 align-items-center  justify-content-between">
+            <div class="d-flex gap-3 align-items-center justify-content-between">
                 <select class="form-control w-auto" [(ngModel)]="filterQuery" name="route"
                     (ngModelChange)="getBuseSchedule()">
-                    <option value="" disabled selected>-- Select --</option>
-                    <option value="Austria To Ukraine">Austria To Ukraine</option>
-                    <option value="Ukraine To Austria">Ukraine To Austria</option>
+                    <option value="" selected>All</option>
+                    <option value="2">Austria To Ukraine</option>
+                    <option value="1">Ukraine To Austria</option>
                 </select>
                 <input type="text" placeholder="Search..." class="form-control w-auto" [(ngModel)]="searchQuery"
                     (ngModelChange)="getBuseSchedule()">

@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-xxl-12">
         <div class="ct_middle_content">
+            
             <!-- <div class="row">
                 <div class="col-xxl-3 col-xl-6 mb-4">
                     <div class="ct_white_bg_card">
@@ -118,7 +119,7 @@
                 </div>
 
                 <div class="col-md-6 mb-4">
-                    <div class="ct_white_bg ct_p_30"  style="height: 100%;">
+                    <div class="ct_white_bg ct_p_30" style="height: 100%;">
 
                         <div class="ct_flex_2 mb-2">
                             <h2 class="ct_fs_24 mb-0 ct_fw_600">All Bookings</h2>
@@ -127,7 +128,7 @@
 
                         <div class="row">
                             <div class="col-lg-6 mt-3 mt-lg-0">
-                                <div class="ct_today_overview_grey py-4 ">
+                                <div class="ct_today_overview_grey py-4">
                                     <p class="ct_fs_18 mb-2">Total Bookings</p>
                                     <h3 class="ct_fs_28 ct_fw_600 mb-0">{{allBookings.bookingCount}}</h3>
                                 </div>
@@ -135,8 +136,10 @@
                             <div class="col-lg-6 mt-3 mt-lg-0">
                                 <div class="ct_today_overview_grey py-4">
                                     <p class="ct_fs_18 mb-2">Total Earnings</p>
-                                    <h3 class="ct_fs_28 ct_fw_600 mb-0">{{allBookings.totalEarnings ?
-                                        allBookings.totalEarnings : 0}} €</h3>
+                                    <h3 class="ct_fs_28 ct_fw_600 mb-0">
+                                        {{ allBookings.totalEarnings ? (allBookings.totalEarnings | number:'1.2-2') : '0.00' }} €
+                                      </h3>
+                                      
                                 </div>
                             </div>
 
@@ -209,9 +212,9 @@
                                     </div>
                                 </td>
                                 <!-- <td class="px-0">{{item.total}}</td> -->
-                                <td class="">{{item.route.title}} {{item.departure_time | date:'HH:mm'}} -
-                                    {{item.arrival_time | date:'HH:mm'}}</td>
-                                <td>{{item.created_at | date:'dd-MM-yyyy'}}</td>
+                                <td class="">{{item.route.title}} {{item.departure_time}} -
+                                    {{item.arrival_time}}</td>
+                                <td>{{item.created_at}}</td>
                                 <td>
                                     @if(item.booking_status == 'Pending'){
                                     <span class="badge py-2 ct_fs_18 ct_fw_700 px-4 ct_border_radius_100"

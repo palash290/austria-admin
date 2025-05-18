@@ -51,7 +51,7 @@
                             <div class="accordion ct_custom_accordian1 mt-4" id="linesAccordion">
                                 <div class="accordion-item" *ngFor="let line of lines">
                                     <h2 class="accordion-header" id="heading{{ line.route_id }}"
-                                        (click)="addRouteById(line.route_id)">
+                                        (click)="addRouteById(line.route_id)" [title]=line.title>
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse"
                                             [attr.data-bs-target]="'#collapse' + line.route_id" aria-expanded="false"
@@ -432,7 +432,8 @@
             </div>
             <div class="modal-footer border-0 justify-content-center">
                 <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
-
+                <button hidden type="button" class="btn btn-secondary" #closeModalCopy
+                data-bs-dismiss="modal">Close</button>
                 <button (click)="copyRoute()" type="button" class="ct_blue_btn py-3  px-5">Confirm</button>
             </div>
         </div>
@@ -527,3 +528,34 @@
 <div *ngIf="loading">
     <app-loader />
 </div>
+
+<!-- delete Modal S -->
+<div class="modal fade " id="ct_delete_modal" tabindex="-1" aria-labelledby="ct_delete_modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content pb-4">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body border-0 pt-0">
+                <div class="ct_delete_modal_cnt">
+                    <div class="text-center mb-4 ct_delete_icon">
+                        <svg width="40" height="40" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15.0447 9.86869L14.6987 18.8687M9.91069 18.8687L9.56469 9.86869M19.5327 6.65869C19.8747 6.71069 20.2147 6.76569 20.5547 6.82469M19.5327 6.65869L18.4647 20.5417C18.4211 21.1069 18.1658 21.6349 17.7497 22.0199C17.3337 22.405 16.7876 22.6189 16.2207 22.6187H8.38869C7.82178 22.6189 7.27571 22.405 6.85967 22.0199C6.44362 21.6349 6.18828 21.1069 6.14469 20.5417L5.07669 6.65869M19.5327 6.65869C18.3786 6.4842 17.2185 6.35178 16.0547 6.26169M5.07669 6.65869C4.73469 6.70969 4.39469 6.76469 4.05469 6.82369M5.07669 6.65869C6.23082 6.4842 7.39092 6.35178 8.55469 6.26169M16.0547 6.26169V5.34569C16.0547 4.16569 15.1447 3.18169 13.9647 3.14469C12.8583 3.10932 11.7511 3.10932 10.6447 3.14469C9.46469 3.18169 8.55469 4.16669 8.55469 5.34569V6.26169M16.0547 6.26169C13.5584 6.06876 11.051 6.06876 8.55469 6.26169"
+                                stroke="#EF331E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h4 class="ct_fs_28 mb-3 ct_fw_600 text-center text-center">Confirm Delete</h4>
+                    <p class="mb-0 text-center ct_fs_18"> Are you sure? you want to delete it.</p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="ct_btn_red bg-danger py-3 px-5" data-bs-dismiss="modal">Cancel</button>
+                <button hidden type="button" class="btn btn-secondary" #closeModal2
+                    data-bs-dismiss="modal">Close</button>
+                <button type="button" class="ct_blue_btn py-3 px-5" (click)="deleteCity1()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- delete Modal E -->

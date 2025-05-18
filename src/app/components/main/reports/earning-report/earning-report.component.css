@@ -7,7 +7,9 @@
 .ct_p_30 {
   padding: 30px !important;
 }
-
+.et_mx_auto_12 div#apexchartslsra1f0p {
+  margin-inline: auto;
+}
 .ct_flex_2 {
   display: flex;
   align-items: baseline;

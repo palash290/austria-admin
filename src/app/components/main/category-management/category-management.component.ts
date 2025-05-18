@@ -84,7 +84,7 @@ export class CategoryManagementComponent {
     //formURlData.set('stop_id', filterId ? filterId : "");
     // formURlData.set('pickup_point', this.fromId);
     // formURlData.set('dropoff_point', this.toId);
-    this.service.postAPI('get-ticket-type-by-routeid', formURlData.toString()).subscribe({
+    this.service.postAPI('get-ticket-type-by-route-line-id', formURlData.toString()).subscribe({
       next: (response) => {
         if (response.success) {
           this.allRoutes = response.data[0].ticket_type;

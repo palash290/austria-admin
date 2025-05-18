@@ -83,6 +83,7 @@
                     <tr>
                         <th>S No.</th>
                         <th>Client</th>
+                        <th>Booking Number</th>
                         <th>From/Time</th>
                         <th>To/Time</th>
                         <th>Tickets/Price</th>
@@ -97,6 +98,7 @@
                             {{i+1}}
                         </td>
                         <td>{{item.first_name}}</td>
+                        <td>{{item.booking_number}}</td>
                         <td>
                             <div>
                                 <p class="m-0">
@@ -122,12 +124,12 @@
                                 {{ item.passengers.length }} {{ item.passengers.length > 1 ? 'Tickets' : 'Ticket' }}
                             </p>
 
-                            <p class="mb-0">{{item.subtotal}}
-                                @if(item.from.from_ukraine){
+                            <p class="mb-0">{{item.subtotal}}€
+                                <!-- @if(item.from.from_ukraine){
                                 ₴
                                 } @else {
                                 €
-                                }
+                                } -->
                             </p>
                         </td>
                         <td>

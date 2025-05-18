@@ -37,6 +37,7 @@ export class AddBookingComponent {
     this.getAllRoutesFrom();
     this.getSingleRoutesFrom();
     this.dateValidation();
+    //this.recalculateSubtotal();
   }
 
   dateValidation() {
@@ -93,6 +94,8 @@ export class AddBookingComponent {
             this.allCityFrom = data.allCityFrom || [];
             this.allCityTo = data.allCityTo || [];
             this.allBuses = data.allBuses || [];
+
+
 
             // this.fromId = data.allCityFrom || [];
             // this.toId = data.allCityTo || [];
@@ -222,9 +225,8 @@ export class AddBookingComponent {
   onBusChange(event: any): void {
     const selectedId = event.target.value;
     this.selectedBusId = selectedId;
-    //console.log('Selected austriaCityId ID:', this.selectedBusId);
     this.getTicketTypeById(this.selectedBusId);
-
+    //this.addTicketLine();
     // this.getBookedSeats();
   }
 
@@ -276,12 +278,13 @@ export class AddBookingComponent {
       .postAPI('bus-search', formData.toString())
       .subscribe((res: any) => {
         if (res.success == true) {
-          //debugger
           this.getBookedSeats(res.data[0]?.route.route_id);
 
           this.isUkrane = res.data[0].route_stops[0].stop_city.from_ukraine;
 
           this.allBuses = res.data;
+          //this.allBuses = res.data?.length ? [res.data[0]] : [];
+
           this.departure_time = res.data[0]?.departure_time;
           this.arrival_time = res.data[0]?.arrival_time;
           this.route_id = res.data[0]?.route.route_id;
@@ -366,7 +369,7 @@ export class AddBookingComponent {
 
   selectedTickets: { ticketType: string; seats: number, price: any }[] = [];
 
-  expandedTicketList: any[] = [];
+ 
   subtotal: any = 0;
 
 
@@ -421,40 +424,30 @@ export class AddBookingComponent {
     console.log('Updated expandedTicketList:', this.expandedTicketList);
   }
 
-  onTicketQuantityChange() {
+  expandedTicketList: any[] = [];
+  ticketTypes: any[] = [];
 
-    this.expandedTicketList = [];
 
-    // Update the selectedTickets array
-    this.selectedTickets = Object.entries(this.ticketQuantities).map(([ticketType, seats]) => {
-      const ticket = this.ticketTypes.find(t => t.label === ticketType);
-      return {
-        ticketType,
-        seats: Number(seats) || 0,
-        price: ticket ? ticket.price : 0,  // Fetch the price
-      };
-    }).filter(ticket => ticket.seats > 0);
-
-    // Calculate the Subtotal (Sum of all ticket prices)
-    this.subtotal = this.selectedTickets.reduce((sum, ticket: any) => sum + (ticket.seats * ticket.price), 0);
-
-    // Create expanded ticket list based on seat count
-    this.expandedTicketList = [];
-    this.selectedTickets.forEach(ticket => {
-      for (let i = 0; i < ticket.seats; i++) {
-        this.expandedTicketList.push({
-          ticketType: ticket.ticketType,
-          selectedSeat: '',
-          passengerName: '',
-          price: ticket.price
-        });
-      }
+  addTicketLine() {
+    this.expandedTicketList.push({
+      ticketType: this.ticketTypes.length > 0 ? this.ticketTypes[0].label : '',
+      selectedSeat: '',
+      passengerName: '',
+      price: this.ticketTypes.length > 0 ? this.ticketTypes[0].price : 0
     });
-    console.log('this.selectedTickets', this.selectedTickets);
-    console.log('this.expandedTicketList', this.expandedTicketList);
 
-    // Create seat options from 1 to number_of_seats
-    this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1);
+    this.recalculateSubtotal(); // optional helper
+  }
+  recalculateSubtotal() {
+    this.subtotal = this.expandedTicketList.reduce(
+      (sum, ticket) => sum + (Number(ticket.price) || 0),
+      0
+    );
+  }
+  
+  removeTicketLine(index: number) {
+    this.expandedTicketList.splice(index, 1);
+    this.recalculateSubtotal(); // update the total
   }
 
 
@@ -462,7 +455,47 @@ export class AddBookingComponent {
 
 
 
-  ticketTypes: any[] = [];
+  // onTicketQuantityChange() {
+
+  //   this.expandedTicketList = [];
+
+  //   // Update the selectedTickets array
+  //   this.selectedTickets = Object.entries(this.ticketQuantities).map(([ticketType, seats]) => {
+  //     const ticket = this.ticketTypes.find(t => t.label === ticketType);
+  //     return {
+  //       ticketType,
+  //       seats: Number(seats) || 0,
+  //       price: ticket ? ticket.price : 0,  // Fetch the price
+  //     };
+  //   }).filter(ticket => ticket.seats > 0);
+
+  //   // Calculate the Subtotal (Sum of all ticket prices)
+  //   this.subtotal = this.selectedTickets.reduce((sum, ticket: any) => sum + (ticket.seats * ticket.price), 0);
+
+  //   // Create expanded ticket list based on seat count
+  //   this.expandedTicketList = [];
+  //   this.selectedTickets.forEach(ticket => {
+  //     for (let i = 0; i < ticket.seats; i++) {
+  //       this.expandedTicketList.push({
+  //         ticketType: ticket.ticketType,
+  //         selectedSeat: '',
+  //         passengerName: '',
+  //         price: ticket.price
+  //       });
+  //     }
+  //   });
+  //   console.log('this.selectedTickets', this.selectedTickets);
+  //   console.log('this.expandedTicketList', this.expandedTicketList);
+
+  //   // Create seat options from 1 to number_of_seats
+  //   this.seatOptions = Array.from({ length: this.number_of_seats }, (_, i) => i + 1);
+  // }
+
+
+
+
+
+
 
   getTicketTypeById(route_id?: any) {
     const formURlData = new URLSearchParams();
@@ -497,15 +530,15 @@ export class AddBookingComponent {
 
   updateTicketPrice(ticket: any) {
     const selectedType = this.ticketTypes.find(t => t.label === ticket.ticketType);
-    ticket.price = selectedType ? selectedType.price : '0.00';
+    ticket.price = selectedType ? selectedType.price : '0';
 
     // Recalculate subtotal
-    this.calculateSubtotal();
+    this.recalculateSubtotal();
   }
 
-  calculateSubtotal() {
-    this.subtotal = this.expandedTicketList.reduce((sum, ticket) => sum + Number(ticket.price), 0);
-  }
+  // calculateSubtotal() {
+  //   this.subtotal = this.expandedTicketList.reduce((sum, ticket) => sum + Number(ticket.price), 0);
+  // }
 
 
 
@@ -611,13 +644,13 @@ export class AddBookingComponent {
     //   return;
     // }
 
-        // Check if at least one ticket is selected
-        if (!Object.values(this.ticketQuantities).some((qty: any) => qty > 0)) {
-          this.toastr.warning("Please select at least one ticket type");
-          return;
-        }
+    // Check if at least one ticket is selected
+    // if (!Object.values(this.ticketQuantities).some((qty: any) => qty > 0)) {
+    //   this.toastr.warning("Please select at least one ticket type");
+    //   return;
+    // }
 
-            // Validate each ticket has a seat and passenger name
+    // Validate each ticket has a seat and passenger name
     for (const ticket of this.expandedTicketList) {
       if (!ticket.selectedSeat) {
         this.toastr.warning(`Please assign a seat for ${ticket.ticketType}`);
@@ -652,6 +685,13 @@ export class AddBookingComponent {
       bookingDetails.append('phone', this.phone);
       bookingDetails.append('email', this.email);
       bookingDetails.append('notes', this.notes);
+      
+      if (this.isUkrane) {
+        bookingDetails.append('from_ukraine', 'true')
+      } else {
+        bookingDetails.append('from_ukraine', 'false')
+      }
+
       bookingDetails.append(
         'ticket_details',
         JSON.stringify(
@@ -680,6 +720,13 @@ export class AddBookingComponent {
       bookingDetails.append('phone', this.phone);
       bookingDetails.append('email', this.email);
       bookingDetails.append('notes', this.notes);
+
+      if (this.isUkrane) {
+        bookingDetails.append('from_ukraine', 'true')
+      } else {
+        bookingDetails.append('from_ukraine', 'false')
+      }
+
       bookingDetails.append(
         'ticket_details',
         JSON.stringify(
@@ -747,9 +794,14 @@ export class AddBookingComponent {
     }
 
     // Check if at least one ticket is selected
-    if (!Object.values(this.ticketQuantities).some((qty: any) => qty > 0)) {
-      this.toastr.warning("Please select at least one ticket type");
-      return;
+    // if (!Object.values(this.ticketQuantities).some((qty: any) => qty > 0)) {
+    //   this.toastr.warning("Please select at least one ticket type");
+    //   return;
+    // }
+
+    if(this.expandedTicketList.length == 0){
+      this.toastr.warning(`Please add atleast one member.`);
+        return;
     }
 
     // Validate each ticket has a seat and passenger name
@@ -814,7 +866,7 @@ export class AddBookingComponent {
   //     };
   //   }
   // }
-  
+
   openBookingDetails() {
     const url = this.route.serializeUrl(
       this.route.createUrlTree(['/admin/booking-details'], { queryParams: { booking_id: this.booking_id, autoPrint: true } })

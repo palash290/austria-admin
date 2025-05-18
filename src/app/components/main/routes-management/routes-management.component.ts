@@ -36,7 +36,8 @@ export class RoutesManagementComponent {
   @ViewChild('closeModal1') closeModal1!: ElementRef;
   @ViewChild('closeModal12') closeModal12!: ElementRef;
   @ViewChild('closeModalArchive') closeModalArchive!: ElementRef;
-
+  @ViewChild('closeModalCopy') closeModalCopy!: ElementRef;
+  
   showArchived = false;
   selectedType: string = 'address';
   latitude: string = '';
@@ -229,14 +230,14 @@ export class RoutesManagementComponent {
             <div>
               <h4>${city.stop_city.city_name}</h4>
               <button id="editBtn" class="custom-edit-btn">Edit</button>
-              <button id="deleteBtn" class="custom-delete-btn">Delete</button>
+              <button id="deleteBtn" class="custom-delete-btn" data-bs-toggle="modal" data-bs-target="#ct_delete_modal">Delete</button>
             </div>
           `);
             infoWindow.open(map, marker);
 
             setTimeout(() => {
               document.getElementById("editBtn")?.addEventListener("click", () => this.editCity(city.stop_city.city_id));
-              document.getElementById("deleteBtn")?.addEventListener("click", () => this.deleteCity(city.stop_city.city_id));
+              document.getElementById("deleteBtn")?.addEventListener("click", () => this.patchUpdate(city.stop_city.city_id));
             }, 100);
           });
         }
@@ -260,14 +261,14 @@ export class RoutesManagementComponent {
             <div>
               <h4>${city.city_name}</h4>
               <button id="editBtn" onclick="editCity('${city.city_name}'">Edit</button>
-              <button id="deleteBtn" onclick="deleteCity('${city.city_name}')">Delete</button>
+              <button id="deleteBtn" onclick="deleteCity('${city.city_id}')" data-bs-toggle="modal" data-bs-target="#ct_delete_modal">Delete</button>
             </div>
           `);
             infoWindow.open(map, marker);
 
             setTimeout(() => {
               document.getElementById("editBtn")?.addEventListener("click", () => this.editCity(city.city_id));
-              document.getElementById("deleteBtn")?.addEventListener("click", () => this.deleteCity(city.city_id));
+              document.getElementById("deleteBtn")?.addEventListener("click", () => this.patchUpdate(city.city_id));
             }, 100);
           });
         }
@@ -285,6 +286,38 @@ export class RoutesManagementComponent {
   deleteCity(cityName: string): void {
     this.toastr.warning("Coming soon!");
     //alert(`Deleting ${cityName}`);
+  }
+
+  cityId: any;
+
+  patchUpdate(cityId: any) {
+    this.cityId = cityId;
+  }
+
+  // (click)="patchUpdate(item.id)"
+
+  @ViewChild('closeModal2') closeModal2!: ElementRef;
+
+  btnDelLoader: boolean = false;
+
+  deleteCity1() {
+    this.btnDelLoader = true;
+    const formData = new URLSearchParams();
+    formData.append('city_id', this.cityId);
+    this.service.postAPI(`delete-city`, formData.toString()).subscribe({
+      next: (resp) => {
+        if (resp.success) {
+          this.closeModal2.nativeElement.click();
+          this.getAllCity();
+          this.toastr.success(resp.message);
+          this.btnDelLoader = false;
+        } else {
+          this.btnDelLoader = false;
+          this.toastr.warning('Something went wrong!');
+          this.getAllCity();
+        }
+      },
+    });
   }
 
 
@@ -321,6 +354,7 @@ export class RoutesManagementComponent {
   };
 
   addTerminal() {
+    debugger
     const stopName = this.stopName?.trim();
     const terminalName = this.terminalName?.trim();
     const latitude = this.latitude?.trim();
@@ -330,9 +364,9 @@ export class RoutesManagementComponent {
       return;
     }
 
-    if (!this.latLngAddress) {
-      return;
-    }
+    // if (!this.latLngAddress) {
+    //   return;
+    // }
 
     // If terminalName is provided but only spaces
     if (terminalName && terminalName.trim() === '') {
@@ -427,6 +461,7 @@ export class RoutesManagementComponent {
     this.archiveRouteId = route_id;
   }
 
+
   copyRoute() {
     const formData = new URLSearchParams();
     // formData.append('title', this.copyTitle);
@@ -443,6 +478,7 @@ export class RoutesManagementComponent {
             this.router.navigate(['/home/routes-management'])
             // this.allTerminalsList = res.data;
             this.toastr.success(res.message);
+            this.closeModalCopy.nativeElement.click();
             this.getRoutes();
             this.isSingleLatLog = false;
             this.initMap();

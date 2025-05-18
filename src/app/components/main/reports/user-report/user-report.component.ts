@@ -34,7 +34,7 @@ export class UserReportComponent {
         // Dispatch an event or call a method to re-render the chart
         this.earningTabActivated = true;
         this.getReportData();
-    this.getUsers();
+        this.getUsers();
 
       });
     }
@@ -140,6 +140,12 @@ export class UserReportComponent {
         console.log(error.message);
       }
     });
+  }
+
+  reset() {
+    this.startDate = '';
+    this.endDate = '';
+    this.getUsers();
   }
 
 

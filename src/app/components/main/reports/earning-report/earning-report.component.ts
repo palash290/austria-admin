@@ -19,7 +19,7 @@ export class EarningReportComponent {
   public statusChart!: any;
   latestBooking: any;
   loader: boolean = false;
-  filterQuery: any = 'day';
+  filterQuery: any = 'year';
   boxData: any;
   loading: boolean = false;
 
@@ -114,7 +114,7 @@ export class EarningReportComponent {
               //   type: item.ticket_type,
               //   revenue: parseFloat(item.total_revenue)
               // }));
-              const totalPassengersPerBooking = [{ day: 'Today', bookings: resp.data.earningOverview.total_earning }];
+              const totalPassengersPerBooking = [{ day: 'Today', bookings: parseFloat(resp.data.earningOverview.total_earning).toFixed(2) }];
               this.eraningChart = {
                 series: [
                   {
@@ -167,7 +167,7 @@ export class EarningReportComponent {
               // };
               const totalBookingsPerWeek = Object.entries(resp.data.earningOverview).map(([day, value]) => ({
                 day,
-                bookings: value
+                bookings: parseFloat(value as string).toFixed(2)
               }));
 
               this.eraningChart = {
@@ -201,7 +201,7 @@ export class EarningReportComponent {
 
               const totalBookingsPerMonth = Object.entries(resp.data.earningOverview).map(([month, value]) => ({
                 month,
-                bookings: value
+                bookings: parseFloat(value as string).toFixed(2)
               }));
 
               this.eraningChart = {
@@ -250,7 +250,7 @@ export class EarningReportComponent {
 
 
 
-  filterQueryTicket: any = 'day';
+  filterQueryTicket: any = 'year';
   statusLength: any;
 
   ticketGraph() {
@@ -318,10 +318,6 @@ export class EarningReportComponent {
         }
       }
     });
-
-
-
-
   }
 
 

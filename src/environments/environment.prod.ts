@@ -3,5 +3,5 @@ export const environment = {
   apiUrl: '',
 
   // baseUrl: 'http://18.229.202.71:4200/'
-    baseUrl: 'http://13.61.168.187:4000/'
+    baseUrl: 'https://13.61.168.187:4000/'
 }

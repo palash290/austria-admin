@@ -8,17 +8,19 @@
                 <thead>
                     <tr>
                         <th>S No.</th>
-                        <th>Austria(€)</th>
                         <th>Ukraine(₴)</th>
-                        <th>Rate</th>
+                        <th>Austria(€)</th>
+                        
+                        <th>Exchange Rate</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of data; let i = index">
                         <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                        <td>{{item.from_currency}}</td>
                         <td>{{item.to_currency}}</td>
+                        <td>{{item.from_currency}}</td>
+                       
                         <td>{{item.rate}}</td>
                         <td>
                             <div class="ct_actions_btn">
@@ -62,11 +64,6 @@
                 <div class="ct_edit_modal_cnt">
                     <h4 class="ct_fs_24 ct_fw_600 text-center">Update Prices</h4>
                     <form [formGroup]="editForm" class="pt-2">
-                        
-                        <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Austria(€)</label>
-                            <input type="text" formControlName="from_currency" class="form-control ct_input ct_fs_18">
-                        </div>
 
                         <div class="form-group mb-4">
                             <label for="" class="ct_fs_18 ct_fw_500 mb-2">Ukraine(₴)</label>
@@ -74,8 +71,13 @@
                         </div>
 
                         <div class="form-group mb-4">
-                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Rate</label>
-                            <input type="text" placeholder="Enter Bus Number" formControlName="rate"
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Austria(€)</label>
+                            <input type="text" formControlName="from_currency" class="form-control ct_input ct_fs_18">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="" class="ct_fs_18 ct_fw_500 mb-2">Exchange Rate</label>
+                            <input type="text" placeholder="Enter Exchange Rate" formControlName="rate"
                                 class="form-control ct_input ct_fs_18" [maxlength]="10">
 
                             <div *ngIf="editForm.controls['rate']?.invalid && editForm.controls['rate'].touched"
